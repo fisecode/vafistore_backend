@@ -1,0 +1,248 @@
+{
+  "menu": [
+    {
+      "url": "/dashboard",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons mdi mdi-home-outline",
+      "slug": "dashboard"
+    },
+    {
+      "url": "https://www.vafistore.com/",
+      "icon": "menu-icon tf-icons mdi mdi-bullseye",
+      "name": "View Store",
+      "slug": "view-store",
+      "target": "_blank"
+    },
+    {
+      "menuHeader": "INFORMATION"
+    },
+    {
+      "url": "/post",
+      "icon": "menu-icon tf-icons mdi mdi-pencil-box-multiple-outline",
+      "name": "Posts",
+      "slug": "posts"
+    },
+    {
+      "url": "/page",
+      "icon": "menu-icon tf-icons mdi mdi-bookmark-multiple-outline",
+      "name": "Content Page",
+      "slug": "page"
+    },
+    {
+      "url": "/slide",
+      "icon": "menu-icon tf-icons mdi mdi-image-album",
+      "name": "Slide Show",
+      "slug": "slide"
+    },
+    {
+      "url": "/social-media",
+      "icon": "menu-icon tf-icons mdi mdi-folder-account",
+      "name": "Social Media",
+      "slug": "social-media"
+    },
+    {
+      "name": "Member",
+      "icon": "menu-icon tf-icons mdi mdi-account-group-outline",
+      "slug": "member",
+      "submenu": [
+        {
+          "url": "member/basic",
+          "name": "Basic",
+          "slug": "member-basic"
+        },
+        {
+          "url": "member/reseller",
+          "name": "Reseller",
+          "slug": "member-reseller"
+        },
+        {
+          "url": "member/refferal-list",
+          "name": "Refferal List",
+          "slug": "member-refferal-list"
+        },
+        {
+          "url": "member/administrator",
+          "name": "Administrator",
+          "slug": "member-administrator"
+        }
+      ]
+    },
+    {
+      "menuHeader": "PRODUCT"
+    },
+    {
+      "url": "/category",
+      "icon": "menu-icon tf-icons mdi mdi-format-list-bulleted",
+      "name": "Category",
+      "slug": "category"
+    },
+    {
+      "name": "Product",
+      "icon": "menu-icon tf-icons mdi mdi-gamepad-square-outline",
+      "slug": "product",
+      "submenu": [
+        {
+          "url": "product/game",
+          "name": "Product Game",
+          "slug": "product-game"
+        },
+        {
+          "url": "product/prepaid",
+          "name": "Product Prepaid",
+          "slug": "product-prepaid"
+        },
+        {
+          "url": "product/social",
+          "name": "Product Social",
+          "slug": "product-social"
+        },
+        {
+          "url": "product/manual",
+          "name": "Product Manual",
+          "slug": "product-manual"
+        },
+        {
+          "url": "product/joki-ml",
+          "name": "Product Joki ML",
+          "slug": "product-joki-ml"
+        },
+        {
+          "url": "product/apigames",
+          "name": "Product Apigames",
+          "slug": "product-apigames"
+        }
+      ]
+    },
+    {
+      "menuHeader": "TRANSACTION"
+    },
+    {
+      "name": "Order",
+      "icon": "menu-icon tf-icons mdi mdi-cart-outline",
+      "slug": "order",
+      "submenu": [
+        {
+          "url": "order/list",
+          "name": "Order List",
+          "slug": "order-list"
+        },
+        {
+          "url": "order/joki",
+          "name": "Order Joki",
+          "slug": "order-joki"
+        }
+      ]
+    },
+    {
+      "url": "/topup",
+      "icon": "menu-icon tf-icons mdi mdi-currency-usd",
+      "name": "Top Up Request",
+      "slug": "top-up-request"
+    },
+    {
+      "url": "/payment/history",
+      "icon": "menu-icon tf-icons mdi mdi-calendar-clock-outline",
+      "name": "Payment History",
+      "slug": "payment-history"
+    },
+    {
+      "url": "/balance/member",
+      "icon": "menu-icon tf-icons mdi mdi-wallet-outline",
+      "name": "Balance Member",
+      "slug": "balance-member"
+    },
+    {
+      "url": "/export",
+      "icon": "menu-icon tf-icons mdi mdi-tray-arrow-down",
+      "name": "Export Excel",
+      "slug": "export-excel"
+    },
+    {
+      "menuHeader": "SYSTEM"
+    },
+    {
+      "name": "Manage API",
+      "icon": "menu-icon tf-icons mdi mdi-api",
+      "slug": "api",
+      "submenu": [
+        {
+          "url": "api/provider",
+          "name": "Provider",
+          "slug": "api-provider"
+        },
+        {
+          "url": "api/payment-gateway",
+          "name": "Payment Gateway",
+          "slug": "api-payment-gateway"
+        },
+        {
+          "url": "api/cekmutasi",
+          "name": "Whatsapp",
+          "slug": "api-cekmutasi"
+        },
+        {
+          "url": "api/whatshapp",
+          "name": "Whatsapp",
+          "slug": "api-ahatsapp"
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "icon": "menu-icon tf-icons mdi mdi-cog-outline",
+      "slug": "setting",
+      "submenu": [
+        {
+          "url": "setting/seo",
+          "name": "SEO & Logo",
+          "slug": "setting-seo"
+        },
+        {
+          "url": "setting/template",
+          "name": "Template",
+          "slug": "setting-template"
+        },
+        {
+          "url": "setting/category",
+          "name": "Product Tab Homepage",
+          "slug": "setting-category"
+        },
+        {
+          "url": "setting/popup/home",
+          "name": "Pop Up Homepage",
+          "slug": "setting-popup-home"
+        },
+        {
+          "url": "setting/popup/product",
+          "name": "Pop Up Product",
+          "slug": "setting-popup-product"
+        },
+        {
+          "url": "setting/discount",
+          "name": "Discount",
+          "slug": "setting-discount"
+        },
+        {
+          "url": "setting/services",
+          "name": "Services",
+          "slug": "setting-services"
+        },
+        {
+          "url": "setting/markup/selling",
+          "name": "Markup Selling",
+          "slug": "setting-markup-selling"
+        },
+        {
+          "url": "setting/voucher",
+          "name": "Voucher",
+          "slug": "setting-voucher"
+        },
+        {
+          "url": "setting/reseller-area",
+          "name": "Reseller",
+          "slug": "setting-reseller"
+        }
+      ]
+    }
+  ]
+}
