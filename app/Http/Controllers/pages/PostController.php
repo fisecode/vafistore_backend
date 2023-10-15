@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use Toastr;
 class PostController extends Controller
 {
   /**
@@ -16,7 +16,15 @@ class PostController extends Controller
    */
   public function index()
   {
-    return view('content.pages.posts');
+    return view('content.pages.posts.list');
+  }
+  public function indexAdd()
+  {
+    return view('content.pages.posts.add');
+  }
+  public function indexCategory()
+  {
+    return view('content.pages.posts.category');
   }
 
   /**
@@ -32,7 +40,6 @@ class PostController extends Controller
    */
   public function store(Request $request)
   {
-    // Validasi data yang diterima dari formulir
     $validator = Validator::make($request->all(), [
       'title' => 'required',
       'content' => 'required',
@@ -49,15 +56,28 @@ class PostController extends Controller
         ->with('error', $messages->first());
     }
 
-    // $validatedData = $request->validate([
-    //   'title' => 'required',
-    //   'content' => 'required',
-    //   // 'meta_desc' => 'required',
-    //   // 'keywords' => 'required',
-    //   'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
-    // ]);
+    $status = $request->status;
 
-    $slug = Str::slug($request->title);
+    // Ambil kata kunci (keywords) dari judul
+    $title = $request->title;
+    $keywords = $this->generateKeywords($title);
+    $content = $request->content;
+    $metaDesc = Str::limit(strip_tags($content), 160);
+
+    // Validasi data yang diterima dari formulir
+    $tagArray = json_decode($request->postTags);
+
+    if ($tagArray) {
+      // Extract the 'value' property from each element and join them with a comma
+      $tagsString = implode(', ', array_column($tagArray, 'value'));
+    } else {
+      $tagsString = null; // Handle the case where the JSON input is not present or invalid
+    }
+
+    // Ambil nama pengguna (user) dan nama penulis (author) dari sesi
+    $userId = Auth::user()->id;
+
+    $slug = Str::slug($title);
     // Handle file upload (jika ada)
     if ($request->hasFile('image')) {
       $image = $request->file('image');
@@ -74,43 +94,40 @@ class PostController extends Controller
     // Ambil tanggal sekarang
     $dateNow = now();
 
-    // Ambil nama pengguna (user) dan nama penulis (author) dari sesi
-    $user = Auth::user()->user;
-    $author = Auth::user()->name;
-
-    // Ambil kata kunci (keywords) dari judul
-    $title = $request->title;
-    $keywords = $this->generateKeywords($title);
-
     // Tentukan gambar default jika tidak ada yang diunggah
     $imagePath = $imagePath ?? 'no-photo.jpg';
 
     // Simpan data artikel ke dalam database
     $post = new Post();
+    $post->user_id = $userId;
     $post->slug = $slug;
     $post->title = $title;
-    $post->meta_desc = ''; // Simpan meta-desc
+    $post->meta_desc = $metaDesc; // Simpan meta-desc
     $post->keyword = $keywords; // Simpan kata kunci
     $post->image = $imagePath; // Simpan path gambar jika ada
-    $post->video = '';
-    $post->content = $request->content;
-    $post->author = $author; // Simpan nama penulis (author)
-    $post->kategori = 'artikel';
+    $post->content = $content;
+    $post->kategori = $request->category;
+    $post->tags = $tagsString;
     $post->created_date = $dateNow; // Simpan tanggal sekarang
     $post->last_update = $dateNow; // Simpan tanggal sekarang sebagai last_update
-    $post->user = $user; // Simpan nama pengguna (user)
-    $post->status = 0;
+    $post->status = $status;
     $post->save();
 
     if ($post) {
       // Pesan sukses jika data berhasil disimpan
-      return redirect()
-        ->route('post')
-        ->with('success', 'Artikel berhasil disimpan!');
+      if ($status == 0) {
+        return redirect()
+          ->route('post.list')
+          ->with('success', 'Artikel berhasil published!');
+      } else {
+        return redirect()
+          ->route('post.list')
+          ->with('success', 'Artikel berhasil disimpan sebagai draft.');
+      }
     } else {
       // Pesan gagal jika terjadi kesalahan
       return redirect()
-        ->route('post')
+        ->route('post.list')
         ->with('error', 'Terjadi kesalahan saat menyimpan artikel.');
     }
   }

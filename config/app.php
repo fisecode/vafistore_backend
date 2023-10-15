@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
 return [
-
   /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -155,23 +154,26 @@ return [
     |
     */
 
-  'providers' => ServiceProvider::defaultProviders()->merge([
-    /*
-         * Package Service Providers...
-         */
+  'providers' => ServiceProvider::defaultProviders()
+    ->merge([
+      /*
+       * Package Service Providers...
+       */
 
-    /*
-         * Application Service Providers...
-         */
-    App\Providers\AppServiceProvider::class,
-    App\Providers\AuthServiceProvider::class,
-    // App\Providers\BroadcastServiceProvider::class,
-    App\Providers\EventServiceProvider::class,
-    App\Providers\RouteServiceProvider::class,
-        App\Providers\FortifyServiceProvider::class,
-        App\Providers\JetstreamServiceProvider::class,
-    App\Providers\MenuServiceProvider::class,
-  ])->toArray(),
+      /*
+       * Application Service Providers...
+       */
+      App\Providers\AppServiceProvider::class,
+      App\Providers\AuthServiceProvider::class,
+      // App\Providers\BroadcastServiceProvider::class,
+      App\Providers\EventServiceProvider::class,
+      App\Providers\RouteServiceProvider::class,
+      App\Providers\FortifyServiceProvider::class,
+      App\Providers\JetstreamServiceProvider::class,
+      App\Providers\MenuServiceProvider::class,
+      Brian2694\Toastr\ToastrServiceProvider::class,
+    ])
+    ->toArray(),
 
   /*
     |--------------------------------------------------------------------------
@@ -184,9 +186,11 @@ return [
     |
     */
 
-  'aliases' => Facade::defaultAliases()->merge([
-    // 'Example' => App\Facades\Example::class,
-    'Helper' => App\Helpers\Helpers::class,
-  ])->toArray(),
-
+  'aliases' => Facade::defaultAliases()
+    ->merge([
+      // 'Example' => App\Facades\Example::class,
+      'Helper' => App\Helpers\Helpers::class,
+      'Toastr' => Brian2694\Toastr\Facades\Toastr::class,
+    ])
+    ->toArray(),
 ];

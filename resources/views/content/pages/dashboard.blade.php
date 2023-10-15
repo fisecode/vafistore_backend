@@ -21,7 +21,7 @@
 @endsection
 
 @section('page-script')
-<script src="{{asset('assets/js/dashboard.js')}}"></script>
+<script src="{{asset('assets/js/pages/dashboard.js')}}"></script>
 @endsection
 
 @section('content')

@@ -11,19 +11,19 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::create('posts', function (Blueprint $table) {
-      $table->id('cuid');
+      $table->id('id');
+      $table->unsignedBigInteger('user_id');
       $table->text('slug');
       $table->text('title');
-      $table->text('meta_desc');
-      $table->text('keyword');
+      $table->text('meta_desc')->nullable();
+      $table->text('keyword')->nullable();
       $table->string('image', 255);
-      $table->string('video', 200);
-      $table->longText('content');
-      $table->text('author');
-      $table->text('kategori');
+      $table->string('video', 200)->nullable();
+      $table->longText('content')->nullable();
+      $table->text('kategori')->nullable();
+      $table->text('tags')->nullable();
       $table->date('created_date');
       $table->date('last_update');
-      $table->text('user');
       $table->integer('status');
       $table->timestamps();
     });

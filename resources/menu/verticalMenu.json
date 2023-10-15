@@ -17,10 +17,26 @@
       "menuHeader": "INFORMATION"
     },
     {
-      "url": "/post",
-      "icon": "menu-icon tf-icons mdi mdi-pencil-box-multiple-outline",
       "name": "Posts",
-      "slug": "posts"
+      "icon": "menu-icon tf-icons mdi mdi-pencil-box-multiple-outline",
+      "slug": "posts",
+      "submenu": [
+        {
+          "url": "post/list",
+          "name": "Post List",
+          "slug": "post-list"
+        },
+        {
+          "url": "post/add",
+          "name": "Add Post",
+          "slug": "posd-add"
+        },
+        {
+          "url": "post/category",
+          "name": "Category List",
+          "slug": "post-category"
+        }
+      ]
     },
     {
       "url": "/page",

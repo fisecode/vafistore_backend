@@ -9,9 +9,10 @@ class Post extends Model
 {
   use HasFactory;
 
-  protected $primaryKey = 'cuid';
+  protected $primaryKey = 'id';
 
   protected $fillable = [
+    'user_id',
     'slug',
     'title',
     'meta_desc',
@@ -19,11 +20,15 @@ class Post extends Model
     'image',
     'video',
     'content',
-    'author',
     'kategori',
+    'tags',
     'created_date',
     'last_update',
-    'user',
     'status',
   ];
+
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
 }
