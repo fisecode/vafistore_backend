@@ -17,6 +17,19 @@ $configData = Helper::appClasses();
 
 @section('page-script')
 <script src="{{asset('assets/js/ui-toasts.js')}}"></script>
+<script>
+  const successMessage = @json(session('success'));
+  if (successMessage) {
+      toastr.success(successMessage, '', { timeOut: 5000, "positionClass": "toast-top-center", "showDuration": "300",
+  "hideDuration": "1000"});
+  };
+
+  const errorMessage = @json(session('error'));
+  if (errorMessage) {
+      toastr.success(successMessage, '', { timeOut: 5000, "positionClass": "toast-top-center", "showDuration": "300",
+  "hideDuration": "1000"});
+  };
+</script>
 @endsection
 
 @section('content')
@@ -24,14 +37,4 @@ $configData = Helper::appClasses();
   <span class="text-muted fw-light">Post /</span><span> List</span>
 </h4>
 
-@if (session('success'))
-<div class="alert alert-success" role="alert">
-  {{ session('success') }}
-</div>
-@endif
-@if (session('error'))
-<div class="alert alert-danger" role="alert">
-  {{ session('error') }}
-</div>
-@endif
 @endsection
