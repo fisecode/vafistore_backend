@@ -62,16 +62,6 @@ $configData = Helper::appClasses();
       </div>
     </div>
     <div class="row">
-      @if (session('success'))
-      <div class="alert alert-success" role="alert">
-        {{ session('success') }}
-      </div>
-      @endif
-      @if (session('error'))
-      <div class="alert alert-danger" role="alert">
-        {{ session('error') }}
-      </div>
-      @endif
       <div class="col-12 col-lg-8">
         <div class="card mb-4">
           <div class="card-body">

@@ -163,6 +163,12 @@ class PostController extends Controller
     //
   }
 
+  public function getData()
+  {
+    $post = Post::with('user')->get();
+    return response()->json($post);
+  }
+
   private function generateKeywords($title)
   {
     // Menghapus karakter khusus dan memecah judul menjadi kata-kata
