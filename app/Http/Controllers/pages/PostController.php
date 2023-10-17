@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\ImageStorage;
 class PostController extends Controller
 {
+  use ImageStorage;
   /**
    * Display a listing of the resource.
    */
@@ -44,7 +46,7 @@ class PostController extends Controller
       'content' => 'required',
       // 'meta_desc' => 'required',
       // 'keywords' => 'required',
-      'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+      'image' => 'image|mimes:jpeg,png,jpg|max:800',
     ]);
 
     if ($validator->fails()) {
@@ -81,11 +83,15 @@ class PostController extends Controller
     if ($request->hasFile('image')) {
       $image = $request->file('image');
 
-      // Menghasilkan nama file yang unik dengan slug
-      $imageName = $slug . '_' . time() . '.' . $image->getClientOriginalExtension();
+      if ($image) {
+        $imagePath = $this->uploadImage($image, $title, 'posts');
+      }
 
-      // Simpan gambar dengan nama unik
-      $imagePath = $image->storeAs('uploads', $imageName, 'public');
+      // // Menghasilkan nama file yang unik dengan slug
+      // $imageName = $slug . '_' . time() . '.' . $image->getClientOriginalExtension();
+
+      // // Simpan gambar dengan nama unik
+      // $imagePath = $image->storeAs('uploads', $imageName, 'public');
     } else {
       $imagePath = null; // Jika tidak ada file yang diunggah
     }

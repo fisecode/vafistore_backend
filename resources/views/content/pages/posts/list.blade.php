@@ -60,7 +60,7 @@ $configData = Helper::appClasses();
         <tr>
           <th></th>
           <th></th>
-          <th>title</th>
+          <th>content</th>
           <th>category</th>
           <th>author</th>
           <th>status</th>
