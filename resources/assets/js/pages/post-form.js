@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
         document.getElementById('status').value = '0';
       } else if (this.name === 'draft') {
         document.getElementById('status').value = '1';
+      } else if (this.name === 'unpublish') {
+        document.getElementById('status').value = '2';
       }
     });
   });

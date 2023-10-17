@@ -1,12 +1,15 @@
 @php
 $configData = Helper::appClasses();
+$isEdit = isset($post);
 @endphp
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Post')
+@section('title', $isEdit ? 'Edit Post' : 'Add Post')
 
 @section('vendor-style')
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/toastr/toastr.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/animate-css/animate.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/quill/typography.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/quill/katex.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/quill/editor.css')}}" />
@@ -33,31 +36,47 @@ $configData = Helper::appClasses();
 <script src="{{asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/flatpickr/flatpickr.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/tagify/tagify.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/toastr/toastr.js')}}"></script>
 @endsection
 
 @section('page-script')
-<script src="{{ asset('assets/js/pages/post-add.js') }}"></script>
-{{-- <script src="{{ asset('assets/js/form-validation.js') }}"></script> --}}
+<script src="{{ asset('assets/js/pages/post-form.js') }}"></script>
+<script>
+  const successMessage = @json(session('success'));
+  const errorMessage = @json(session('error'));
+  if (successMessage) {
+      toastr.success(successMessage, '', { timeOut: 5000, "positionClass": "toast-top-center", "showDuration": "300",
+  "hideDuration": "1000"});
+  } else if(errorMessage){
+      toastr.error(errorMessage, '', { timeOut: 5000, "positionClass": "toast-top-center", "showDuration": "300",
+  "hideDuration": "1000"});
+  };
+</script>
 @endsection
 
 @section('content')
 <h4 class="py-3 mb-4">
-  <span class="text-muted fw-light">Post /</span><span> Add</span>
+  <span class="text-muted fw-light">Post /</span><span>{{ $isEdit ? ' Edit' : ' Add' }}</span>
 </h4>
 
 <div class="post-add">
-  <form id="add-post" role="form" action="{{ route('post.store') }}" method="post" enctype="multipart/form-data">
+  <form id="add-post" role="form" action="{{ $isEdit ? route('post.update', $post->id) : route('post.store') }}"
+    method="post" enctype="multipart/form-data">
     @csrf
     <!-- Add Post -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
 
       <div class="d-flex flex-column justify-content-center">
-        <h4 class="mb-1 mt-3">Add a new Post</h4>
+        <h4 class="mb-1 mt-3">{{ $isEdit ? ' Edit Post' : ' Add a new Post' }}</h4>
       </div>
       <div class="d-flex align-content-center flex-wrap gap-3">
+        @if (!$isEdit)
+
         <button class="btn btn-outline-secondary">Discard</button>
-        <button type="submit" name="draft" class="btn btn-outline-primary">Save draft</button>
-        <button type="submit" name="publish" class="btn btn-primary">Publish</button>
+        @endif
+        <button type="submit" name="{{ $isEdit ? 'unpublish' : 'draft' }}"
+          class="btn btn-outline-primary">Unpublish</button>
+        <button type="submit" name="publish" class="btn btn-primary">{{ $isEdit ? 'Update' : 'Publish' }}</button>
         <input type="hidden" name="status" id="status" value="0">
       </div>
     </div>
@@ -71,7 +90,7 @@ $configData = Helper::appClasses();
             </div> --}}
             <div class="form-floating form-floating-outline mb-4">
               <input type="text" class="form-control" id="post-title" placeholder="Add Title" name="title"
-                aria-label="Post title">
+                aria-label="Post title" value="{{ $isEdit ? $post->title : '' }}">
               <label for="post-title">Title</label>
             </div>
 
@@ -100,6 +119,9 @@ $configData = Helper::appClasses();
                 </div>
                 <input type="hidden" name="content" id="quill-content">
                 <div class="content-editor border-0 pb-1 ql-container ql-snow" id="article-content">
+                  @if ($isEdit)
+                  {!! $post->content !!}
+                  @endif
                 </div>
               </div>
             </div>
@@ -116,7 +138,12 @@ $configData = Helper::appClasses();
           </div>
           <div class="card-body">
             <div class="text-center mb-3">
+              @if ($isEdit)
+              <img src="{{ asset('storage/assets/img/posts/' . $post->image) }}" alt="user-avatar"
+                class="w-100 h-auto rounded" id="uploadedAvatar" />
+              @else
               <img src="" alt="user-avatar" class="w-100 h-auto hide-item rounded" id="uploadedAvatar" />
+              @endif
             </div>
             <div class="button-wrapper text-center">
               <label for="upload" class="btn btn-primary" tabindex="0">
@@ -144,11 +171,24 @@ $configData = Helper::appClasses();
             <!-- Category -->
             <div class="mb-4 col category-select2-dropdown d-flex justify-content-between">
               <div class="form-floating form-floating-outline w-100 me-3">
+                {{-- <select id="category-org" class="select2 form-select" data-placeholder="Select Category"
+                  name="category">
+                  <option value="">Select Category</option>
+                  @foreach($categories as $category)
+                  <option value="{{ $category->id }}" {{ $isEdit && $post->category_id === $category->id ? 'selected' :
+                    '' }}>
+                    {{ $category->name }}
+                  </option>
+                  @endforeach
+                </select> --}}
+
                 <select id="category-org" class="select2 form-select" data-placeholder="Select Category"
                   name="category">
                   <option value="">Select Category</option>
-                  <option value="Blog">Blog</option>
-                  <option value="Tutorial">Tutorial</option>=
+                  <option value="Blog" {{ $isEdit && $post->kategori === 'Blog' ? 'selected' : '' }}>Blog</option>
+                  <option value="Tutorial" {{ $isEdit && $post->kategori === 'Tutorial' ? 'selected' : '' }}>Tutorial
+                  </option>
+                  <!-- Tambahkan opsi kategori lainnya sesuai kebutuhan -->
                 </select>
                 <label for="category">Category</label>
               </div>
@@ -161,7 +201,8 @@ $configData = Helper::appClasses();
             <!-- Tags -->
             <div class="mb-3">
               <div class="form-floating form-floating-outline">
-                <input id="post-tags" class="form-control h-auto" name="postTags" aria-label="Product Tags" />
+                <input id="post-tags" class="form-control h-auto" name="postTags" aria-label="Product Tags"
+                  value="{{ $isEdit ? $post->tags : '' }}" />
                 <label for="postTags">Tags</label>
               </div>
             </div>

@@ -19,9 +19,9 @@ class PostController extends Controller
   {
     return view('content.pages.posts.list');
   }
-  public function indexAdd()
+  public function add()
   {
-    return view('content.pages.posts.add');
+    return view('content.pages.posts.form');
   }
   public function indexCategory()
   {
@@ -41,96 +41,75 @@ class PostController extends Controller
    */
   public function store(Request $request)
   {
-    $validator = Validator::make($request->all(), [
+    // Validation rules
+    $rules = [
       'title' => 'required',
       'content' => 'required',
-      // 'meta_desc' => 'required',
-      // 'keywords' => 'required',
       'image' => 'image|mimes:jpeg,png,jpg|max:800',
-    ]);
+    ];
+
+    // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
 
     if ($validator->fails()) {
-      $messages = $validator->getMessageBag();
-
       return redirect()
         ->back()
-        ->with('error', $messages->first());
+        ->with('error', $validator->messages()->first());
     }
 
-    $status = $request->status;
-
-    // Ambil kata kunci (keywords) dari judul
+    // Extract data from the request
     $title = $request->title;
-    $keywords = $this->generateKeywords($title);
     $content = $request->content;
-    $metaDesc = Str::limit(strip_tags($content), 160);
-
-    // Validasi data yang diterima dari formulir
+    $status = $request->status ?? 0; // Default status to 0 if not provided
     $tagArray = json_decode($request->postTags);
 
+    // Extract tags if present
+    $tagsString = null;
     if ($tagArray) {
-      // Extract the 'value' property from each element and join them with a comma
       $tagsString = implode(', ', array_column($tagArray, 'value'));
-    } else {
-      $tagsString = null; // Handle the case where the JSON input is not present or invalid
     }
 
-    // Ambil nama pengguna (user) dan nama penulis (author) dari sesi
-    $userId = Auth::user()->id;
+    // Generate keywords from the title
+    $keywords = $this->generateKeywords($title);
 
+    // Create a unique slug
     $slug = Str::slug($title);
-    // Handle file upload (jika ada)
+
+    // Handle file upload
+    $imagePath = null;
     if ($request->hasFile('image')) {
       $image = $request->file('image');
-
-      if ($image) {
-        $imagePath = $this->uploadImage($image, $title, 'posts');
-      }
-
-      // // Menghasilkan nama file yang unik dengan slug
-      // $imageName = $slug . '_' . time() . '.' . $image->getClientOriginalExtension();
-
-      // // Simpan gambar dengan nama unik
-      // $imagePath = $image->storeAs('uploads', $imageName, 'public');
+      $imagePath = $this->uploadImage($image, $title, 'posts');
     } else {
-      $imagePath = null; // Jika tidak ada file yang diunggah
+      $imagePath = 'no-photo.jpg'; // Default image path if no file is uploaded
     }
 
-    // Ambil tanggal sekarang
+    // Get the current date and time
     $dateNow = now();
 
-    // Tentukan gambar default jika tidak ada yang diunggah
-    $imagePath = $imagePath ?? 'no-photo.jpg';
-
-    // Simpan data artikel ke dalam database
+    // Create and save the post
     $post = new Post();
-    $post->user_id = $userId;
+    $post->user_id = Auth::user()->id;
     $post->slug = $slug;
     $post->title = $title;
-    $post->meta_desc = $metaDesc; // Simpan meta-desc
-    $post->keyword = $keywords; // Simpan kata kunci
-    $post->image = $imagePath; // Simpan path gambar jika ada
+    $post->meta_desc = Str::limit(strip_tags($content), 160);
+    $post->keyword = $keywords;
+    $post->image = $imagePath;
     $post->content = $content;
     $post->kategori = $request->category;
     $post->tags = $tagsString;
-    $post->created_date = $dateNow; // Simpan tanggal sekarang
-    $post->last_update = $dateNow; // Simpan tanggal sekarang sebagai last_update
+    $post->created_date = $dateNow;
+    $post->last_update = $dateNow;
     $post->status = $status;
     $post->save();
 
+    // Redirect with success or error message
     if ($post) {
-      // Pesan sukses jika data berhasil disimpan
-      if ($status == 0) {
-        return redirect()
-          ->route('post.list')
-          ->with('success', 'Artikel berhasil published!');
-      } else {
-        return redirect()
-          ->route('post.list')
-          ->with('success', 'Artikel berhasil disimpan sebagai draft.');
-      }
+      $message = $status == 0 ? 'Artikel berhasil published!' : 'Artikel berhasil disimpan sebagai draft.';
+      return redirect()
+        ->route('post.list')
+        ->with('success', $message);
     } else {
-      // Pesan gagal jika terjadi kesalahan
       return redirect()
         ->route('post.list')
         ->with('error', 'Terjadi kesalahan saat menyimpan artikel.');
@@ -150,7 +129,16 @@ class PostController extends Controller
    */
   public function edit(string $id)
   {
-    //
+    $post = Post::find($id); // Mengambil data posting berdasarkan ID
+
+    if (!$post) {
+      // Handle jika posting tidak ditemukan
+      return redirect()
+        ->route('post.list')
+        ->with('error', 'Post not found.');
+    }
+
+    return view('content.pages.posts.form', compact('post'));
   }
 
   /**
@@ -158,7 +146,49 @@ class PostController extends Controller
    */
   public function update(Request $request, string $id)
   {
-    //
+    // Validation rules
+    $rules = [
+      'title' => 'required',
+      'content' => 'required',
+      'image' => 'image|mimes:jpeg,png,jpg|max:800',
+    ];
+
+    // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+      return redirect()
+        ->back()
+        ->withInput()
+        ->withErrors($validator)
+        ->with('error', $validator->messages()->first());
+    }
+
+    $dateNow = now();
+
+    $post = Post::findOrFail($id);
+    $status = $request->status ?? 0;
+    $request['last_update'] = $dateNow;
+
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+      $image = $request->file('image');
+      $imagePath = $this->uploadImage($image, $request->title, 'post', true, $post->image);
+    }
+    $request['image'] = $imagePath;
+
+    $post->update($request->all());
+
+    if ($post) {
+      $message = $status == 0 ? 'Artikel berhasil di update!' : 'Artikel berhasil di unpublish.';
+      return redirect()
+        ->route('post.list')
+        ->with('success', $message);
+    } else {
+      return redirect()
+        ->route('post.list')
+        ->with('error', 'Terjadi kesalahan saat menyimpan artikel.');
+    }
   }
 
   /**

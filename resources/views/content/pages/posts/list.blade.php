@@ -25,17 +25,19 @@ $configData = Helper::appClasses();
 @section('page-script')
 <script src="{{asset('assets/js/pages/post-list.js')}}"></script>
 <script>
-  const successMessage = @json(session('success'));
-  if (successMessage) {
-      toastr.success(successMessage, '', { timeOut: 5000, "positionClass": "toast-top-center", "showDuration": "300",
-  "hideDuration": "1000"});
-  };
+  const showMessage = (type, message) => {
+    if (message) {
+      toastr[type](message, '', {
+        timeOut: 5000,
+        positionClass: "toast-top-center",
+        showDuration: "300",
+        hideDuration: "1000"
+      });
+    }
+  }
 
-  const errorMessage = @json(session('error'));
-  if (errorMessage) {
-      toastr.success(successMessage, '', { timeOut: 5000, "positionClass": "toast-top-center", "showDuration": "300",
-  "hideDuration": "1000"});
-  };
+  showMessage('success', @json(session('success')));
+  showMessage('error', @json(session('error')));
 </script>
 @endsection
 
@@ -64,7 +66,7 @@ $configData = Helper::appClasses();
           <th>category</th>
           <th>author</th>
           <th>status</th>
-          <th>actions</th>
+          <th></th>
         </tr>
       </thead>
     </table>
