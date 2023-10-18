@@ -74,8 +74,8 @@ $isEdit = isset($post);
 
         <button class="btn btn-outline-secondary">Discard</button>
         @endif
-        <button type="submit" name="{{ $isEdit ? 'unpublish' : 'draft' }}"
-          class="btn btn-outline-primary">Unpublish</button>
+        <button type="submit" name="{{ $isEdit ? 'unpublish' : 'draft' }}" class="btn btn-outline-primary">{{ $isEdit ?
+          'Unpublish' : 'Save Draft' }}</button>
         <button type="submit" name="publish" class="btn btn-primary">{{ $isEdit ? 'Update' : 'Publish' }}</button>
         <input type="hidden" name="status" id="status" value="0">
       </div>

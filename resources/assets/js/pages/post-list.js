@@ -114,7 +114,7 @@ function truncated(content, max) {
             <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical me-2"></i></button>
             <div class="dropdown-menu dropdown-menu-end m-0">
             <a href="javascript:0;" class="dropdown-item">View</a>
-            <a href="javascript:0;" class="dropdown-item">Suspend</a></div>`;
+            <a href="#" class="dropdown-item" data-post-id="${$id}" data-toggle="modal" data-target="#deleteModal">Delete</a>`;
           }
         }
       ],

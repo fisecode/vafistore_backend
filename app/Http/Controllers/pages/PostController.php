@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageStorage;
+use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
   use ImageStorage;
@@ -17,7 +18,8 @@ class PostController extends Controller
    */
   public function index()
   {
-    return view('content.pages.posts.list');
+    $post = Post::all();
+    return view('content.pages.posts.list', compact('post'));
   }
   public function add()
   {
@@ -170,14 +172,28 @@ class PostController extends Controller
     $status = $request->status ?? 0;
     $request['last_update'] = $dateNow;
 
-    $imagePath = null;
+    $imagePath = $post->image;
+    $image = null;
+    $newTitle = $request->title;
+    $oldTitle = $post->title;
     if ($request->hasFile('image')) {
       $image = $request->file('image');
-      $imagePath = $this->uploadImage($image, $request->title, 'post', true, $post->image);
+      $path = $this->uploadImage($image, $request->title, 'posts', true, $imagePath);
+      $request->replace(['image' => $path]);
     }
-    $request['image'] = $imagePath;
 
     $post->update($request->all());
+
+    if ($image) {
+      $post->image = $path;
+      $post->save();
+    }
+
+    if ($oldTitle !== $newTitle) {
+      $newImageName = $this->renameImage($imagePath, $request->title);
+      $post->image = $newImageName;
+      $post->save();
+    }
 
     if ($post) {
       $message = $status == 0 ? 'Artikel berhasil di update!' : 'Artikel berhasil di unpublish.';
@@ -196,7 +212,22 @@ class PostController extends Controller
    */
   public function destroy(string $id)
   {
-    //
+    $post = Post::findOrFail($id);
+    $image = $image->photo;
+
+    if ($image) {
+      $this->deleteImage($image, 'posts');
+    }
+
+    $post->delete();
+    session()->flash('success', 'Post successfully deleted.');
+    return redirect()->back();
+  }
+
+  public function delete(string $id)
+  {
+    $post = Post::findOrFail($id);
+    return view('content.pages.posts.delete', compact('post'));
   }
 
   public function getData()
@@ -221,5 +252,17 @@ class PostController extends Controller
     $keywords = implode(',', $keywords);
 
     return $keywords;
+  }
+
+  public function renameImage($imagePath, $newTitle)
+  {
+    $newName = Str::slug($newTitle) . '-' . time();
+    $extension = pathinfo($imagePath, PATHINFO_EXTENSION); // Dapatkan ekstensi gambar dari path yang lama
+    $newImageName = $newName . '.' . $extension;
+
+    // Ganti nama file gambar di direktori penyimpanan
+    Storage::move("/assets/img/posts/{$imagePath}", "/assets/img/posts/{$newImageName}");
+
+    return $newImageName;
   }
 }

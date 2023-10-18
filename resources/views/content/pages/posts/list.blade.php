@@ -38,6 +38,18 @@ $configData = Helper::appClasses();
 
   showMessage('success', @json(session('success')));
   showMessage('error', @json(session('error')));
+
+  $(document).ready(function () {
+    $('.dropdown-item[data-toggle="modal"]').click(function () {
+        var post_id = $(this).data('post-id');
+        var deleteForm = $('#deletePostForm');
+        var actionUrl = deleteForm.attr('action');
+        actionUrl = actionUrl.replace('__ID__', post_id);
+        deleteForm.attr('action', actionUrl);
+        $('#post_id').val(post_id);
+    });
+});
+
 </script>
 @endsection
 
@@ -70,6 +82,33 @@ $configData = Helper::appClasses();
         </tr>
       </thead>
     </table>
+  </div>
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus Post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus post ini?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <form action="{{ route('post.destroy', ['id' => '__ID__']) }}" method="POST" id="deletePostForm">
+          @csrf
+          @method('DELETE')
+          <input type="hidden" name="post_id" id="post_id">
+          <button type="submit" class="btn btn-danger">Hapus</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 @endsection

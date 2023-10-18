@@ -23,6 +23,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
   Route::get('/post/add', [PostController::class, 'add'])->name('post.add');
   Route::get('/post/edit/{id}', [PostController::class, 'edit'])->name('post.edit');
   Route::post('/post/{id}/update', [PostController::class, 'update'])->name('post.update');
+  Route::delete('/post/{id}', [PostController::class, 'destroy'])->name('post.destroy');
+  Route::get('/post/delete/{id}', [PostController::class, 'delete'])->name('post.delete');
   Route::get('/post/category', [PostController::class, 'indexCategory'])->name('post.category');
   Route::get('/post/get', [PostController::class, 'getData'])->name('post.get');
   Route::post('/post', $controller_path . '\pages\PostController@store')->name('post.store');
