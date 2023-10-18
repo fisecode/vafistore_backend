@@ -172,6 +172,7 @@ return [
       App\Providers\JetstreamServiceProvider::class,
       App\Providers\MenuServiceProvider::class,
       Brian2694\Toastr\ToastrServiceProvider::class,
+      Yajra\DataTables\DataTablesServiceProvider::class,
     ])
     ->toArray(),
 
@@ -191,6 +192,7 @@ return [
       // 'Example' => App\Facades\Example::class,
       'Helper' => App\Helpers\Helpers::class,
       'Toastr' => Brian2694\Toastr\Facades\Toastr::class,
+      'Datatables' => Yajra\Datatables\Datatables::class,
     ])
     ->toArray(),
 ];

@@ -14,16 +14,90 @@ $configData = Helper::appClasses();
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
 @endsection
 
 @section('vendor-script')
+
+
+<script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/toastr/toastr.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
 @endsection
 
 @section('page-script')
 <script src="{{asset('assets/js/pages/post-list.js')}}"></script>
+{{-- <script>
+  $(document).ready(function() {
+            $('#datatables-post').DataTable({
+                responsive: true,
+                ajax: 'list',
+                columns: [{
+                        data: 'title',
+                        name: 'content',
+                        render: function (data, type, full) {
+            const $id = full['id'];
+            const $content = full['meta_desc'];
+            const $image = full['image'];
+            let $output = '';
+
+            if ($image) {
+              $output = `<img src="../storage/assets/img/posts/${$image}" alt="Product-${$id}" class="rounded-2">`;
+            } else {
+              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+              const stateNum = Math.floor(Math.random() * 6);
+              const $state = states[stateNum];
+              const $kategori = full['kategori'];
+              const $initials = ($kategori.match(/\b\w/g) || []).map(match => match.toUpperCase()).join('');
+              $output = `<span class="avatar-initial rounded-2 bg-label-${$state}">${$initials}</span>`;
+            }
+
+            const maxContentLength = 50;
+            const truncatedContent = truncated($content, 30);
+            const truncatedTitle = truncated(data, 30);
+            const $row_output = `
+              <div class="d-flex justify-content-start align-items-center product-name">
+                <div class="avatar-wrapper me-3">
+                  <div class="avatar rounded-2 bg-label-secondary">
+                    ${$output}
+                  </div>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="text-nowrap text-heading fw-medium">
+                    ${truncatedTitle}
+                  </span>
+                  <small class="text-truncate d-none d-sm-block">
+                    ${truncatedContent}
+                  </small>
+                </div>
+              </div>`;
+            return $row_output;
+          }
+                    },
+                    {
+                        data: 'kategori',
+                        name: 'kategori'
+                    },
+                    {
+                        data: 'author',
+                        name: 'author'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: true,
+                        searchable: false
+                    }
+                ]
+            });
+        });
+</script> --}}
 <script>
   const showMessage = (type, message) => {
     if (message) {
@@ -38,18 +112,6 @@ $configData = Helper::appClasses();
 
   showMessage('success', @json(session('success')));
   showMessage('error', @json(session('error')));
-
-  $(document).ready(function () {
-    $('.dropdown-item[data-toggle="modal"]').click(function () {
-        var post_id = $(this).data('post-id');
-        var deleteForm = $('#deletePostForm');
-        var actionUrl = deleteForm.attr('action');
-        actionUrl = actionUrl.replace('__ID__', post_id);
-        deleteForm.attr('action', actionUrl);
-        $('#post_id').val(post_id);
-    });
-});
-
 </script>
 @endsection
 
@@ -69,46 +131,53 @@ $configData = Helper::appClasses();
     </div>
   </div>
   <div class="card-datatable table-responsive">
-    <table class="datatables-products table">
+    <table class="table" id="datatables-post">
       <thead class="table-light">
         <tr>
-          <th></th>
-          <th></th>
           <th>content</th>
           <th>category</th>
           <th>author</th>
           <th>status</th>
-          <th></th>
+          <th>action</th>
         </tr>
       </thead>
+      <tbody>
+
+      </tbody>
     </table>
-  </div>
-</div>
+    <!-- Modal -->
+    <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <form class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
 
-
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus Post</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Apakah Anda yakin ingin menghapus post ini?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        <form action="{{ route('post.destroy', ['id' => '__ID__']) }}" method="POST" id="deletePostForm">
-          @csrf
-          @method('DELETE')
-          <input type="hidden" name="post_id" id="post_id">
-          <button type="submit" class="btn btn-danger">Hapus</button>
+          </div>
         </form>
       </div>
     </div>
+    {{-- <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+          </div>
+        </div>
+      </div>
+    </div> --}}
   </div>
 </div>
 @endsection

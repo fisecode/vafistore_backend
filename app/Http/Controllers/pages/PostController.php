@@ -10,16 +10,45 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageStorage;
 use Illuminate\Support\Facades\Storage;
+use DataTables;
 class PostController extends Controller
 {
   use ImageStorage;
   /**
    * Display a listing of the resource.
    */
-  public function index()
+  public function index(Request $request)
   {
-    $post = Post::all();
-    return view('content.pages.posts.list', compact('post'));
+    if ($request->ajax()) {
+      $post = Post::all();
+      return DataTables::of($post)
+        ->addIndexColumn()
+        ->addColumn('author', function ($post) {
+          return $post->user->name;
+        })
+        ->addColumn('action', function ($post) {
+          $edit = route('post.edit', $post->id);
+          $delete = route('post.delete', $post->id);
+          return '<div class="d-inline-block text-nowrap">
+              <a href="' .
+            $edit .
+            '" class="btn btn-sm btn-icon"><i class="mdi mdi-pencil-outline"></i></a>
+              <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical me-2"></i></button>
+              <div class="dropdown-menu dropdown-menu-end m-0">
+                    <a href="javascript:0;" class="dropdown-item">View</a>
+                    <a href="#" class="dropdown-item delete-record" data-ajax-popup="true"
+                    data-title="Delete" data-url="' .
+            $delete .
+            '" data-id="' .
+            $post->id .
+            '">Delete</a>
+            </div>
+          </div>';
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+    return view('content.pages.posts.list');
   }
   public function add()
   {
@@ -226,8 +255,8 @@ class PostController extends Controller
 
   public function delete(string $id)
   {
-    $post = Post::findOrFail($id);
-    return view('content.pages.posts.delete', compact('post'));
+    Post::find($id)->delete();
+    return back();
   }
 
   public function getData()
