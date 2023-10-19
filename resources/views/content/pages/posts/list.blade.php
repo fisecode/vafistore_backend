@@ -18,7 +18,7 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('vendor-script')
-<script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script>
+{{-- <script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script> --}}
 <script src="{{asset('assets/vendor/libs/toastr/toastr.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
@@ -27,75 +27,6 @@ $configData = Helper::appClasses();
 
 @section('page-script')
 <script src="{{asset('assets/js/pages/post-list.js')}}"></script>
-{{-- <script>
-  $(document).ready(function() {
-            $('#datatables-post').DataTable({
-                responsive: true,
-                ajax: 'list',
-                columns: [{
-                        data: 'title',
-                        name: 'content',
-                        render: function (data, type, full) {
-            const $id = full['id'];
-            const $content = full['meta_desc'];
-            const $image = full['image'];
-            let $output = '';
-
-            if ($image) {
-              $output = `<img src="../storage/assets/img/posts/${$image}" alt="Product-${$id}" class="rounded-2">`;
-            } else {
-              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              const stateNum = Math.floor(Math.random() * 6);
-              const $state = states[stateNum];
-              const $kategori = full['kategori'];
-              const $initials = ($kategori.match(/\b\w/g) || []).map(match => match.toUpperCase()).join('');
-              $output = `<span class="avatar-initial rounded-2 bg-label-${$state}">${$initials}</span>`;
-            }
-
-            const maxContentLength = 50;
-            const truncatedContent = truncated($content, 30);
-            const truncatedTitle = truncated(data, 30);
-            const $row_output = `
-              <div class="d-flex justify-content-start align-items-center product-name">
-                <div class="avatar-wrapper me-3">
-                  <div class="avatar rounded-2 bg-label-secondary">
-                    ${$output}
-                  </div>
-                </div>
-                <div class="d-flex flex-column">
-                  <span class="text-nowrap text-heading fw-medium">
-                    ${truncatedTitle}
-                  </span>
-                  <small class="text-truncate d-none d-sm-block">
-                    ${truncatedContent}
-                  </small>
-                </div>
-              </div>`;
-            return $row_output;
-          }
-                    },
-                    {
-                        data: 'kategori',
-                        name: 'kategori'
-                    },
-                    {
-                        data: 'author',
-                        name: 'author'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: true,
-                        searchable: false
-                    }
-                ]
-            });
-        });
-</script> --}}
 <script>
   const showMessage = (type, message) => {
     if (message) {
@@ -144,20 +75,13 @@ $configData = Helper::appClasses();
       </tbody>
     </table>
     <!-- Modal -->
-    <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <form class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
+    <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" data-bs-backdrop="static">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
           <div class="modal-body">
 
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>

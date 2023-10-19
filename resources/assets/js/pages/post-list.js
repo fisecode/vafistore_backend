@@ -6,39 +6,6 @@ function truncated(content, max) {
   return truncatedContent;
 }
 
-// $(document).on(
-//   'click',
-//   'a[data-ajax-popup="true"], button[data-ajax-popup="true"], div[data-ajax-popup="true"]',
-//   function () {
-//     // alert('asd');
-//     var title = $(this).data('title');
-//     var size = $(this).data('size') == '' ? 'md' : $(this).data('size');
-//     var url = $(this).data('url');
-//     $('#commonModal .modal-title').html(title);
-//     $('#commonModal .modal-dialog').addClass('modal-' + size);
-//     $.ajax({
-//       url: url,
-//       success: function (data) {
-//         // alert(data);
-//         // return false;
-//         if (data.length) {
-//           $('#commonModal .modal-body').html(data);
-//           $('#commonModal').modal('show');
-//           // common_bind();
-//           // common_bind_select();
-//         } else {
-//           show_msg('Error', 'Permission denied', 'error');
-//           $('#commonModal').modal('hide');
-//         }
-//       },
-//       error: function (data) {
-//         data = data.responseJSON;
-//         show_msg('Error', data.error, 'error');
-//       }
-//     });
-//   }
-// );
-
 $(function () {
   $('#datatables-post').DataTable({
     responsive: true,
@@ -134,13 +101,11 @@ $(function () {
     ]
   });
 
-  $(document).on('click', '.delete-record', function (e) {
+  $(document).on('click', '.delete-post', function (e) {
     e.preventDefault();
-    var title = $(this).data('title');
     var size = $(this).data('size') == '' ? 'md' : $(this).data('size');
     var url = $(this).data('url');
 
-    $('#commonModal .modal-title').html(title);
     $('#commonModal .modal-dialog').addClass('modal-' + size);
     $.ajax({
       url: url,
@@ -162,54 +127,5 @@ $(function () {
         show_msg('Error', data.error, 'error');
       }
     });
-    // // sweetalert for confirmation of delete
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "You won't be able to revert this!",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonText: 'Yes, delete it!',
-    //   customClass: {
-    //     confirmButton: 'btn btn-primary me-3',
-    //     cancelButton: 'btn btn-label-secondary'
-    //   },
-    //   buttonsStyling: false
-    // }).then(function (result) {
-    //   if (result.isConfirmed) {
-    //     // delete the data
-    //     $.ajax({
-    //       url: url,
-    //       type: 'DELETE',
-    //       success: function () {
-    //         Swal.fire('Deleted!', 'Your post has been deleted.', 'success').then(() => {
-    //           // Reload the page after the post has been deleted
-    //           location.reload();
-    //         });
-    //       },
-    //       error: function (error) {
-    //         console.log(error);
-    //       }
-    //     });
-
-    //     // success sweetalert
-    //     Swal.fire({
-    //       icon: 'success',
-    //       title: 'Deleted!',
-    //       text: 'The user has been deleted!',
-    //       customClass: {
-    //         confirmButton: 'btn btn-success'
-    //       }
-    //     });
-    //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //     Swal.fire({
-    //       title: 'Cancelled',
-    //       text: 'The User is not deleted!',
-    //       icon: 'error',
-    //       customClass: {
-    //         confirmButton: 'btn btn-success'
-    //       }
-    //     });
-    //   }
-    // });
   });
 });

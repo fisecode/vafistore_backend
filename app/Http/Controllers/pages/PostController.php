@@ -36,7 +36,7 @@ class PostController extends Controller
               <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical me-2"></i></button>
               <div class="dropdown-menu dropdown-menu-end m-0">
                     <a href="javascript:0;" class="dropdown-item">View</a>
-                    <a href="#" class="dropdown-item delete-record" data-ajax-popup="true"
+                    <a href="#" class="dropdown-item delete-post"
                     data-title="Delete" data-toggle="tooltip" data-original-title="Delete" data-url="' .
             $delete .
             '" data-id="' .
@@ -242,7 +242,7 @@ class PostController extends Controller
   public function destroy(string $id)
   {
     $post = Post::findOrFail($id);
-    $image = $image->photo;
+    $image = $post->image;
 
     if ($image) {
       $this->deleteImage($image, 'posts');
@@ -255,8 +255,8 @@ class PostController extends Controller
 
   public function delete(string $id)
   {
-    $Post = Employee::findOrFail($id);
-    return view('content.pages.posts.delete', compact('Post'));
+    $post = Post::findOrFail($id);
+    return view('content.pages.posts.delete', compact('post'));
   }
 
   public function getData()
