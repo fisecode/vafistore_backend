@@ -18,8 +18,6 @@ $configData = Helper::appClasses();
 @endsection
 
 @section('vendor-script')
-
-
 <script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/toastr/toastr.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js')}}"></script>
@@ -162,22 +160,6 @@ $configData = Helper::appClasses();
         </form>
       </div>
     </div>
-    {{-- <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-
-          </div>
-        </div>
-      </div>
-    </div> --}}
   </div>
 </div>
 @endsection

@@ -37,7 +37,7 @@ class PostController extends Controller
               <div class="dropdown-menu dropdown-menu-end m-0">
                     <a href="javascript:0;" class="dropdown-item">View</a>
                     <a href="#" class="dropdown-item delete-record" data-ajax-popup="true"
-                    data-title="Delete" data-url="' .
+                    data-title="Delete" data-toggle="tooltip" data-original-title="Delete" data-url="' .
             $delete .
             '" data-id="' .
             $post->id .
@@ -255,8 +255,8 @@ class PostController extends Controller
 
   public function delete(string $id)
   {
-    Post::find($id)->delete();
-    return back();
+    $Post = Employee::findOrFail($id);
+    return view('content.pages.posts.delete', compact('Post'));
   }
 
   public function getData()
