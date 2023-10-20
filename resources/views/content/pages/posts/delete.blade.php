@@ -14,6 +14,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-outline-danger">Yes, delete post</button>
+    <button type="submit" class="btn btn-outline-danger">Yes, delete post</button>
   </div>
 </form>
