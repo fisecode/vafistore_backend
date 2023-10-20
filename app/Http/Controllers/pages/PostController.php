@@ -4,6 +4,7 @@ namespace App\Http\Controllers\pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -17,46 +18,93 @@ class PostController extends Controller
   /**
    * Display a listing of the resource.
    */
+  public function PostManagement()
+  {
+    return view('content.posts.index');
+  }
+
   public function index(Request $request)
   {
-    if ($request->ajax()) {
-      $post = Post::all();
-      return DataTables::of($post)
-        ->addIndexColumn()
-        ->addColumn('author', function ($post) {
-          return $post->user->name;
-        })
-        ->addColumn('action', function ($post) {
-          $edit = route('post.edit', $post->id);
-          $delete = route('post.delete', $post->id);
-          return '<div class="d-inline-block text-nowrap">
-              <a href="' .
-            $edit .
-            '" class="btn btn-sm btn-icon"><i class="mdi mdi-pencil-outline"></i></a>
-              <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical me-2"></i></button>
-              <div class="dropdown-menu dropdown-menu-end m-0">
-                    <a href="javascript:0;" class="dropdown-item">View</a>
-                    <a href="#" class="dropdown-item delete-post"
-                    data-title="Delete" data-toggle="tooltip" data-original-title="Delete" data-url="' .
-            $delete .
-            '" data-id="' .
-            $post->id .
-            '">Delete</a>
-            </div>
-          </div>';
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+    $columns = [
+      1 => 'id',
+      2 => 'name',
+      3 => 'email',
+      4 => 'email_verified_at',
+    ];
+
+    $search = [];
+
+    $totalData = User::count();
+
+    $totalFiltered = $totalData;
+
+    $limit = $request->input('length');
+    $start = $request->input('start');
+    $order = $columns[$request->input('order.0.column')];
+    $dir = $request->input('order.0.dir');
+
+    if (empty($request->input('search.value'))) {
+      $users = User::offset($start)
+        ->limit($limit)
+        ->orderBy($order, $dir)
+        ->get();
+    } else {
+      $search = $request->input('search.value');
+
+      $users = User::where('id', 'LIKE', "%{$search}%")
+        ->orWhere('name', 'LIKE', "%{$search}%")
+        ->orWhere('email', 'LIKE', "%{$search}%")
+        ->offset($start)
+        ->limit($limit)
+        ->orderBy($order, $dir)
+        ->get();
+
+      $totalFiltered = User::where('id', 'LIKE', "%{$search}%")
+        ->orWhere('name', 'LIKE', "%{$search}%")
+        ->orWhere('email', 'LIKE', "%{$search}%")
+        ->count();
     }
-    return view('content.pages.posts.list');
+
+    $data = [];
+
+    if (!empty($users)) {
+      // providing a dummy id instead of database ids
+      $ids = $start;
+
+      foreach ($users as $user) {
+        $nestedData['id'] = $user->id;
+        $nestedData['fake_id'] = ++$ids;
+        $nestedData['name'] = $user->name;
+        $nestedData['email'] = $user->email;
+        $nestedData['email_verified_at'] = $user->email_verified_at;
+
+        $data[] = $nestedData;
+      }
+    }
+
+    if ($data) {
+      return response()->json([
+        'draw' => intval($request->input('draw')),
+        'recordsTotal' => intval($totalData),
+        'recordsFiltered' => intval($totalFiltered),
+        'code' => 200,
+        'data' => $data,
+      ]);
+    } else {
+      return response()->json([
+        'message' => 'Internal Server Error',
+        'code' => 500,
+        'data' => [],
+      ]);
+    }
   }
   public function add()
   {
-    return view('content.pages.posts.form');
+    return view('content.posts.form');
   }
   public function indexCategory()
   {
-    return view('content.pages.posts.category');
+    return view('content.posts.category');
   }
 
   /**
@@ -169,7 +217,7 @@ class PostController extends Controller
         ->with('error', 'Post not found.');
     }
 
-    return view('content.pages.posts.form', compact('post'));
+    return view('content.posts.form', compact('post'));
   }
 
   /**
@@ -256,7 +304,7 @@ class PostController extends Controller
   public function delete(string $id)
   {
     $post = Post::findOrFail($id);
-    return view('content.pages.posts.delete', compact('post'));
+    return view('content.posts.delete', compact('post'));
   }
 
   public function getData()
