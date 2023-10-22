@@ -83,9 +83,9 @@ $configData = Helper::appClasses();
       <form class="add-new-category pt-0" id="addNewCategoryForm">
         <input type="hidden" name="id" id="category_id">
         <div class="form-floating form-floating-outline mb-4">
-          <input type="text" class="form-control" id="add-category-fullname" placeholder="John Doe" name="name"
-            aria-label="John Doe" />
-          <label for="add-category-fullname">Full Name</label>
+          <input type="text" class="form-control" id="add-category-name" placeholder="Category Name" name="name"
+            aria-label="Category Name" />
+          <label for="add-category-fullname">Category Name</label>
         </div>
         <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>

@@ -149,7 +149,7 @@ $(function () {
     // get data
     $.get(`${baseUrl}post-category\/${category_id}\/edit`, function (data) {
       $('#category_id').val(data.id);
-      $('#add-category-fullname').val(data.name);
+      $('#add-category-name').val(data.name);
     });
   });
 
