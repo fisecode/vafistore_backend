@@ -11,15 +11,14 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::create('pages', function (Blueprint $table) {
-      $table->increments('cuid');
+      $table->id();
       $table->text('slug');
-      $table->text('nama_page');
-      $table->longText('content');
-      $table->string('image');
-      $table->string('video');
-      $table->date('created_date');
-      $table->date('last_update');
-      $table->text('user');
+      $table->text('page_name');
+      $table->longText('content')->nullable();
+      $table->string('image')->nullable();
+      $table->string('video')->nullable();
+      $table->unsignedBigInteger('user_id');
+      $table->integer('status');
       $table->timestamps();
     });
   }

@@ -11,79 +11,6 @@ $.ajaxSetup({
   }
 });
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  (function () {
-    // Update/reset user image of account page
-    let accountUserImage = document.getElementById('uploadedImage');
-    const fileInput = document.querySelector('.account-file-input');
-    const resetFileInput = document.querySelector('.account-image-reset');
-
-    if (accountUserImage) {
-      const resetImage = accountUserImage.src;
-
-      fileInput.onchange = () => {
-        if (fileInput.files[0]) {
-          accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-          accountUserImage.style.display = 'block'; // Show the image
-          resetFileInput.style.display = 'block'; // Show the Reset button
-          resetFileInput.classList.add('btn');
-        }
-      };
-
-      resetFileInput.onclick = () => {
-        fileInput.value = '';
-        accountUserImage.src = resetImage;
-        accountUserImage.style.display = 'none'; // Hide the image
-        resetFileInput.style.display = 'none'; // Hide the Reset button
-        resetFileInput.classList.remove('btn');
-      };
-    }
-  })();
-  FormValidation.formValidation(document.getElementById('add-post'), {
-    fields: {
-      title: {
-        validators: {
-          notEmpty: {
-            message: 'Title is required'
-          }
-        }
-      },
-      content: {
-        validators: {
-          notEmpty: {
-            message: 'Content is required'
-          }
-        }
-      },
-      image: {
-        validators: {
-          file: {
-            extension: 'jpg,jpeg,png',
-            type: 'image/jpeg,image/png',
-            maxSize: 800000,
-            message: 'The selected file is not valid'
-          }
-        }
-      }
-    },
-    plugins: {
-      trigger: new FormValidation.plugins.Trigger(),
-      bootstrap5: new FormValidation.plugins.Bootstrap5({
-        // Use this for enabling/changing valid/invalid class
-        eleValidClass: '',
-        rowSelector: function (field, ele) {
-          // field is the field name & ele is the field element
-          return '.mb-4';
-        }
-      }),
-      // submitButton: new FormValidation.plugins.SubmitButton(),
-      // Submit the form when all fields are valid
-      defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
-      autoFocus: new FormValidation.plugins.AutoFocus()
-    }
-  });
-});
-
 (function () {
   const ap = document.querySelector('.content-editor');
   const quill = new Quill(ap, {
@@ -97,37 +24,107 @@ document.addEventListener('DOMContentLoaded', function (e) {
   // Mendengarkan perubahan di Quill Editor
   quill.on('text-change', function () {
     // Dapatkan nilai dari Quill Editor dan perbarui input 'content'
-    const about = document.querySelector('input[name=content]');
-    about.value = quill.root.innerHTML;
+    const content = document.querySelector('input[name=content]');
+    content.value = quill.root.innerHTML;
   });
 
-  // const form = document.getElementById('add-post');
-  // form.onsubmit = function () {
-  //   // Populate hidden form on submit
-  //   const about = document.querySelector('input[name=content]');
-  //   about.value = quill.root.innerHTML;
-  // };
+  document.addEventListener('DOMContentLoaded', function (e) {
+    (function () {
+      // Update/reset user image of account page
+      let accountUserImage = document.getElementById('uploadedImage');
+      const fileInput = document.querySelector('.account-file-input');
+      const resetFileInput = document.querySelector('.account-image-reset');
 
-  // Basic Tags
+      if (accountUserImage) {
+        const resetImage = accountUserImage.src;
 
-  const tagifyBasicEl = document.querySelector('#post-tags');
-  const TagifyBasic = new Tagify(tagifyBasicEl);
+        fileInput.onchange = () => {
+          if (fileInput.files[0]) {
+            accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+            accountUserImage.style.display = 'block'; // Show the image
+            resetFileInput.style.display = 'block'; // Show the Reset button
+            resetFileInput.classList.add('btn');
+          }
+        };
 
-  const bs = document.querySelectorAll('button[type="submit"]');
-  bs.forEach(button => {
-    button.addEventListener('click', function () {
-      if (this.name === 'publish') {
-        document.getElementById('status').value = '0';
-      } else if (this.name === 'draft') {
-        document.getElementById('status').value = '1';
-      } else if (this.name === 'unpublish') {
-        document.getElementById('status').value = '2';
+        resetFileInput.onclick = () => {
+          fileInput.value = '';
+          accountUserImage.src = resetImage;
+          accountUserImage.style.display = 'none'; // Hide the image
+          resetFileInput.style.display = 'none'; // Hide the Reset button
+          resetFileInput.classList.remove('btn');
+        };
+      }
+    })();
+    FormValidation.formValidation(document.getElementById('add-post'), {
+      fields: {
+        title: {
+          validators: {
+            notEmpty: {
+              message: 'Title is required'
+            }
+          }
+        },
+        content: {
+          validators: {
+            notEmpty: {
+              message: 'Content is required'
+            }
+          }
+        },
+        image: {
+          validators: {
+            file: {
+              extension: 'jpg,jpeg,png',
+              type: 'image/jpeg,image/png',
+              maxSize: 800000,
+              message: 'The selected file is not valid'
+            }
+          }
+        }
+      },
+      plugins: {
+        trigger: new FormValidation.plugins.Trigger(),
+        bootstrap5: new FormValidation.plugins.Bootstrap5({
+          // Use this for enabling/changing valid/invalid class
+          eleValidClass: '',
+          rowSelector: function (field, ele) {
+            // field is the field name & ele is the field element
+            return '.mb-4';
+          }
+        }),
+        submitButton: new FormValidation.plugins.SubmitButton(),
+        // Submit the form when all fields are valid
+        // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        autoFocus: new FormValidation.plugins.AutoFocus()
       }
     });
   });
 })();
 
 $(function () {
+  const tagifyBasicEl = document.querySelector('#post-tags');
+  const TagifyBasic = new Tagify(tagifyBasicEl);
+
+  const bs = document.querySelectorAll('button[type="submit"]');
+  bs.forEach(button => {
+    button.addEventListener('click', function () {
+      if (this.name === 'publish' || this.name === 'update') {
+        document.getElementById('status').value = '1';
+      } else if (this.name === 'draft') {
+        document.getElementById('status').value = '0';
+      } else if (this.name === 'unpublish') {
+        document.getElementById('status').value = '2';
+      }
+    });
+  });
+
+  $('#discard').click(function (e) {
+    e.preventDefault(); // Mencegah tindakan bawaan tombol
+    // Kode untuk mengarahkan ke halaman daftar posting
+    window.location.href = `${baseUrl}posts`;
+  });
+
   // Select2
   const select2 = $('.select2');
   if (select2.length) {

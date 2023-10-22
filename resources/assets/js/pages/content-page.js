@@ -1,16 +1,5 @@
 'use strict';
 
-function truncated(content, max) {
-  const maxContentLength = max;
-  const truncatedContent = content.length > maxContentLength ? content.slice(0, maxContentLength) + '...' : content;
-  return truncatedContent;
-}
-
-var dt_user_table = $('.datatables-posts'),
-  select2 = $('.select2'),
-  userView = baseUrl + 'app/user/view/account',
-  offCanvasForm = $('#offcanvasAddCategory');
-
 // ajax setup
 $.ajaxSetup({
   headers: {
@@ -20,19 +9,24 @@ $.ajaxSetup({
 
 // Datatable (jquery)
 $(function () {
-  if (dt_user_table.length) {
-    var dt_user = dt_user_table.DataTable({
+  var dt_pages_table = $('.datatables-pages'),
+    statusObj = {
+      0: { title: 'not_active' },
+      1: { title: 'active' }
+    };
+
+  if (dt_pages_table.length) {
+    var dt_pages = dt_pages_table.DataTable({
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'post-list'
+        url: baseUrl + 'page-list'
       },
       columns: [
         // columns according to JSON
         { data: '' },
-        { data: 'title' },
-        { data: 'category' },
-        { data: 'author' },
+        { data: 'id' },
+        { data: 'name' },
         { data: 'status' },
         { data: 'action' }
       ],
@@ -49,85 +43,53 @@ $(function () {
           }
         },
         {
-          // Content
+          searchable: false,
+          orderable: false,
           targets: 1,
-          responsivePriority: 1,
           render: function (data, type, full, meta) {
-            const $id = full['id'];
-            const $content = full['meta_desc'];
-            const $image = full['image'];
-            let $output = '';
-
-            if ($image) {
-              $output = `<img src="../storage/assets/img/posts/${$image}" alt="Product-${$id}" class="rounded-2">`;
-            } else {
-              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              const stateNum = Math.floor(Math.random() * 6);
-              const $state = states[stateNum];
-              const $category = full['category'];
-              const $initials = ($category.match(/\b\w/g) || []).map(match => match.toUpperCase()).join('');
-              $output = `<span class="avatar-initial rounded-2 bg-label-${$state}">${$initials}</span>`;
-            }
-
-            const truncatedContent = truncated($content, 30);
-            const truncatedTitle = truncated(data, 30);
-            const $row_output = `
-      <div class="d-flex justify-content-start align-items-center product-name">
-        <div class="avatar-wrapper me-3">
-          <div class="avatar rounded-2 bg-label-secondary">
-            ${$output}
-          </div>
-        </div>
-        <div class="d-flex flex-column">
-          <span class="text-nowrap text-heading fw-medium">
-            ${truncatedTitle}
-          </span>
-          <small class="text-truncate d-none d-sm-block">
-            ${truncatedContent}
-          </small>
-        </div>
-      </div>`;
-            return $row_output;
+            return `<span>${full.fake_id}</span>`;
           }
         },
         {
-          // category
+          // Category name
           targets: 2,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
-            return `<span>${full.category}</span>`;
-          }
-        },
-        {
-          // Author
-          targets: 3,
-          responsivePriority: 5,
-          render: function (data, type, full, meta) {
-            return `<span>${full.author}</span>`;
+            return `<span>${full.name}</span>`;
           }
         },
         {
           // Status
-          targets: 4,
-          responsivePriority: 3,
+          targets: 3,
+          responsivePriority: 4,
           render: function (data, type, full, meta) {
-            let badgeClass, statusText;
-
-            if (data === 1) {
-              badgeClass = 'bg-label-success';
-              statusText = 'Publish';
-            } else if (data === 0) {
-              badgeClass = 'bg-label-info';
-              statusText = 'Draft';
-            } else if (data === 2) {
-              badgeClass = 'bg-label-warning';
-              statusText = 'Unpublish';
-            } else {
-              badgeClass = 'bg-label-default';
-              statusText = 'Unknown';
-            }
-
-            return `<span class="badge rounded-pill ${badgeClass}" text-capitalized>${statusText}</span>`;
+            var $status = full['status'];
+            var statusSwitchObj = {
+              not_active:
+                '<label class="switch switch-primary switch-sm">' +
+                `<input type="checkbox" class="switch-input" id="switch" data-id="${full['id']}">` +
+                '<span class="switch-toggle-slider">' +
+                '<span class="switch-off">' +
+                '</span>' +
+                '</span>' +
+                '</label>',
+              active:
+                '<label class="switch switch-primary switch-sm">' +
+                `<input type="checkbox" class="switch-input" checked="" data-id="${full['id']}">` +
+                '<span class="switch-toggle-slider">' +
+                '<span class="switch-on">' +
+                '</span>' +
+                '</span>' +
+                '</label>'
+            };
+            return (
+              "<span class='text-truncate' >" +
+              statusSwitchObj[statusObj[$status].title] +
+              '<span class="d-none">' +
+              statusObj[$status].title +
+              '</span>' +
+              '</span>'
+            );
           }
         },
         {
@@ -137,18 +99,13 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'post/' + full['id'] + '/edit';
+            var edit = baseUrl + 'page/' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
               '<a href="' +
               edit +
               '" class="btn btn-sm btn-icon"><i class="mdi mdi-pencil-outline"></i></a>' +
-              '<button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical mdi-20px"></i></button>' +
-              '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="' +
-              userView +
-              '" class="dropdown-item">View</a>' +
-              `<a href="javascript:;" class="dropdown-item delete-record" data-id="${full['id']}">Delete</a>` +
+              `<button class="btn btn-sm btn-icon delete-record" data-id="${full['id']}"><i class="mdi mdi-delete-outline mdi-20px"></i></button>` +
               '</div>'
             );
           }
@@ -172,10 +129,10 @@ $(function () {
       // Buttons with Dropdown
       buttons: [
         {
-          text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Post</span>',
+          text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Page</span>',
           className: 'add-new btn btn-primary mx-3',
           action: function () {
-            window.location.href = '/post/add';
+            window.location.href = '/page/add';
           }
         }
       ],
@@ -215,9 +172,39 @@ $(function () {
     });
   }
 
+  // Update Status
+  $(document).on('change', '.switch-input', function () {
+    var id = $(this).data('id');
+
+    $.ajax({
+      method: 'PUT',
+      url: `${baseUrl}page-list/${id}`,
+      data: {
+        newStatus: $(this).is(':checked') ? 1 : 0
+      },
+      success: function (response) {
+        dt_pages.draw();
+
+        // sweetalert
+        Swal.fire({
+          icon: 'success',
+          title: `${response.title}`,
+          text: `${response.message}`,
+          customClass: {
+            confirmButton: 'btn btn-success'
+          }
+        });
+      },
+      error: function (error) {
+        console.error('Terjadi kesalahan dalam permintaan AJAX:');
+        console.error(error);
+      }
+    });
+  });
+
   // Delete Record
   $(document).on('click', '.delete-record', function () {
-    var post_id = $(this).data('id'),
+    var page_id = $(this).data('id'),
       dtrModal = $('.dtr-bs-modal.show');
 
     // hide responsive modal in small screen
@@ -242,9 +229,9 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}post-list/${post_id}`,
+          url: `${baseUrl}page-list/${page_id}`,
           success: function () {
-            dt_user.draw();
+            dt_pages.draw();
           },
           error: function (error) {
             console.log(error);
@@ -255,7 +242,7 @@ $(function () {
         Swal.fire({
           icon: 'success',
           title: 'Deleted!',
-          text: 'The post has been deleted!',
+          text: 'The page has been deleted!',
           customClass: {
             confirmButton: 'btn btn-success'
           }
@@ -263,7 +250,7 @@ $(function () {
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           title: 'Cancelled',
-          text: 'The post is not deleted!',
+          text: 'The page is not deleted!',
           icon: 'error',
           customClass: {
             confirmButton: 'btn btn-success'
@@ -271,10 +258,5 @@ $(function () {
         });
       }
     });
-  });
-
-  // clearing form data when offcanvas hidden
-  offCanvasForm.on('hidden.bs.offcanvas', function () {
-    fv.resetForm(true);
   });
 });

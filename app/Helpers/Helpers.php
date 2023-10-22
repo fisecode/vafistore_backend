@@ -9,9 +9,7 @@ class Helpers
 {
   public static function appClasses()
   {
-
     $data = config('custom.custom');
-
 
     // default data array
     $DefaultData = [
@@ -33,13 +31,13 @@ class Helpers
       // 'menuOffcanvas' => false,
       'customizerControls' => [
         'rtl',
-      'style',
-      'headerType',
-      'contentLayout',
-      'layoutCollapsed',
-      'showDropdownOnHover',
-      'layoutNavbarOptions',
-      'themes',
+        'style',
+        'headerType',
+        'contentLayout',
+        'layoutCollapsed',
+        'showDropdownOnHover',
+        'layoutNavbarOptions',
+        'themes',
       ],
       //   'defaultLanguage'=>'en',
     ];
@@ -95,7 +93,7 @@ class Helpers
         }
       }
     }
-    $styleVal = $data['myStyle'] == "dark" ? "dark" : "light";
+    $styleVal = $data['myStyle'] == 'dark' ? 'dark' : 'light';
     if (isset($_COOKIE['style'])) {
       $styleVal = $_COOKIE['style'];
     }
@@ -143,7 +141,6 @@ class Helpers
     if ($layoutClasses['menuFixed'] == true) {
       $layoutClasses['menuFixed'] = 'layout-menu-fixed';
     }
-
 
     // Footer Fixed
     if ($layoutClasses['footerFixed'] == true) {

@@ -170,9 +170,6 @@ class PostController extends Controller
       $imagePath = 'no-photo.jpg'; // Default image path if no file is uploaded
     }
 
-    // Get the current date and time
-    $dateNow = now();
-
     // Create and save the post
     $post = new Post();
     $post->user_id = Auth::user()->id;
@@ -184,14 +181,12 @@ class PostController extends Controller
     $post->content = $content;
     $post->category_id = $request->category;
     $post->tags = $tagsString;
-    $post->created_date = $dateNow;
-    $post->last_update = $dateNow;
     $post->status = $status;
     $post->save();
 
     // Redirect with success or error message
     if ($post) {
-      $message = $status == 0 ? 'Article successfully published!' : 'Article successfully saved as draft.';
+      $message = $status == 1 ? 'Article successfully published!' : 'Article successfully saved as draft.';
       return redirect()
         ->route('post')
         ->with('success', $message);
@@ -253,7 +248,6 @@ class PostController extends Controller
 
     $post = Post::findOrFail($id);
     $status = $request->status ?? 0;
-    $dateNow = now();
 
     // Handle image upload
     $imagePath = $post->image;
@@ -279,12 +273,11 @@ class PostController extends Controller
       'content' => $request->content,
       'category_id' => $request->category,
       'tags' => $request->tags,
-      'last_update' => $dateNow,
       'status' => $status,
     ]);
 
     // Redirect with success or error message
-    $message = $status == 0 ? 'Article successfully updated!' : 'Article successfully unpublished.';
+    $message = $status == 1 ? 'Article successfully updated!' : 'Article successfully unpublished.';
     return redirect()
       ->route('post')
       ->with('success', $message);

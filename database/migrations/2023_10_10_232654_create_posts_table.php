@@ -22,8 +22,6 @@ return new class extends Migration {
       $table->longText('content')->nullable();
       $table->unsignedBigInteger('category_id')->nullable();
       $table->text('tags')->nullable();
-      $table->date('created_date');
-      $table->date('last_update');
       $table->integer('status');
       $table->timestamps();
     });

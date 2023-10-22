@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\pages\DashboardController;
+use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\pages\PostController;
 use App\Http\Controllers\pages\PostCategoryController;
 
@@ -31,13 +32,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
   Route::resource('/post-category', PostCategoryController::class);
   Route::get('/post/category', [PostCategoryController::class, 'PostCategoryManagement'])->name('post.category');
   Route::get('/post/category/get', [PostCategoryController::class, 'get'])->name('post.category.get');
-
-  // Route::get('/post/list', [PostController::class, 'index'])->name('post.list');
-  // Route::delete('/post/{id}', [PostController::class, 'destroy'])->name('post.destroy');
-  // Route::get('/post/delete/{id}', [PostController::class, 'delete'])->name('post.delete');
-  // Route::get('/post/category', [PostController::class, 'indexCategory'])->name('post.category');
-  // Route::get('/post/get', [PostController::class, 'getData'])->name('post.get');
-  Route::get('/page-2', $controller_path . '\pages\Page2@index')->name('pages-page-2');
+  //Pages
+  Route::resource('/page-list', PageController::class);
+  Route::get('page', [PageController::class, 'PageManagement'])->name('page');
+  Route::get('page/add', [PageController::class, 'create'])->name('page.add');
+  Route::get('page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
 });
 
 Route::get('/', function () {
