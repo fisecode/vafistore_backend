@@ -20,7 +20,7 @@ class Post extends Model
     'image',
     'video',
     'content',
-    'kategori',
+    'category_id',
     'tags',
     'created_date',
     'last_update',
@@ -30,5 +30,9 @@ class Post extends Model
   public function user()
   {
     return $this->belongsTo(User::class, 'user_id');
+  }
+  public function category()
+  {
+    return $this->belongsTo(PostCategory::class, 'category_id');
   }
 }

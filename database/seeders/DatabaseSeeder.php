@@ -30,6 +30,21 @@ class DatabaseSeeder extends Seeder
       'status' => 1,
     ]);
 
+    DB::table('post_categories')->insert([
+      [
+        'name' => 'Game',
+      ],
+      [
+        'name' => 'Premium',
+      ],
+      [
+        'name' => 'Pulsa',
+      ],
+      [
+        'name' => 'Tutorial',
+      ],
+    ]);
+
     DB::table('admins')->insert([
       [
         'cuid' => 1,

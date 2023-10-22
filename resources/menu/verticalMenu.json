@@ -23,7 +23,7 @@
       "submenu": [
         {
           "url": "posts",
-          "name": "Posts",
+          "name": "Posts List",
           "slug": "posts"
         },
         {

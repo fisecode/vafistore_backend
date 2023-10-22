@@ -17,6 +17,8 @@ $isEdit = isset($post);
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/dropzone/dropzone.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/flatpickr/flatpickr.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/tagify/tagify.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
 <style>
   .hide-item {
     display: none;
@@ -37,6 +39,10 @@ $isEdit = isset($post);
 <script src="{{asset('assets/vendor/libs/flatpickr/flatpickr.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/tagify/tagify.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/toastr/toastr.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
 @endsection
 
 @section('page-script')
@@ -117,7 +123,7 @@ $isEdit = isset($post);
                     </span>
                   </div>
                 </div>
-                <input type="hidden" name="content" id="quill-content">
+                <input type="hidden" name="content" id="quill-content" value="{{ $isEdit ? $post->content : '' }}">
                 <div class="content-editor border-0 pb-1 ql-container ql-snow" id="article-content">
                   @if ($isEdit)
                   {!! $post->content !!}
@@ -139,10 +145,10 @@ $isEdit = isset($post);
           <div class="card-body">
             <div class="text-center mb-3">
               @if ($isEdit)
-              <img src="{{ asset('storage/assets/img/posts/' . $post->image) }}" alt="user-avatar"
-                class="w-100 h-auto rounded" id="uploadedAvatar" />
+              <img src="{{ asset('storage/assets/img/posts/' . $post->image) }}" alt="post-img"
+                class="w-100 h-auto rounded" id="uploadedImage" />
               @else
-              <img src="" alt="user-avatar" class="w-100 h-auto hide-item rounded" id="uploadedAvatar" />
+              <img src="" alt="post-img" class="w-100 h-auto hide-item rounded" id="uploadedImage" />
               @endif
             </div>
             <div class="button-wrapper text-center">
@@ -171,7 +177,7 @@ $isEdit = isset($post);
             <!-- Category -->
             <div class="mb-4 col category-select2-dropdown d-flex justify-content-between">
               <div class="form-floating form-floating-outline w-100 me-3">
-                {{-- <select id="category-org" class="select2 form-select" data-placeholder="Select Category"
+                <select id="category-org" class="select2 form-select" data-placeholder="Select Category"
                   name="category">
                   <option value="">Select Category</option>
                   @foreach($categories as $category)
@@ -180,20 +186,12 @@ $isEdit = isset($post);
                     {{ $category->name }}
                   </option>
                   @endforeach
-                </select> --}}
-
-                <select id="category-org" class="select2 form-select" data-placeholder="Select Category"
-                  name="category">
-                  <option value="">Select Category</option>
-                  <option value="Blog" {{ $isEdit && $post->kategori === 'Blog' ? 'selected' : '' }}>Blog</option>
-                  <option value="Tutorial" {{ $isEdit && $post->kategori === 'Tutorial' ? 'selected' : '' }}>Tutorial
-                  </option>
-                  <!-- Tambahkan opsi kategori lainnya sesuai kebutuhan -->
                 </select>
                 <label for="category">Category</label>
               </div>
               <div>
-                <button class="btn btn-outline-primary btn-icon btn-lg h-px-50">
+                <button class="btn btn-outline-primary btn-icon btn-lg h-px-50" tabindex="0" type="button"
+                  data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddCategory">
                   <i class="mdi mdi-plus"></i>
                 </button>
               </div>
@@ -212,6 +210,25 @@ $isEdit = isset($post);
       </div>
     </div>
   </form>
+  <!-- Offcanvas to add new category -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCategory"
+    aria-labelledby="offcanvasAddCategoryLabel">
+    <div class="offcanvas-header">
+      <h5 id="offcanvasAddCategoryLabel" class="offcanvas-title">Add Category</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body mx-0 flex-grow-0">
+      <form class="add-new-category pt-0" id="addNewCategoryForm">
+        <div class="form-floating form-floating-outline mb-4">
+          <input type="text" class="form-control" id="add-category-name" placeholder="Category" name="name"
+            aria-label="Category" />
+          <label for="add-category-name">Category Name</label>
+        </div>
+        <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 

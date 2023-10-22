@@ -1,14 +1,7 @@
 'use strict';
 
-function truncated(content, max) {
-  const maxContentLength = max;
-  const truncatedContent = content.length > maxContentLength ? content.slice(0, maxContentLength) + '...' : content;
-  return truncatedContent;
-}
-
-var dt_user_table = $('.datatables-posts'),
+var dt_post_category_table = $('.datatables-post-category'),
   select2 = $('.select2'),
-  userView = baseUrl + 'app/user/view/account',
   offCanvasForm = $('#offcanvasAddCategory');
 
 // ajax setup
@@ -20,20 +13,18 @@ $.ajaxSetup({
 
 // Datatable (jquery)
 $(function () {
-  if (dt_user_table.length) {
-    var dt_user = dt_user_table.DataTable({
+  if (dt_post_category_table.length) {
+    var dt_category = dt_post_category_table.DataTable({
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'post-list'
+        url: baseUrl + 'post-category'
       },
       columns: [
         // columns according to JSON
         { data: '' },
-        { data: 'title' },
-        { data: 'category' },
-        { data: 'author' },
-        { data: 'status' },
+        { data: 'id' },
+        { data: 'name' },
         { data: 'action' }
       ],
       columnDefs: [
@@ -49,85 +40,19 @@ $(function () {
           }
         },
         {
-          // Content
+          searchable: false,
+          orderable: false,
           targets: 1,
-          responsivePriority: 1,
           render: function (data, type, full, meta) {
-            const $id = full['id'];
-            const $content = full['meta_desc'];
-            const $image = full['image'];
-            let $output = '';
-
-            if ($image) {
-              $output = `<img src="../storage/assets/img/posts/${$image}" alt="Product-${$id}" class="rounded-2">`;
-            } else {
-              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              const stateNum = Math.floor(Math.random() * 6);
-              const $state = states[stateNum];
-              const $category = full['category'];
-              const $initials = ($category.match(/\b\w/g) || []).map(match => match.toUpperCase()).join('');
-              $output = `<span class="avatar-initial rounded-2 bg-label-${$state}">${$initials}</span>`;
-            }
-
-            const truncatedContent = truncated($content, 30);
-            const truncatedTitle = truncated(data, 30);
-            const $row_output = `
-      <div class="d-flex justify-content-start align-items-center product-name">
-        <div class="avatar-wrapper me-3">
-          <div class="avatar rounded-2 bg-label-secondary">
-            ${$output}
-          </div>
-        </div>
-        <div class="d-flex flex-column">
-          <span class="text-nowrap text-heading fw-medium">
-            ${truncatedTitle}
-          </span>
-          <small class="text-truncate d-none d-sm-block">
-            ${truncatedContent}
-          </small>
-        </div>
-      </div>`;
-            return $row_output;
+            return `<span>${full.fake_id}</span>`;
           }
         },
         {
-          // category
+          // Category name
           targets: 2,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
-            return `<span>${full.category}</span>`;
-          }
-        },
-        {
-          // Author
-          targets: 3,
-          responsivePriority: 5,
-          render: function (data, type, full, meta) {
-            return `<span>${full.author}</span>`;
-          }
-        },
-        {
-          // Status
-          targets: 4,
-          responsivePriority: 3,
-          render: function (data, type, full, meta) {
-            let badgeClass, statusText;
-
-            if (data === 0) {
-              badgeClass = 'bg-label-success';
-              statusText = 'Publish';
-            } else if (data === 1) {
-              badgeClass = 'bg-label-info';
-              statusText = 'Draft';
-            } else if (data === 2) {
-              badgeClass = 'bg-label-warning';
-              statusText = 'Unpublish';
-            } else {
-              badgeClass = 'bg-label-default';
-              statusText = 'Unknown';
-            }
-
-            return `<span class="badge rounded-pill ${badgeClass}" text-capitalized>${statusText}</span>`;
+            return `<span>${full.name}</span>`;
           }
         },
         {
@@ -137,18 +62,10 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'post/' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
-              '<a href="' +
-              edit +
-              '" class="btn btn-sm btn-icon"><i class="mdi mdi-pencil-outline"></i></a>' +
-              '<button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical mdi-20px"></i></button>' +
-              '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="' +
-              userView +
-              '" class="dropdown-item">View</a>' +
-              `<a href="javascript:;" class="dropdown-item delete-record" data-id="${full['id']}">Delete</a>` +
+              `<button class="btn btn-sm btn-icon edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddCategory"><i class="mdi mdi-pencil-outline mdi-20px"></i></button>` +
+              `<button class="btn btn-sm btn-icon delete-record" data-id="${full['id']}"><i class="mdi mdi-delete-outline mdi-20px"></i></button>` +
               '</div>'
             );
           }
@@ -172,10 +89,11 @@ $(function () {
       // Buttons with Dropdown
       buttons: [
         {
-          text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Post</span>',
+          text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Category</span>',
           className: 'add-new btn btn-primary mx-3',
-          action: function () {
-            window.location.href = '/post/add';
+          attr: {
+            'data-bs-toggle': 'offcanvas',
+            'data-bs-target': '#offcanvasAddCategory'
           }
         }
       ],
@@ -215,6 +133,99 @@ $(function () {
     });
   }
 
+  // edit record
+  $(document).on('click', '.edit-record', function () {
+    var category_id = $(this).data('id'),
+      dtrModal = $('.dtr-bs-modal.show');
+
+    // hide responsive modal in small screen
+    if (dtrModal.length) {
+      dtrModal.modal('hide');
+    }
+
+    // changing the title of offcanvas
+    $('#offcanvasAddCategoryLabel').html('Edit Category');
+
+    // get data
+    $.get(`${baseUrl}post-category\/${category_id}\/edit`, function (data) {
+      $('#category_id').val(data.id);
+      $('#add-category-fullname').val(data.name);
+    });
+  });
+
+  // changing the title
+  $('.add-new').on('click', function () {
+    $('#category_id').val(''); //reseting input field
+    $('#offcanvasAddCategoryLabel').html('Add Category');
+  });
+
+  const addNewCategoryForm = document.getElementById('addNewCategoryForm');
+
+  // category form validation
+  const fv = FormValidation.formValidation(addNewCategoryForm, {
+    fields: {
+      name: {
+        validators: {
+          notEmpty: {
+            message: 'Please enter fullname'
+          }
+        }
+      }
+    },
+    plugins: {
+      trigger: new FormValidation.plugins.Trigger(),
+      bootstrap5: new FormValidation.plugins.Bootstrap5({
+        // Use this for enabling/changing valid/invalid class
+        eleValidClass: '',
+        rowSelector: function (field, ele) {
+          // field is the field name & ele is the field element
+          return '.mb-4';
+        }
+      }),
+      submitButton: new FormValidation.plugins.SubmitButton(),
+      // Submit the form when all fields are valid
+      // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+      autoFocus: new FormValidation.plugins.AutoFocus()
+    }
+  }).on('core.form.valid', function () {
+    // adding or updating category when form successfully validate
+    $.ajax({
+      data: $('#addNewCategoryForm').serialize(),
+      url: `${baseUrl}post-category`,
+      type: 'POST',
+      success: function (response) {
+        dt_category.draw();
+        offCanvasForm.offcanvas('hide');
+
+        // sweetalert
+        Swal.fire({
+          icon: 'success',
+          title: `Successfully ${response.message}!`,
+          text: `Category ${response.message} Successfully.`,
+          customClass: {
+            confirmButton: 'btn btn-success'
+          }
+        });
+      },
+      error: function (err) {
+        offCanvasForm.offcanvas('hide');
+        Swal.fire({
+          title: 'Duplicate Entry!',
+          text: 'Category name should be unique.',
+          icon: 'error',
+          customClass: {
+            confirmButton: 'btn btn-success'
+          }
+        });
+      }
+    });
+  });
+
+  // clearing form data when offcanvas hidden
+  offCanvasForm.on('hidden.bs.offcanvas', function () {
+    fv.resetForm(true);
+  });
+
   // Delete Record
   $(document).on('click', '.delete-record', function () {
     var post_id = $(this).data('id'),
@@ -242,9 +253,9 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}post-list/${post_id}`,
+          url: `${baseUrl}post-category/${post_id}`,
           success: function () {
-            dt_user.draw();
+            dt_category.draw();
           },
           error: function (error) {
             console.log(error);
@@ -255,7 +266,7 @@ $(function () {
         Swal.fire({
           icon: 'success',
           title: 'Deleted!',
-          text: 'The post has been deleted!',
+          text: 'The category has been deleted!',
           customClass: {
             confirmButton: 'btn btn-success'
           }
@@ -263,7 +274,7 @@ $(function () {
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           title: 'Cancelled',
-          text: 'The post is not deleted!',
+          text: 'The category is not deleted!',
           icon: 'error',
           customClass: {
             confirmButton: 'btn btn-success'

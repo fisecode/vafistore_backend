@@ -4,10 +4,17 @@
 
 'use strict';
 
+// ajax setup
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+
 document.addEventListener('DOMContentLoaded', function (e) {
   (function () {
     // Update/reset user image of account page
-    let accountUserImage = document.getElementById('uploadedAvatar');
+    let accountUserImage = document.getElementById('uploadedImage');
     const fileInput = document.querySelector('.account-file-input');
     const resetFileInput = document.querySelector('.account-image-reset');
 
@@ -32,6 +39,49 @@ document.addEventListener('DOMContentLoaded', function (e) {
       };
     }
   })();
+  FormValidation.formValidation(document.getElementById('add-post'), {
+    fields: {
+      title: {
+        validators: {
+          notEmpty: {
+            message: 'Title is required'
+          }
+        }
+      },
+      content: {
+        validators: {
+          notEmpty: {
+            message: 'Content is required'
+          }
+        }
+      },
+      image: {
+        validators: {
+          file: {
+            extension: 'jpg,jpeg,png',
+            type: 'image/jpeg,image/png',
+            maxSize: 800000,
+            message: 'The selected file is not valid'
+          }
+        }
+      }
+    },
+    plugins: {
+      trigger: new FormValidation.plugins.Trigger(),
+      bootstrap5: new FormValidation.plugins.Bootstrap5({
+        // Use this for enabling/changing valid/invalid class
+        eleValidClass: '',
+        rowSelector: function (field, ele) {
+          // field is the field name & ele is the field element
+          return '.mb-4';
+        }
+      }),
+      // submitButton: new FormValidation.plugins.SubmitButton(),
+      // Submit the form when all fields are valid
+      defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+      autoFocus: new FormValidation.plugins.AutoFocus()
+    }
+  });
 });
 
 (function () {
@@ -44,12 +94,19 @@ document.addEventListener('DOMContentLoaded', function (e) {
     theme: 'snow'
   });
 
-  const form = document.getElementById('add-post');
-  form.onsubmit = function () {
-    // Populate hidden form on submit
+  // Mendengarkan perubahan di Quill Editor
+  quill.on('text-change', function () {
+    // Dapatkan nilai dari Quill Editor dan perbarui input 'content'
     const about = document.querySelector('input[name=content]');
     about.value = quill.root.innerHTML;
-  };
+  });
+
+  // const form = document.getElementById('add-post');
+  // form.onsubmit = function () {
+  //   // Populate hidden form on submit
+  //   const about = document.querySelector('input[name=content]');
+  //   about.value = quill.root.innerHTML;
+  // };
 
   // Basic Tags
 
@@ -84,46 +141,79 @@ $(function () {
     });
   }
 
-  const formRepeater = $('.form-repeater');
+  var offCanvasForm = $('#offcanvasAddCategory');
 
-  // Form Repeater
-  // ! Using jQuery each loop to add dynamic id and class for inputs. You may need to improve it based on form fields.
-  // -----------------------------------------------------------------------------------------------------------------
+  // validating form and updating categories data
+  const addNewUserForm = document.getElementById('addNewCategoryForm');
 
-  if (formRepeater.length) {
-    const row = 2;
-    const col = 1;
-    formRepeater.on('submit', function (e) {
-      e.preventDefault();
-    });
-    formRepeater.repeater({
-      show: function () {
-        const fromControl = $(this).find('.form-control, .form-select');
-        const formLabel = $(this).find('.form-label');
+  // category form validation
+  const fv = FormValidation.formValidation(addNewUserForm, {
+    fields: {
+      name: {
+        validators: {
+          notEmpty: {
+            message: 'Please enter category name'
+          }
+        }
+      }
+    },
+    plugins: {
+      trigger: new FormValidation.plugins.Trigger(),
+      bootstrap5: new FormValidation.plugins.Bootstrap5({
+        // Use this for enabling/changing valid/invalid class
+        eleValidClass: '',
+        rowSelector: function (field, ele) {
+          // field is the field name & ele is the field element
+          return '.mb-4';
+        }
+      }),
+      submitButton: new FormValidation.plugins.SubmitButton(),
+      // Submit the form when all fields are valid
+      // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+      autoFocus: new FormValidation.plugins.AutoFocus()
+    }
+  }).on('core.form.valid', function () {
+    // adding or updating user when form successfully validate
+    $.ajax({
+      data: $('#addNewCategoryForm').serialize(),
+      url: `${baseUrl}post-category`,
+      type: 'POST',
+      success: function (response) {
+        if (response.success) {
+          // Refresh the Select2 dropdown
+          $.each(response.categories, function (id, text) {
+            $('#category-org').append(new Option(text, id, false, false));
+          });
+          $('#category-org').trigger('change');
+        }
+        offCanvasForm.offcanvas('hide');
 
-        fromControl.each(function (i) {
-          const id = 'form-repeater-' + row + '-' + col;
-          $(fromControl[i]).attr('id', id);
-          $(formLabel[i]).attr('for', id);
-          col++;
+        // sweetalert
+        Swal.fire({
+          icon: 'success',
+          title: `Successfully ${response.message}!`,
+          text: `Category ${response.message} Successfully.`,
+          customClass: {
+            confirmButton: 'btn btn-success'
+          }
         });
-
-        row++;
-        $(this).slideDown();
-        $('.select2-container').remove();
-        $('.select2.form-select').select2({
-          placeholder: 'Placeholder text'
-        });
-        $('.select2-container').css('width', '100%');
-        select2Focus('.form-select');
-        $('.form-repeater:first .form-select').select2({
-          dropdownParent: $(this).parent(),
-          placeholder: 'Placeholder text'
-        });
-        $('.ecommerce-select2-dropdown .form-select').select2({
-          dropdownParent: $('.ecommerce-select2-dropdown').parent()
+      },
+      error: function (err) {
+        offCanvasForm.offcanvas('hide');
+        Swal.fire({
+          title: 'Duplicate Entry!',
+          text: 'Category already exist.',
+          icon: 'error',
+          customClass: {
+            confirmButton: 'btn btn-success'
+          }
         });
       }
     });
-  }
+  });
+
+  // clearing form data when offcanvas hidden
+  offCanvasForm.on('hidden.bs.offcanvas', function () {
+    fv.resetForm(true);
+  });
 });

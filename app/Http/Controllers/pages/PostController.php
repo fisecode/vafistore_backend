@@ -4,14 +4,12 @@ namespace App\Http\Controllers\pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
-use App\Models\User;
+use App\Models\PostCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageStorage;
-use Illuminate\Support\Facades\Storage;
-use DataTables;
 class PostController extends Controller
 {
   use ImageStorage;
@@ -26,15 +24,15 @@ class PostController extends Controller
   public function index(Request $request)
   {
     $columns = [
-      1 => 'id',
-      2 => 'name',
-      3 => 'email',
-      4 => 'email_verified_at',
+      1 => 'title',
+      2 => 'category_id',
+      3 => 'author',
+      4 => 'status',
     ];
 
     $search = [];
 
-    $totalData = User::count();
+    $totalData = Post::count();
 
     $totalFiltered = $totalData;
 
@@ -44,39 +42,53 @@ class PostController extends Controller
     $dir = $request->input('order.0.dir');
 
     if (empty($request->input('search.value'))) {
-      $users = User::offset($start)
+      $posts = Post::offset($start)
         ->limit($limit)
         ->orderBy($order, $dir)
         ->get();
     } else {
       $search = $request->input('search.value');
 
-      $users = User::where('id', 'LIKE', "%{$search}%")
-        ->orWhere('name', 'LIKE', "%{$search}%")
-        ->orWhere('email', 'LIKE', "%{$search}%")
+      $posts = Post::where('id', 'LIKE', "%{$search}%")
+        ->orWhere('title', 'LIKE', "%{$search}%")
+        ->orWhere('status', 'LIKE', "%{$search}%")
+        ->orWhereHas('user', function ($q) use ($search) {
+          $q->where('name', 'LIKE', "%{$search}%");
+        })
+        ->orWhereHas('category', function ($q) use ($search) {
+          $q->where('name', 'LIKE', "%{$search}%");
+        })
         ->offset($start)
         ->limit($limit)
         ->orderBy($order, $dir)
         ->get();
 
-      $totalFiltered = User::where('id', 'LIKE', "%{$search}%")
-        ->orWhere('name', 'LIKE', "%{$search}%")
-        ->orWhere('email', 'LIKE', "%{$search}%")
+      $totalFiltered = Post::where('id', 'LIKE', "%{$search}%")
+        ->orWhere('title', 'LIKE', "%{$search}%")
+        ->orWhere('status', 'LIKE', "%{$search}%")
+        ->orWhereHas('user', function ($q) use ($search) {
+          $q->where('name', 'LIKE', "%{$search}%");
+        })
+        ->orWhereHas('category', function ($q) use ($search) {
+          $q->where('name', 'LIKE', "%{$search}%");
+        })
         ->count();
     }
 
     $data = [];
 
-    if (!empty($users)) {
+    if (!empty($posts)) {
       // providing a dummy id instead of database ids
       $ids = $start;
 
-      foreach ($users as $user) {
-        $nestedData['id'] = $user->id;
-        $nestedData['fake_id'] = ++$ids;
-        $nestedData['name'] = $user->name;
-        $nestedData['email'] = $user->email;
-        $nestedData['email_verified_at'] = $user->email_verified_at;
+      foreach ($posts as $post) {
+        $nestedData['id'] = $post->id;
+        $nestedData['title'] = $post->title;
+        $nestedData['category'] = $post->category ? $post->category->name : 'No Category';
+        $nestedData['status'] = $post->status;
+        $nestedData['image'] = $post->image;
+        $nestedData['meta_desc'] = $post->meta_desc;
+        $nestedData['author'] = $post->user->name;
 
         $data[] = $nestedData;
       }
@@ -98,21 +110,14 @@ class PostController extends Controller
       ]);
     }
   }
-  public function add()
-  {
-    return view('content.posts.form');
-  }
-  public function indexCategory()
-  {
-    return view('content.posts.category');
-  }
 
   /**
    * Show the form for creating a new resource.
    */
   public function create()
   {
-    //
+    $categories = PostCategory::all();
+    return view('content.posts.form', compact('categories'));
   }
 
   /**
@@ -133,6 +138,8 @@ class PostController extends Controller
     if ($validator->fails()) {
       return redirect()
         ->back()
+        ->withInput()
+        ->withErrors($validator)
         ->with('error', $validator->messages()->first());
     }
 
@@ -175,7 +182,7 @@ class PostController extends Controller
     $post->keyword = $keywords;
     $post->image = $imagePath;
     $post->content = $content;
-    $post->kategori = $request->category;
+    $post->category_id = $request->category;
     $post->tags = $tagsString;
     $post->created_date = $dateNow;
     $post->last_update = $dateNow;
@@ -184,14 +191,14 @@ class PostController extends Controller
 
     // Redirect with success or error message
     if ($post) {
-      $message = $status == 0 ? 'Artikel berhasil published!' : 'Artikel berhasil disimpan sebagai draft.';
+      $message = $status == 0 ? 'Article successfully published!' : 'Article successfully saved as draft.';
       return redirect()
-        ->route('post.list')
+        ->route('post')
         ->with('success', $message);
     } else {
       return redirect()
-        ->route('post.list')
-        ->with('error', 'Terjadi kesalahan saat menyimpan artikel.');
+        ->route('post')
+        ->with('error', 'An error occurred while saving the article.');
     }
   }
 
@@ -209,15 +216,16 @@ class PostController extends Controller
   public function edit(string $id)
   {
     $post = Post::find($id); // Mengambil data posting berdasarkan ID
+    $categories = PostCategory::all();
 
     if (!$post) {
       // Handle jika posting tidak ditemukan
       return redirect()
-        ->route('post.list')
+        ->route('post')
         ->with('error', 'Post not found.');
     }
 
-    return view('content.posts.form', compact('post'));
+    return view('content.posts.form', compact('post', 'categories'));
   }
 
   /**
@@ -243,45 +251,43 @@ class PostController extends Controller
         ->with('error', $validator->messages()->first());
     }
 
-    $dateNow = now();
-
     $post = Post::findOrFail($id);
     $status = $request->status ?? 0;
-    $request['last_update'] = $dateNow;
+    $dateNow = now();
 
+    // Handle image upload
     $imagePath = $post->image;
-    $image = null;
-    $newTitle = $request->title;
-    $oldTitle = $post->title;
     if ($request->hasFile('image')) {
       $image = $request->file('image');
-      $path = $this->uploadImage($image, $request->title, 'posts', true, $imagePath);
-      $request->replace(['image' => $path]);
+      $imagePath = $this->uploadImage($image, $request->title, 'posts', true, $imagePath);
     }
 
-    $post->update($request->all());
-
-    if ($image) {
-      $post->image = $path;
-      $post->save();
-    }
-
+    // Handle image renaming
+    $newTitle = $request->title;
+    $oldTitle = $post->title;
     if ($oldTitle !== $newTitle) {
-      $newImageName = $this->renameImage($imagePath, $request->title);
-      $post->image = $newImageName;
-      $post->save();
+      $newImageName = $this->renameImage($imagePath, $request->title, 'posts');
+      $imagePath = $newImageName;
     }
 
-    if ($post) {
-      $message = $status == 0 ? 'Artikel berhasil di update!' : 'Artikel berhasil di unpublish.';
-      return redirect()
-        ->route('post.list')
-        ->with('success', $message);
-    } else {
-      return redirect()
-        ->route('post.list')
-        ->with('error', 'Terjadi kesalahan saat menyimpan artikel.');
-    }
+    // Update the post
+    $post->update([
+      'title' => $request->title,
+      'meta_desc' => Str::limit(strip_tags($request->content), 160),
+      'keyword' => $request->keywords,
+      'image' => $imagePath,
+      'content' => $request->content,
+      'category_id' => $request->category,
+      'tags' => $request->tags,
+      'last_update' => $dateNow,
+      'status' => $status,
+    ]);
+
+    // Redirect with success or error message
+    $message = $status == 0 ? 'Article successfully updated!' : 'Article successfully unpublished.';
+    return redirect()
+      ->route('post')
+      ->with('success', $message);
   }
 
   /**
@@ -289,6 +295,7 @@ class PostController extends Controller
    */
   public function destroy(string $id)
   {
+    // $posts = Post::where('id', $id)->delete();
     $post = Post::findOrFail($id);
     $image = $post->image;
 
@@ -297,8 +304,8 @@ class PostController extends Controller
     }
 
     $post->delete();
-    session()->flash('success', 'Post successfully deleted.');
-    return redirect()->back();
+    // session()->flash('success', 'Post successfully deleted.');
+    // return redirect()->back();
   }
 
   public function delete(string $id)
@@ -313,33 +320,24 @@ class PostController extends Controller
     return response()->json($post);
   }
 
+  /**
+   * Generate keywords from post title.
+   */
   private function generateKeywords($title)
   {
-    // Menghapus karakter khusus dan memecah judul menjadi kata-kata
+    // Remove special characters and split the title into words
     $title = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
     $title = strtolower($title);
     $keywords = explode(' ', $title);
 
-    // Hapus kata-kata yang terlalu pendek (opsional)
+    // Remove words that are too short (optional)
     $keywords = array_filter($keywords, function ($keyword) {
       return strlen($keyword) > 2;
     });
 
-    // Menggabungkan kata-kata menjadi string dengan koma sebagai pemisah
+    // Combine words into a string with comma as separator
     $keywords = implode(',', $keywords);
 
     return $keywords;
-  }
-
-  public function renameImage($imagePath, $newTitle)
-  {
-    $newName = Str::slug($newTitle) . '-' . time();
-    $extension = pathinfo($imagePath, PATHINFO_EXTENSION); // Dapatkan ekstensi gambar dari path yang lama
-    $newImageName = $newName . '.' . $extension;
-
-    // Ganti nama file gambar di direktori penyimpanan
-    Storage::move("/assets/img/posts/{$imagePath}", "/assets/img/posts/{$newImageName}");
-
-    return $newImageName;
   }
 }
