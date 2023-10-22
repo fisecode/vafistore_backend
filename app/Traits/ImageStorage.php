@@ -43,4 +43,16 @@ trait ImageStorage
   {
     Storage::delete("/assets/img/{$path}/" . $old_photo);
   }
+
+  public function renameImage($imagePath, $newTitle, $path)
+  {
+    $newName = Str::slug($newTitle) . '-' . time();
+    $extension = pathinfo($imagePath, PATHINFO_EXTENSION); // Get image extension from old path
+    $newImageName = $newName . '.' . $extension;
+
+    // Rename image file in storage directory
+    Storage::move("/assets/img/{$path}/{$imagePath}", "/assets/img/{$path}/{$newImageName}");
+
+    return $newImageName;
+  }
 }

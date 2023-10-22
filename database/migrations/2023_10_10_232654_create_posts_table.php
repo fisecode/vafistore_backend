@@ -20,7 +20,7 @@ return new class extends Migration {
       $table->string('image', 255);
       $table->string('video', 200)->nullable();
       $table->longText('content')->nullable();
-      $table->text('kategori')->nullable();
+      $table->unsignedBigInteger('category_id')->nullable();
       $table->text('tags')->nullable();
       $table->date('created_date');
       $table->date('last_update');
