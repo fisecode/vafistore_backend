@@ -1,35 +1,5 @@
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  (function () {
-    // Update/reset user image of account page
-    let accountUserImage = document.getElementById('uploadedImage');
-    const fileInput = document.querySelector('.account-file-input');
-    const resetFileInput = document.querySelector('.account-image-reset');
-
-    if (accountUserImage) {
-      const resetImage = accountUserImage.src;
-
-      fileInput.onchange = () => {
-        if (fileInput.files[0]) {
-          accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-          accountUserImage.style.display = 'block'; // Show the image
-          resetFileInput.style.display = 'block'; // Show the Reset button
-          resetFileInput.classList.add('btn');
-        }
-      };
-
-      resetFileInput.onclick = () => {
-        fileInput.value = '';
-        accountUserImage.src = resetImage;
-        accountUserImage.style.display = 'none'; // Hide the image
-        resetFileInput.style.display = 'none'; // Hide the Reset button
-        resetFileInput.classList.remove('btn');
-      };
-    }
-  })();
-});
-
 // ajax setup
 $.ajaxSetup({
   headers: {
@@ -39,26 +9,27 @@ $.ajaxSetup({
 
 // Datatable (jquery)
 $(function () {
-  var dt_slides_table = $('.datatables-slide'),
-    offCanvasForm = $('#offcanvasAddSlide'),
+  var dt_socials_table = $('.datatables-socials'),
+    offCanvasForm = $('#offcanvasAddSocials'),
     statusObj = {
       0: { title: 'not_active' },
       1: { title: 'active' }
     };
 
-  if (dt_slides_table.length) {
-    var dt_slides = dt_slides_table.DataTable({
+  if (dt_socials_table.length) {
+    var dt_socials = dt_socials_table.DataTable({
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'slide-list'
+        url: baseUrl + 'social-list'
       },
       columns: [
         // columns according to JSON
         { data: '' },
-        { data: 'image' },
-        { data: 'description' },
-        { data: 'sort' },
+        { data: 'id' },
+        { data: 'name' },
+        { data: 'url' },
+        { data: 'icon' },
         { data: 'status' },
         { data: 'action' }
       ],
@@ -78,38 +49,34 @@ $(function () {
           searchable: false,
           orderable: false,
           targets: 1,
-          responsivePriority: 1,
           render: function (data, type, full, meta) {
-            const $id = full['id'];
-            const $image = full['image'];
-            let $output = '';
-
-            if ($image) {
-              $output = `<img src="../storage/assets/img/slides/${$image}" alt="slide-${$id}" class="w-px-250 h-auto d-block">`;
-            } else {
-              $output = '<span>No Image</span>';
-            }
-            const $row_output = `${$output}`;
-            return $row_output;
+            return `<span>${full.fake_id}</span>`;
           }
         },
         {
           targets: 2,
-          responsivePriority: 5,
+          responsivePriority: 1,
           render: function (data, type, full, meta) {
-            return `<span>${full.description}</span>`;
+            return `<span>${full.name}</span>`;
           }
         },
         {
           targets: 3,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
-            return `<span>${full.sort}</span>`;
+            return `<span>${full.url}</span>`;
+          }
+        },
+        {
+          targets: 4,
+          responsivePriority: 5,
+          render: function (data, type, full, meta) {
+            return `<span>${full.icon}</span>`;
           }
         },
         {
           // Status
-          targets: 4,
+          targets: 5,
           responsivePriority: 3,
           render: function (data, type, full, meta) {
             var $status = full['status'];
@@ -150,13 +117,13 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block text-nowrap">' +
-              `<button class="btn btn-sm btn-icon edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddSlide"><i class="mdi mdi-pencil-outline mdi-20px"></i></button>` +
+              `<button class="btn btn-sm btn-icon edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddSocials"><i class="mdi mdi-pencil-outline mdi-20px"></i></button>` +
               `<button class="btn btn-sm btn-icon delete-record" data-id="${full['id']}"><i class="mdi mdi-delete-outline mdi-20px"></i></button>`
             );
           }
         }
       ],
-      order: [[3, 'asc']],
+      order: [[2, 'asc']],
       dom:
         '<"row mx-2"' +
         '<"col-md-2"<"me-3"l>>' +
@@ -174,11 +141,11 @@ $(function () {
       // Buttons with Dropdown
       buttons: [
         {
-          text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Slide</span>',
+          text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Socials</span>',
           className: 'add-new btn btn-primary mx-3',
           attr: {
             'data-bs-toggle': 'offcanvas',
-            'data-bs-target': '#offcanvasAddSlide'
+            'data-bs-target': '#offcanvasAddSocials'
           }
         }
       ],
@@ -220,7 +187,7 @@ $(function () {
 
   // edit record
   $(document).on('click', '.edit-record', function () {
-    var slide_id = $(this).data('id'),
+    var socials_id = $(this).data('id'),
       dtrModal = $('.dtr-bs-modal.show');
 
     // hide responsive modal in small screen
@@ -229,16 +196,17 @@ $(function () {
     }
 
     // changing the title of offcanvas
-    $('#offcanvasAddSlideLabel').html('Edit Slide');
+    $('#offcanvasAddSocialsLabel').html('Edit Socials');
 
     // get data
-    $.get(`${baseUrl}slide-list\/${slide_id}\/edit`, function (data) {
-      $('#slide_id').val(data.id);
-      $('#add-slide-description').val(data.description);
-      $('#add-slide-sort').val(data.sort);
+    $.get(`${baseUrl}social-list\/${socials_id}\/edit`, function (data) {
+      $('#socials_id').val(data.id);
+      $('#add-socials-name').val(data.name);
+      $('#add-socials-url').val(data.url);
+      $('#add-socials-icon').val(data.icon);
 
       if (data.image) {
-        $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/slides/' + data.image);
+        $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/socials/' + data.image);
         $('#uploadedImage').removeClass('hide-item'); // Hapus kelas 'hide-item'
       }
     });
@@ -246,38 +214,35 @@ $(function () {
 
   // changing the title
   $('.add-new').on('click', function () {
-    $('#slide_id').val('');
-    $('#offcanvasAddSlideLabel').html('Add Slide');
-    $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/slides/no-image.jpg');
+    $('#socials_id').val('');
+    $('#offcanvasAddSocialsLabel').html('Add Socials');
+    $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/socials/no-image.jpg');
     $('#uploadedImage').addClass('hide-item');
   });
 
-  const addNewSlideForm = document.getElementById('addNewSlideForm');
+  const addNewSocialsForm = document.getElementById('addNewSocialsForm');
 
   // category form validation
-  const fv = FormValidation.formValidation(addNewSlideForm, {
+  const fv = FormValidation.formValidation(addNewSocialsForm, {
     fields: {
-      image: {
+      name: {
         validators: {
-          file: {
-            extension: 'jpg,jpeg,png',
-            type: 'image/jpeg,image/png',
-            maxSize: 800000,
-            message: 'The selected file is not valid'
+          notEmpty: {
+            message: 'Please enter social media name'
           }
         }
       },
-      description: {
+      url: {
         validators: {
           notEmpty: {
-            message: 'Please enter description'
+            message: 'Please enter url'
           }
         }
       },
-      sortOrder: {
+      icon: {
         validators: {
           notEmpty: {
-            message: 'Please enter sort order'
+            message: 'Please enter icon'
           }
         }
       }
@@ -299,16 +264,16 @@ $(function () {
     }
   }).on('core.form.valid', function () {
     // adding or updating category when form successfully validate
-    var formData = new FormData($('#addNewSlideForm')[0]);
+    var formData = new FormData($('#addNewSocialsForm')[0]);
 
     $.ajax({
       data: formData,
-      url: `${baseUrl}slide-list`,
+      url: `${baseUrl}social-list`,
       type: 'POST',
       contentType: false,
       processData: false,
       success: function (response) {
-        dt_slides.draw();
+        dt_socials.draw();
         offCanvasForm.offcanvas('hide');
 
         // sweetalert
@@ -322,11 +287,11 @@ $(function () {
         });
       },
       error: function (err) {
-        console.log(err.responseJSON.message);
         offCanvasForm.offcanvas('hide');
+        console.log(err.responseJSON.message);
         Swal.fire({
           title: 'Duplicate Entry!',
-          text: 'Sort Order Already Use.',
+          text: 'Socials name should be unique.',
           icon: 'error',
           customClass: {
             confirmButton: 'btn btn-success'
@@ -347,12 +312,12 @@ $(function () {
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}slide-list/${id}`,
+      url: `${baseUrl}social-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },
       success: function (response) {
-        dt_slides.draw();
+        dt_socials.draw();
 
         // sweetalert
         Swal.fire({
@@ -373,7 +338,7 @@ $(function () {
 
   // Delete Record
   $(document).on('click', '.delete-record', function () {
-    var page_id = $(this).data('id'),
+    var social_id = $(this).data('id'),
       dtrModal = $('.dtr-bs-modal.show');
 
     // hide responsive modal in small screen
@@ -398,9 +363,9 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}slide-list/${page_id}`,
+          url: `${baseUrl}social-list/${social_id}`,
           success: function () {
-            dt_slides.draw();
+            dt_socials.draw();
           },
           error: function (error) {
             console.log(error);

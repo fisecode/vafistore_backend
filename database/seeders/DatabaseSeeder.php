@@ -576,14 +576,34 @@ class DatabaseSeeder extends Seeder
     ]);
 
     DB::table('socials')->insert([
-      'facebook' => 'www.facebook.com',
-      'twitter' => 'www.twitter.com',
-      'googleplus' => '#',
-      'instagram' => 'www.instagram.com',
-      'linkedin' => 'www.tiktok.com',
-      'youtube' => 'www.youtube.com',
-      'date' => now(),
-      'user' => 'admin',
+      [
+        'id' => 1,
+        'name' => 'Facebook',
+        'url' => 'https://www.facebook.com',
+        'icon' => 'facebook',
+        'status' => 1,
+      ],
+      [
+        'id' => 2,
+        'name' => 'Twitter',
+        'url' => 'https://www.twitter.com',
+        'icon' => 'twitter',
+        'status' => 1,
+      ],
+      [
+        'id' => 3,
+        'name' => 'Instagram',
+        'url' => 'https://www.instagram.com',
+        'icon' => 'instagram',
+        'status' => 1,
+      ],
+      [
+        'id' => 4,
+        'name' => 'Tiktok',
+        'url' => 'https://www.tiktok.com',
+        'icon' => 'tiktok',
+        'status' => 1,
+      ],
     ]);
 
     DB::table('api')->insert([

@@ -11,15 +11,11 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::create('socials', function (Blueprint $table) {
-      $table->id('cuid');
-      $table->text('facebook');
-      $table->text('twitter');
-      $table->text('googleplus');
-      $table->text('instagram');
-      $table->text('linkedin');
-      $table->text('youtube');
-      $table->datetime('date');
-      $table->text('user');
+      $table->id();
+      $table->text('name');
+      $table->text('url');
+      $table->text('icon')->nullable();
+      $table->integer('status');
       $table->timestamps();
     });
   }

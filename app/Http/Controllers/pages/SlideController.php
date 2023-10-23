@@ -115,7 +115,7 @@ class SlideController extends Controller
     // Validation rules
     $rules = [
       'description' => 'required',
-      'sortOrder' => 'required',
+      'sortOrder' => 'numeric|required',
       'image' => 'image|mimes:jpeg,png,jpg|max:800',
     ];
 
@@ -158,8 +158,6 @@ class SlideController extends Controller
       $slide->status = $slideStatus;
       $slide->save();
 
-      return response()->json(['title' => 'Well Done!', 'message' => 'Content Slide Saved!']);
-
       if ($slide) {
         return response()->json(['title' => 'Well Done!', 'message' => 'Content Slide Saved!']);
       } else {
@@ -184,14 +182,9 @@ class SlideController extends Controller
       ]);
 
       if ($slide) {
-        $message = 'Well Done! Content Slide Saved!';
-        return redirect()
-          ->route('slide')
-          ->with('success', $message);
+        return response()->json(['title' => 'Well Done!', 'message' => 'Content Slide Saved!']);
       } else {
-        return redirect()
-          ->route('slide')
-          ->with('error', 'An error occurred while saving the slide.');
+        return response()->json(['title' => 'Error', 'message' => 'An error occurred while saving the slide.']);
       }
     }
   }

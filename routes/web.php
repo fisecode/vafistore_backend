@@ -6,6 +6,7 @@ use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\pages\PostController;
 use App\Http\Controllers\pages\PostCategoryController;
 use App\Http\Controllers\pages\SlideController;
+use App\Http\Controllers\pages\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
   Route::get('page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
   //slide
   Route::resource('/slide-list', SlideController::class);
-  Route::get('slide', [SlideController::class, 'SlideManagement'])->name('slide');
+  Route::get('/slide', [SlideController::class, 'SlideManagement'])->name('slide');
+  //socials
+  Route::resource('/social-list', SocialController::class);
+  Route::get('/socials', [SocialController::class, 'SocialManagement'])->name('social');
 });
 
 Route::get('/', function () {

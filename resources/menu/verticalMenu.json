@@ -51,10 +51,10 @@
       "slug": "slide"
     },
     {
-      "url": "/social-media",
+      "url": "/socials",
       "icon": "menu-icon tf-icons mdi mdi-folder-account",
       "name": "Social Media",
-      "slug": "social-media"
+      "slug": "socials"
     },
     {
       "name": "Member",
