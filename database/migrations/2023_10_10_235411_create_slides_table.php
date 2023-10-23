@@ -11,11 +11,11 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::create('slides', function (Blueprint $table) {
-      $table->id('cuid');
+      $table->id();
       $table->string('image');
-      $table->text('deskripsi');
-      $table->integer('sort');
-      $table->string('user');
+      $table->text('description')->nullable();
+      $table->integer('sort')->unique();
+      $table->string('user_id');
       $table->integer('status');
       $table->timestamps();
     });

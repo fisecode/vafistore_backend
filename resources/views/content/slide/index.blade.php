@@ -4,7 +4,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Post-Category List')
+@section('title', 'Slide List')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
@@ -15,6 +15,15 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css') }}" />
+    <style>
+        .hide-item {
+            display: none;
+        }
+
+        .hide-button {
+            display: none;
+        }
+    </style>
 @endsection
 
 @section('vendor-script')
@@ -29,7 +38,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/pages/post-category.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/slide-page.js') }}"></script>
     <script>
         const showMessage = (type, message) => {
             if (message) {
@@ -49,7 +58,7 @@
 
 @section('content')
     <h4 class="py-3 mb-4">
-        <span class="text-muted fw-light">Post /</span><span> List</span>
+        <span class="text-muted fw-light">Slide /</span><span> List</span>
     </h4>
 
     <!-- Product List Table -->
@@ -58,31 +67,64 @@
             <h5 class="card-title mb-0">Search Filter</h5>
         </div>
         <div class="card-datatable table-responsive">
-            <table class="datatables-post-category table">
+            <table class="datatables-slide table">
                 <thead class="table-light">
                     <tr>
                         <th></th>
-                        <th>Id</th>
-                        <th>Category</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Sort Order</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
             </table>
         </div>
-        <!-- Offcanvas to add new category -->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCategory"
-            aria-labelledby="offcanvasAddCategoryLabel">
+        <!-- Offcanvas to add new slide -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddSlide" aria-labelledby="offcanvasAddSlideLabel">
             <div class="offcanvas-header">
-                <h5 id="offcanvasAddCategoryLabel" class="offcanvas-title">Add Category</h5>
+                <h5 id="offcanvasAddSlideLabel" class="offcanvas-title">Add Slide</h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body mx-0 flex-grow-0">
-                <form class="add-new-category pt-0" id="addNewCategoryForm">
-                    <input type="hidden" name="id" id="category_id">
+                <form class="add-new-slide pt-0" id="addNewSlideForm" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="slide_id">
+                    <!-- Image Card -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Image Slide</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <img src="" alt="post-img" class="w-100 h-auto hide-item rounded"
+                                    id="uploadedImage" />
+                            </div>
+                            <div class="button-wrapper text-center">
+                                <label for="upload" class="btn btn-primary" tabindex="0">
+                                    <span class="d-none d-sm-block">Browse</span>
+                                    <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
+                                    <input type="file" id="upload" class="account-file-input" name="image" hidden
+                                        accept="image/png, image/jpeg" />
+                                </label>
+                                <button type="button" class="btn-outline-danger account-image-reset hide-item">
+                                    <i class="mdi mdi-reload d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Reset</span>
+                                </button>
+
+                                <div class="small mt-3">Allowed JPG or PNG. Max size of 800K</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Image Card -->
                     <div class="form-floating form-floating-outline mb-4">
-                        <input type="text" class="form-control" id="add-category-name" placeholder="Category Name"
-                            name="name" aria-label="Category Name" />
-                        <label for="add-category-fullname">Category Name</label>
+                        <textarea class="form-control" id="add-slide-description" placeholder="Description" name="description"
+                            aria-label="Description" style="height: 100px"></textarea>
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="form-floating form-floating-outline mb-4">
+                        <input type="number" class="form-control" id="add-slide-sort" placeholder="Sort Order"
+                            name="sortOrder" aria-label="Sort Order" />
+                        <label for="sortOrder">Sort Order</label>
                     </div>
                     <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
                     <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>

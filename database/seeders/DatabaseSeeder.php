@@ -550,27 +550,27 @@ class DatabaseSeeder extends Seeder
 
     DB::table('slides')->insert([
       [
-        'cuid' => 19,
+        'id' => 1,
         'image' => 'slide_master_20230727193547.png',
-        'deskripsi' => 'Slide 1',
+        'description' => 'Slide 1',
         'sort' => 1,
-        'user' => 'master',
+        'user_id' => '1',
         'status' => 1,
       ],
       [
-        'cuid' => 20,
+        'id' => 2,
         'image' => 'slide_master_20230727193603.jpg',
-        'deskripsi' => 'Slide 2',
+        'description' => 'Slide 2',
         'sort' => 2,
-        'user' => 'master',
+        'user_id' => '1',
         'status' => 1,
       ],
       [
-        'cuid' => 21,
+        'id' => 3,
         'image' => 'slide_master_20230727193617.png',
-        'deskripsi' => 'Slide 3',
+        'description' => 'Slide 3',
         'sort' => 3,
-        'user' => 'master',
+        'user_id' => '1',
         'status' => 1,
       ],
     ]);

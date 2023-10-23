@@ -115,10 +115,10 @@ class PostCategoryController extends Controller
         $categories->save();
 
         $categories = PostCategory::pluck('name', 'id')->all();
-        // user created
+        // post category created
         return response()->json(['success' => 'true', 'categories' => $categories, 'message' => 'created']);
       } else {
-        // user already exist
+        // post category already exist
         return response()->json(['message' => 'already exits'], 422);
       }
     }

@@ -246,6 +246,12 @@ class PageController extends Controller
    */
   public function destroy($id)
   {
-    $page = Page::where('id', $id)->delete();
+    $page = Page::find($id);
+    $image = $page->image;
+
+    if ($image) {
+      $this->deleteImage($image, 'pages');
+    }
+    $page->delete();
   }
 }

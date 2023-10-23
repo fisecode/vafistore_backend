@@ -5,6 +5,7 @@ use App\Http\Controllers\pages\DashboardController;
 use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\pages\PostController;
 use App\Http\Controllers\pages\PostCategoryController;
+use App\Http\Controllers\pages\SlideController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +17,8 @@ use App\Http\Controllers\pages\PostCategoryController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-$controller_path = 'App\Http\Controllers';
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-  $controller_path = 'App\Http\Controllers';
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
   //Post
   Route::get('/posts', [PostController::class, 'PostManagement'])->name('post');
@@ -37,6 +36,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
   Route::get('page', [PageController::class, 'PageManagement'])->name('page');
   Route::get('page/add', [PageController::class, 'create'])->name('page.add');
   Route::get('page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
+  //slide
+  Route::resource('/slide-list', SlideController::class);
+  Route::get('slide', [SlideController::class, 'SlideManagement'])->name('slide');
 });
 
 Route::get('/', function () {

@@ -56,4 +56,8 @@ class User extends Authenticatable
   {
     return $this->hasMany(Page::class, 'user_id');
   }
+  public function slides()
+  {
+    return $this->hasMany(Slide::class, 'user_id');
+  }
 }
