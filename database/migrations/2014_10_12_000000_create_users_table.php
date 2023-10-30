@@ -16,12 +16,11 @@ return new class extends Migration {
       $table->string('name');
       $table->string('email')->unique();
       $table->text('no_hp');
-      $table->text('level');
       $table->string('pinTrx');
       $table->integer('reff');
       $table->integer('uplineID');
       $table->datetime('join_date');
-      $table->datetime('last_login');
+      $table->datetime('last_login')->nullable();
       $table->timestamp('email_verified_at')->nullable();
       $table->string('password');
       $table->rememberToken();

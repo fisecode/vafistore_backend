@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,21 +17,32 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
-    DB::table('users')->insert([
+    // Mendapatkan atau membuat peran 'super admin'
+    $superAdminRole = Role::firstOrCreate(['name' => 'super admin']);
+
+    // Mendapatkan atau membuat izin 'super admin'
+    $superAdminPermission = Permission::firstOrCreate(['name' => 'super admin']);
+
+    // Menambahkan izin 'super admin' ke peran 'super admin'
+    $superAdminRole->givePermissionTo($superAdminPermission);
+
+    $user = DB::table('users')->insert([
       'username' => 'admin',
       'name' => 'Akhmat Fikri Septiawan',
       'email' => 'admin@vafistore.com',
       'password' => Hash::make('admin'),
       'no_hp' => '089523090952',
-      'level' => 'superadmin',
       'pinTrx' => 'c8837b23ff8aaa8a2dde915473ce0991',
       'reff' => 8,
       'uplineID' => 1,
-      'join_date' => '2020-07-10 00:00:00',
-      'last_login' => '2023-10-05 21:40:22',
-      'email_verified_at' => '2023-10-11 00:38:14',
+      'join_date' => date(now()),
+      'last_login' => date(now()),
+      'email_verified_at' => date(now()),
       'status' => 1,
     ]);
+
+    $user = User::where('username', 'admin')->first(); // Sesuaikan query dengan model User Anda
+    $user->assignRole('super admin');
 
     DB::table('post_categories')->insert([
       [
