@@ -188,11 +188,11 @@ class PostController extends Controller
     if ($post) {
       $message = $status == 1 ? 'Article successfully published!' : 'Article successfully saved as draft.';
       return redirect()
-        ->route('post')
+        ->route('post-list')
         ->with('success', $message);
     } else {
       return redirect()
-        ->route('post')
+        ->route('post-list')
         ->with('error', 'An error occurred while saving the article.');
     }
   }
@@ -216,7 +216,7 @@ class PostController extends Controller
     if (!$post) {
       // Handle jika posting tidak ditemukan
       return redirect()
-        ->route('post')
+        ->route('post-list')
         ->with('error', 'Post not found.');
     }
 
@@ -279,7 +279,7 @@ class PostController extends Controller
     // Redirect with success or error message
     $message = $status == 1 ? 'Article successfully updated!' : 'Article successfully unpublished.';
     return redirect()
-      ->route('post')
+      ->route('post-list')
       ->with('success', $message);
   }
 

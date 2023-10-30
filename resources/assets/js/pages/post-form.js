@@ -93,9 +93,9 @@ $.ajaxSetup({
             return '.mb-4';
           }
         }),
-        submitButton: new FormValidation.plugins.SubmitButton(),
+        // submitButton: new FormValidation.plugins.SubmitButton(),
         // Submit the form when all fields are valid
-        // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
         autoFocus: new FormValidation.plugins.AutoFocus()
       }
     });

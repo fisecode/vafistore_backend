@@ -19,12 +19,15 @@ class DatabaseSeeder extends Seeder
   {
     // Mendapatkan atau membuat peran 'super admin'
     $superAdminRole = Role::firstOrCreate(['name' => 'super admin']);
+    $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
     // Mendapatkan atau membuat izin 'super admin'
     $superAdminPermission = Permission::firstOrCreate(['name' => 'super admin']);
+    $adminPermission = Permission::firstOrCreate(['name' => 'basic']);
 
     // Menambahkan izin 'super admin' ke peran 'super admin'
     $superAdminRole->givePermissionTo($superAdminPermission);
+    $adminRole->givePermissionTo($adminPermission);
 
     $user = DB::table('users')->insert([
       'username' => 'admin',
@@ -35,14 +38,26 @@ class DatabaseSeeder extends Seeder
       'pinTrx' => 'c8837b23ff8aaa8a2dde915473ce0991',
       'reff' => 8,
       'uplineID' => 1,
-      'join_date' => date(now()),
-      'last_login' => date(now()),
-      'email_verified_at' => date(now()),
+      'join_date' => now(),
+      'email_verified_at' => now(),
       'status' => 1,
     ]);
 
     $user = User::where('username', 'admin')->first(); // Sesuaikan query dengan model User Anda
     $user->assignRole('super admin');
+
+    $user = DB::table('users')->insert([
+      'username' => 'iam14',
+      'name' => 'Ivani Marlina',
+      'email' => 'ivani@vafistore.com',
+      'password' => Hash::make('admin'),
+      'join_date' => now(),
+      'email_verified_at' => now(),
+      'status' => 1,
+    ]);
+
+    $user = User::where('username', 'iam14')->first(); // Sesuaikan query dengan model User Anda
+    $user->assignRole('admin');
 
     DB::table('post_categories')->insert([
       [

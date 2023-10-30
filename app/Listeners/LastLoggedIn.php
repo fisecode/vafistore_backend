@@ -20,7 +20,7 @@ class LastLoggedIn
   public function handle(Login $event)
   {
     $event->user->update([
-      'last_login' => date(now()),
+      'last_login' => now(),
     ]);
   }
 }

@@ -4,32 +4,40 @@
       "url": "/dashboard",
       "name": "Dashboard",
       "icon": "menu-icon tf-icons mdi mdi-home-outline",
-      "slug": "dashboard"
+      "slug": "dashboard",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "url": "https://www.vafistore.com/",
       "icon": "menu-icon tf-icons mdi mdi-bullseye",
       "name": "View Store",
       "slug": "view-store",
-      "target": "_blank"
+      "target": "_blank",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "menuHeader": "INFORMATION"
     },
     {
-      "name": "Posts",
+      "name": "Post",
       "icon": "menu-icon tf-icons mdi mdi-pencil-box-multiple-outline",
-      "slug": "posts",
+      "slug": "post",
       "submenu": [
         {
-          "url": "posts",
-          "name": "Posts List",
-          "slug": "posts"
+          "url": "post/list",
+          "name": "Post List",
+          "slug": "post-list"
         },
         {
           "url": "post/add",
           "name": "Add Post",
-          "slug": "posd-add"
+          "slug": "post-add"
         },
         {
           "url": "post/category",
@@ -42,24 +50,39 @@
       "url": "/page",
       "icon": "menu-icon tf-icons mdi mdi-bookmark-multiple-outline",
       "name": "Content Page",
-      "slug": "page"
+      "slug": "page",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "url": "/slide",
       "icon": "menu-icon tf-icons mdi mdi-image-album",
       "name": "Slide Show",
-      "slug": "slide"
+      "slug": "slide",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "url": "/socials",
       "icon": "menu-icon tf-icons mdi mdi-folder-account",
       "name": "Social Media",
-      "slug": "socials"
+      "slug": "socials",
+      "roles": [
+        "super admin"
+      ]
     },
     {
       "name": "Member",
       "icon": "menu-icon tf-icons mdi mdi-account-group-outline",
       "slug": "member",
+      "roles": [
+        "super admin",
+        "admin"
+      ],
       "submenu": [
         {
           "url": "member/basic",
@@ -77,9 +100,9 @@
           "slug": "member-refferal-list"
         },
         {
-          "url": "member/administrator",
-          "name": "Administrator",
-          "slug": "member-administrator"
+          "url": "member/super-administrator",
+          "name": "super administrator",
+          "slug": "member-super-administrator"
         }
       ]
     },
@@ -90,12 +113,20 @@
       "url": "/category",
       "icon": "menu-icon tf-icons mdi mdi-format-list-bulleted",
       "name": "Category",
-      "slug": "category"
+      "slug": "category",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "name": "Product",
       "icon": "menu-icon tf-icons mdi mdi-gamepad-square-outline",
       "slug": "product",
+      "roles": [
+        "super admin",
+        "admin"
+      ],
       "submenu": [
         {
           "url": "product/game",
@@ -136,6 +167,10 @@
       "name": "Order",
       "icon": "menu-icon tf-icons mdi mdi-cart-outline",
       "slug": "order",
+      "roles": [
+        "super admin",
+        "admin"
+      ],
       "submenu": [
         {
           "url": "order/list",
@@ -153,33 +188,55 @@
       "url": "/topup",
       "icon": "menu-icon tf-icons mdi mdi-currency-usd",
       "name": "Top Up Request",
-      "slug": "top-up-request"
+      "slug": "top-up-request",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "url": "/payment/history",
       "icon": "menu-icon tf-icons mdi mdi-calendar-clock-outline",
       "name": "Payment History",
-      "slug": "payment-history"
+      "slug": "payment-history",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "url": "/balance/member",
       "icon": "menu-icon tf-icons mdi mdi-wallet-outline",
       "name": "Balance Member",
-      "slug": "balance-member"
+      "slug": "balance-member",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
       "url": "/export",
       "icon": "menu-icon tf-icons mdi mdi-tray-arrow-down",
       "name": "Export Excel",
-      "slug": "export-excel"
+      "slug": "export-excel",
+      "roles": [
+        "super admin",
+        "admin"
+      ]
     },
     {
-      "menuHeader": "SYSTEM"
+      "menuHeader": "SYSTEM",
+      "roles": [
+        "super admin"
+      ]
     },
     {
       "name": "Manage API",
       "icon": "menu-icon tf-icons mdi mdi-api",
       "slug": "api",
+      "roles": [
+        "super admin"
+      ],
       "submenu": [
         {
           "url": "api/provider",
@@ -193,7 +250,7 @@
         },
         {
           "url": "api/cekmutasi",
-          "name": "Whatsapp",
+          "name": "Cekmutasi",
           "slug": "api-cekmutasi"
         },
         {
@@ -207,6 +264,9 @@
       "name": "Settings",
       "icon": "menu-icon tf-icons mdi mdi-cog-outline",
       "slug": "setting",
+      "roles": [
+        "super admin"
+      ],
       "submenu": [
         {
           "url": "setting/seo",
