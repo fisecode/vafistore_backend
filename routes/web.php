@@ -6,6 +6,7 @@ use App\Http\Controllers\pages\DashboardController;
 use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\pages\PostController;
 use App\Http\Controllers\pages\PostCategoryController;
+use App\Http\Controllers\pages\ProviderController;
 use App\Http\Controllers\pages\SlideController;
 use App\Http\Controllers\pages\SocialController;
 
@@ -46,7 +47,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     //socials
     Route::resource('/social-list', SocialController::class);
     Route::get('/socials', [SocialController::class, 'SocialManagement'])->name('socials');
+    //member
     Route::get('/member/basic', [MemberController::class, 'index'])->name('member-basic');
+    //provider
+    Route::resource('/api/provider-list', ProviderController::class);
+    Route::get('/api/provider', [ProviderController::class, 'ProviderManagement'])->name('api-provider');
   });
 });
 

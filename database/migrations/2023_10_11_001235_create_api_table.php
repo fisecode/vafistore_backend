@@ -11,13 +11,13 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::create('api', function (Blueprint $table) {
-      $table->id('cuid');
-      $table->text('provider');
-      $table->text('api_key');
-      $table->text('private_key');
-      $table->text('merchant_code');
-      $table->tinyInteger('jenis');
-      $table->tinyInteger('status');
+      $table->id('id');
+      $table->text('provider')->unique();
+      $table->text('api_key')->nullable();
+      $table->text('private_key')->nullable();
+      $table->text('merchant_code')->nullable();
+      $table->tinyInteger('jenis')->nullable();
+      $table->tinyInteger('status')->default(1);
       $table->timestamps();
     });
   }

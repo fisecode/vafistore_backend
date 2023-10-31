@@ -637,7 +637,6 @@ class DatabaseSeeder extends Seeder
 
     DB::table('api')->insert([
       [
-        'cuid' => 1,
         'provider' => 'Tripay',
         'api_key' => 'UuwdDwA46ewEGOrChZz55vOZyEtAhkT4yjpwnvXc',
         'private_key' => 'qoEYp-QYH53-AQBOC-K3l20-gatWG',
@@ -646,7 +645,6 @@ class DatabaseSeeder extends Seeder
         'status' => 1,
       ],
       [
-        'cuid' => 2,
         'provider' => 'ipaymu',
         'api_key' => '',
         'private_key' => '',
@@ -655,7 +653,6 @@ class DatabaseSeeder extends Seeder
         'status' => 0,
       ],
       [
-        'cuid' => 3,
         'provider' => 'duitku',
         'api_key' => '',
         'private_key' => '',
@@ -664,16 +661,14 @@ class DatabaseSeeder extends Seeder
         'status' => 0,
       ],
       [
-        'cuid' => 4,
         'provider' => 'Vip Reseller',
-        'api_key' => 'DNU3ANNd3HbgfhNScmBgXwQBzarMgtJFiDSJuAak3zjsyjxkUrsq4EZKk6EQLcHz',
+        'api_key' => 'PWsxqySJkfVdKQEWuiRGgR8D5NNdTDtquMfo7gyscaOxvEV028UvHA8XO3Z9WOnJ',
         'private_key' => '',
-        'merchant_code' => 'W30rpgmr',
+        'merchant_code' => 'YpKDXLDO',
         'jenis' => 1,
         'status' => 1,
       ],
       [
-        'cuid' => 5,
         'provider' => 'Digiflazz',
         'api_key' => '8bef7462-a18e-57b1-a5d0-ccf7035690b6',
         'private_key' => '',
@@ -682,7 +677,6 @@ class DatabaseSeeder extends Seeder
         'status' => 1,
       ],
       [
-        'cuid' => 6,
         'provider' => 'MedanPedia',
         'api_key' => 'f55031-9d6c69-181deb-44ee66-0cf434',
         'private_key' => '',
@@ -691,7 +685,6 @@ class DatabaseSeeder extends Seeder
         'status' => 1,
       ],
       [
-        'cuid' => 7,
         'provider' => 'Cekmutasi',
         'api_key' => '#',
         'private_key' => '',
@@ -700,7 +693,6 @@ class DatabaseSeeder extends Seeder
         'status' => 1,
       ],
       [
-        'cuid' => 8,
         'provider' => 'Watsap',
         'api_key' => 'Vte6lCkgDK7mO6TLlqWgTqj4ueS7jJ',
         'private_key' => 'wa.srv10.wapanels.com',
@@ -709,7 +701,6 @@ class DatabaseSeeder extends Seeder
         'status' => 1,
       ],
       [
-        'cuid' => 9,
         'provider' => 'Apigames',
         'api_key' => 'Tes',
         'private_key' => '',
