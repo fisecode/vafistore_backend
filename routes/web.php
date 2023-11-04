@@ -7,6 +7,7 @@ use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\pages\PostController;
 use App\Http\Controllers\pages\PostCategoryController;
 use App\Http\Controllers\pages\ProviderController;
+use App\Http\Controllers\pages\ServiceController;
 use App\Http\Controllers\pages\SlideController;
 use App\Http\Controllers\pages\SocialController;
 
@@ -52,6 +53,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     //provider
     Route::resource('/api/provider-list', ProviderController::class);
     Route::get('/api/provider', [ProviderController::class, 'ProviderManagement'])->name('api-provider');
+    //Services
+    Route::resource('/setting/services', ServiceController::class);
+    Route::get('/setting/services', [ServiceController::class, 'index'])->name('setting-services');
   });
 });
 
