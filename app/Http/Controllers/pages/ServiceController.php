@@ -16,7 +16,7 @@ class ServiceController extends Controller
     $providers = ApiManagement::where('status', 1)
       ->where('jenis', 1)
       ->get();
-    return view('content.services.index', compact('providers'));
+    return view('content.service-page.index', compact('providers'));
   }
 
   /**
