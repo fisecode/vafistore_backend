@@ -10,10 +10,11 @@ return new class extends Migration {
    */
   public function up(): void
   {
-    Schema::create('admins', function (Blueprint $table) {
-      $table->id('cuid'); // Primary Key
+    Schema::create('markups', function (Blueprint $table) {
+      $table->id('id'); // Primary Key
       $table->integer('persen_sell');
       $table->integer('persen_res');
+      $table->integer('persen_flash')->default(0);
       $table->integer('com_ref');
       $table->integer('satuan');
       $table->timestamps(); // Optional timestamps
@@ -25,6 +26,6 @@ return new class extends Migration {
    */
   public function down(): void
   {
-    Schema::dropIfExists('admins');
+    Schema::dropIfExists('markups');
   }
 };

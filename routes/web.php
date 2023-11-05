@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     //Services
     Route::resource('/setting/services', ServiceController::class);
     Route::get('/setting/services', [ServiceController::class, 'index'])->name('setting-services');
+    Route::get('/setting/services/get/{providerId}/{jenis}', [ServiceController::class, 'get'])->name('get-service');
   });
 });
 

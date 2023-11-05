@@ -11,7 +11,7 @@ return new class extends Migration {
   public function up(): void
   {
     Schema::create('products', function (Blueprint $table) {
-      $table->id('cuid');
+      $table->id('id');
       $table->text('slug');
       $table->text('code');
       $table->text('title');
@@ -19,11 +19,12 @@ return new class extends Migration {
       $table->integer('harga_modal');
       $table->integer('harga_jual');
       $table->integer('harga_reseller');
+      $table->integer('harga_flash')->nullable();
       $table->string('image', 255);
       $table->text('currency');
       $table->text('type');
+      $table->integer('flash_sale')->default(0);
       $table->integer('status');
-      $table->date('created_date');
       $table->integer('jenis');
       $table->tinyInteger('product_type');
       $table->timestamps();

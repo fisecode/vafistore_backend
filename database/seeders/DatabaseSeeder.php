@@ -74,46 +74,52 @@ class DatabaseSeeder extends Seeder
       ],
     ]);
 
-    DB::table('admins')->insert([
+    DB::table('markups')->insert([
       [
-        'cuid' => 1,
-        'persen_sell' => 2,
-        'persen_res' => 1,
+        'id' => 1,
+        'persen_sell' => 12,
+        'persen_res' => 6,
+        'persen_flash' => 8,
         'com_ref' => 2,
         'satuan' => 0,
       ],
       [
-        'cuid' => 2,
+        'id' => 2,
         'persen_sell' => 5,
         'persen_res' => 5,
+        'persen_flash' => 2,
         'com_ref' => 10,
         'satuan' => 0,
       ],
       [
-        'cuid' => 3,
+        'id' => 3,
         'persen_sell' => 2,
         'persen_res' => 1,
+        'persen_flash' => 2,
         'com_ref' => 2,
         'satuan' => 0,
       ],
       [
-        'cuid' => 4,
+        'id' => 4,
         'persen_sell' => 5,
         'persen_res' => 5,
+        'persen_flash' => 2,
         'com_ref' => 10,
         'satuan' => 0,
       ],
       [
-        'cuid' => 5,
+        'id' => 5,
         'persen_sell' => 5,
         'persen_res' => 0,
+        'persen_flash' => 2,
         'com_ref' => 10,
         'satuan' => 0,
       ],
       [
-        'cuid' => 7,
+        'id' => 7,
         'persen_sell' => 5,
         'persen_res' => 5,
+        'persen_flash' => 2,
         'com_ref' => 10,
         'satuan' => 0,
       ],
@@ -126,7 +132,7 @@ class DatabaseSeeder extends Seeder
         'active' => 0,
         'pending' => 0,
         'payout' => 0,
-        'created_date' => Carbon::now(),
+        'created_date' => now(),
       ],
     ]);
 
@@ -415,7 +421,7 @@ class DatabaseSeeder extends Seeder
 
     DB::table('prepaids')->insert([
       [
-        'cuid' => 40002,
+        'id' => 40002,
         'slug' => '1gbnasional+4gb(01.00-09.00)1hari',
         'code' => 'TDN5',
         'title' => '1GB Nasional + 4GB (01.00 - 09.00) 1 Hari',
@@ -426,12 +432,12 @@ class DatabaseSeeder extends Seeder
         'harga_reseller' => 5333,
         'image' => 'tri.png',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 3,
+        'created_at' => now(),
       ],
       [
-        'cuid' => 40009,
+        'id' => 40009,
         'slug' => 'alwayson1.5gb',
         'code' => 'TDA15',
         'title' => 'AlwaysOn 1.5 GB',
@@ -442,16 +448,15 @@ class DatabaseSeeder extends Seeder
         'harga_reseller' => 15761,
         'image' => 'tri.png',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 3,
+        'created_at' => now(),
       ],
-      // Tambahkan data lainnya jika diperlukan
     ]);
 
     DB::table('products')->insert([
       [
-        'cuid' => 40033,
+        'id' => 40033,
         'slug' => 'arenaofvalor',
         'code' => 'AOV2390-S1000',
         'title' => '2390 Vouchers',
@@ -463,12 +468,12 @@ class DatabaseSeeder extends Seeder
         'currency' => '',
         'type' => 'Umum',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 1,
+        'created_at' => now(),
       ],
       [
-        'cuid' => 40031,
+        'id' => 40031,
         'slug' => 'arenaofvalor',
         'code' => 'AOV950-S1000',
         'title' => '950 Vouchers',
@@ -480,12 +485,12 @@ class DatabaseSeeder extends Seeder
         'currency' => '',
         'type' => 'Umum',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 1,
+        'created_at' => now(),
       ],
       [
-        'cuid' => 40032,
+        'id' => 40032,
         'slug' => 'arenaofvalor',
         'code' => 'AOV1430-S1000',
         'title' => '1430 Vouchers',
@@ -497,12 +502,12 @@ class DatabaseSeeder extends Seeder
         'currency' => '',
         'type' => 'Umum',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 1,
+        'created_at' => now(),
       ],
       [
-        'cuid' => 40030,
+        'id' => 40030,
         'slug' => 'arenaofvalor',
         'code' => 'AOV950-S58',
         'title' => '950 Vouchers',
@@ -514,15 +519,15 @@ class DatabaseSeeder extends Seeder
         'currency' => '',
         'type' => 'Umum',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 1,
+        'created_at' => now(),
       ],
     ]);
 
     DB::table('social_products')->insert([
       [
-        'cuid' => 40000,
+        'id' => 40000,
         'slug' => '2656',
         'code' => '2656',
         'title' => 'Instagram Likes [No Drop] Real [Max 5K]',
@@ -535,12 +540,12 @@ class DatabaseSeeder extends Seeder
         'harga_reseller' => 6052,
         'image' => 'instagram.png',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 5,
+        'created_at' => now(),
       ],
       [
-        'cuid' => 40002,
+        'id' => 40002,
         'slug' => '2873',
         'code' => '2873',
         'title' => 'Threads Artist VERIFIED Comments | 1 Comment',
@@ -553,9 +558,9 @@ class DatabaseSeeder extends Seeder
         'harga_reseller' => 14159,
         'image' => 'threads.png',
         'status' => 1,
-        'created_date' => '2023-09-27',
         'jenis' => 4,
         'product_type' => 5,
+        'created_at' => now(),
       ],
       // Tambahkan data lainnya sesuai kebutuhan
     ]);
@@ -638,9 +643,9 @@ class DatabaseSeeder extends Seeder
     DB::table('api')->insert([
       [
         'provider' => 'Tripay',
-        'api_key' => 'UuwdDwA46ewEGOrChZz55vOZyEtAhkT4yjpwnvXc',
-        'private_key' => 'qoEYp-QYH53-AQBOC-K3l20-gatWG',
-        'merchant_code' => 'T25429',
+        'api_key' => 'DEV-sYGX0cTeCAxmKzRqWYr0dzPs5MJPCz3rzL0bAPOW',
+        'private_key' => 'fMKg1-TXqaH-iv686-GNU6o-4QGCs',
+        'merchant_code' => 'T26751',
         'jenis' => 0,
         'status' => 1,
       ],
@@ -670,17 +675,17 @@ class DatabaseSeeder extends Seeder
       ],
       [
         'provider' => 'Digiflazz',
-        'api_key' => '8bef7462-a18e-57b1-a5d0-ccf7035690b6',
+        'api_key' => 'dev-a7c365e0-7a29-11ee-8b22-9d3d24f389e4',
         'private_key' => '',
-        'merchant_code' => 'xiziziDz4lwg',
+        'merchant_code' => 'pavawuDz2bAD',
         'jenis' => 1,
         'status' => 1,
       ],
       [
         'provider' => 'MedanPedia',
-        'api_key' => 'f55031-9d6c69-181deb-44ee66-0cf434',
+        'api_key' => 'c801dd-354a0d-856daa-97515a-d0f203',
         'private_key' => '',
-        'merchant_code' => '20568',
+        'merchant_code' => '22436',
         'jenis' => 1,
         'status' => 1,
       ],

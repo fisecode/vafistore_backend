@@ -19,7 +19,6 @@
 @endsection
 
 @section('vendor-script')
-    {{-- <script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script> --}}
     <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
@@ -29,7 +28,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/pages/post.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/pages/post.js') }}"></script> --}}
     <script>
         const showMessage = (type, message) => {
             if (message) {
@@ -90,7 +89,8 @@
                                                         Game</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 1]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
                                                         <a href="#" class="btn btn-label-secondary btn-sm"
                                                             onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
                                                     </td>
@@ -102,7 +102,8 @@
                                                         Akun Premium</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 4]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
                                                         <a href="#" class="btn btn-label-secondary btn-sm"
                                                             onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
                                                     </td>
@@ -114,7 +115,8 @@
                                                         Pulsa & Emoney</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 2]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
                                                         <a href="#" class="btn btn-label-secondary btn-sm"
                                                             onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
                                                     </td>
@@ -126,7 +128,8 @@
                                                         Social Media</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 3]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
                                                         <a href="#" class="btn btn-label-secondary btn-sm"
                                                             onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
                                                     </td>
