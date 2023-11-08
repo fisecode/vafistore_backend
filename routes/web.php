@@ -3,6 +3,7 @@
 use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\pages\DashboardController;
+use App\Http\Controllers\pages\MiscError;
 use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\pages\PostController;
 use App\Http\Controllers\pages\PostCategoryController;
@@ -24,7 +25,7 @@ use App\Http\Controllers\pages\SocialController;
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
   // Rute yang memerlukan peran "super admin"
-  Route::group(['middleware' => ['allowed.role:admin,super admin']], function () {
+  Route::group(['middleware' => ['allowed.role:super admin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     //Post
     Route::get('/post/list', [PostController::class, 'PostManagement'])->name('post-list');
@@ -59,6 +60,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/setting/services/get/{providerId}/{jenis}', [ServiceController::class, 'get'])->name('get-service');
   });
 });
+
+Route::get('/test', [MiscError::class, 'index'])->name('test');
 
 Route::get('/', function () {
   return redirect()->route('dashboard');

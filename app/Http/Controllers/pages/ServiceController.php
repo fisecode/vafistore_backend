@@ -7,6 +7,7 @@ use App\Models\ApiManagement;
 use App\Models\Markup;
 use App\Models\Prepaid;
 use App\Models\Product;
+use App\Models\SocialProduct;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
@@ -274,6 +275,231 @@ class ServiceController extends Controller
             $produk->status = 1;
             $produk->jenis = 4;
             $produk->product_type = $productType;
+            $produk->save();
+
+            if (!$produk->save()) {
+              $success = false;
+            }
+          }
+        }
+
+        if ($success) {
+          return redirect()
+            ->route('setting-services')
+            ->with('success', 'Semua produk berhasil ditambahkan');
+        } else {
+          return redirect()
+            ->route('setting-services')
+            ->with('error', 'Gagal menambahkan beberapa produk');
+        }
+      }
+    } elseif ($jenis == 3) {
+      if ($providerID == 4) {
+        $sign = md5($merchantCodes . $apiKey);
+
+        $date = Carbon::now()->toDateString();
+
+        SocialProduct::where('jenis', 4)
+          ->delete();
+
+        $markUp = Markup::where('id', 5)->first();
+        $persen_sell = $markUp->persen_sell;
+        $persen_res = $markUp->persen_res;
+        $persen_flash = $markUp->persen_flash;
+        $satuan = $markUp->satuan;
+
+        $client = new Client();
+        $response = $client->post('https://vip-reseller.co.id/api/social-media', [
+          'form_params' => [
+            'key' => $apiKey,
+            'sign' => $sign,
+            'type' => 'services',
+          ],
+        ]);
+
+        $hasil = json_decode($response->getBody(), true);
+
+        $success = true;
+        foreach ($hasil['data'] as $i => $data) {
+          $a = strlen($i);
+          if ($a == 1) {
+            $id = '4000' . $i;
+          } else if ($a == 2) {
+            $id = '400' . $i;
+          } else if ($a == 3) {
+            $id = '40' . $i;
+          } else if ($a == 4) {
+            $id = '4' . $i;
+          } else if ($a == 5) {
+            $id = $i;
+          }
+          $produk = new SocialProduct();
+          $code = $data['id'];
+          $explode = explode(' ', $data['category']);
+          $category = $explode[0];
+          $title = str_replace(['’', "'"], '&apos;', $data['name']);
+          $deskripsi = str_replace(array("’", "'"), "&apos;", $data['note']);
+          $minBuy = $data['min'];
+          $maxBuy = $data['max'];
+          $image = strtolower($category) . '.png';
+          $tipeData = $data['status'];
+          $hargaModal = $data['price']['basic'];
+          if ($satuan == 0) {
+            $hargaJual = ceil(($hargaModal + round(($hargaModal * $persen_sell) / 100)) / 100) * 100;
+            $hargaReseller = ceil(($hargaModal + round(($hargaModal * $persen_res) / 100)) / 100) * 100;
+            $hargaFlash = $hargaModal + round(($hargaModal * $persen_flash) / 100);
+          } else {
+            $hargaJual = ceil(($hargaModal + $persen_sell) / 100) * 100;
+            $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
+            $hargaFlash = $hargaModal + $persen_flash;
+          }
+
+          $desiredEndDigits = 99;
+          if ($hargaFlash % 100 != $desiredEndDigits) {
+            $hargaFlash = ceil($hargaFlash / 100) * 100 + $desiredEndDigits;
+          }
+          if (
+            $tipeData == 'available' &&
+            !$produk
+              ->where('code', $code)
+              ->whereDate('created_at', $date)
+              ->exists()
+          ) {
+
+            $produk->id = $id;
+            $produk->slug = $code;
+            $produk->code = $code;
+            $produk->title = $title;
+            $produk->kategori = $category;
+            $produk->deskripsi = $deskripsi;
+            $produk->min_buy = $minBuy;
+            $produk->max_buy = $maxBuy;
+            $produk->harga_modal = $hargaModal;
+            $produk->harga_jual = $hargaJual;
+            $produk->harga_reseller = $hargaReseller;
+            $produk->harga_flash = $hargaFlash;
+            $produk->image = $image;
+            $produk->status = 1;
+            $produk->jenis = 4;
+            $produk->product_type = 5;
+            $produk->save();
+
+            if (!$produk->save()) {
+              $success = false;
+            }
+          }
+        }
+
+        if ($success) {
+          return redirect()
+            ->route('setting-services')
+            ->with('success', 'Semua produk berhasil ditambahkan');
+        } else {
+          return redirect()
+            ->route('setting-services')
+            ->with('error', 'Gagal menambahkan beberapa produk');
+        }
+      }
+    } elseif ($jenis == 4) {
+      if ($providerID == 4) {
+        $sign = md5($merchantCodes . $apiKey);
+        $date = Carbon::now()->toDateString();
+
+        Product::where('jenis', 4)
+          ->where('product_type', 2)
+          ->delete();
+
+        $markUp = Markup::where('id', 1)->first();
+        $persen_sell = $markUp->persen_sell;
+        $persen_res = $markUp->persen_res;
+        $persen_flash = $markUp->persen_flash;
+        $satuan = $markUp->satuan;
+
+        $client = new Client();
+        $response = $client->post('https://vip-reseller.co.id/api/game-feature', [
+          'form_params' => [
+            'key' => $apiKey,
+            'sign' => $sign,
+            'type' => 'services',
+            'filter_type' => 'game',
+          ],
+        ]);
+
+        $hasil = json_decode($response->getBody(), true);
+        $success = true;
+
+        foreach ($hasil['data'] as $i => $data) {
+          $produk = new Product();
+          $code = $data['code'];
+          $game = $data['game'];
+          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $game));
+          $image = strtolower(str_replace(' ', '_', $game)) . '.png';
+          $title = str_replace(['’', "'"], '&apos;', $data['name']);
+          $hargaModal = $data['price']['basic'];
+
+          if ($satuan == 0) {
+            $hargaJual = ceil(($hargaModal + round(($hargaModal * $persen_sell) / 100)) / 100) * 100;
+            $hargaReseller = ceil(($hargaModal + round(($hargaModal * $persen_res) / 100)) / 100) * 100;
+            $hargaFlash = $hargaModal + round(($hargaModal * $persen_flash) / 100);
+          } else {
+            $hargaJual = ceil(($hargaModal + $persen_sell) / 100) * 100;
+            $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
+            $hargaFlash = $hargaModal + $persen_flash;
+          }
+
+          $desiredEndDigits = 99;
+          // Mengecek jika nilai terakhir tidak 99
+          if ($hargaFlash % 100 != $desiredEndDigits) {
+            $hargaFlash = ceil($hargaFlash / 100) * 100 + $desiredEndDigits;
+          }
+
+          $tipeData = $data['status'];
+          if (
+            $tipeData == 'available' &&
+            !$produk
+              ->where('code', $code)
+              ->whereDate('created_at', $date)
+              ->exists() &&
+            in_array($game, [
+              'Canva Pro',
+              'Apple Gift Card',
+              'PicsArt Pro',
+              'Tiktok Music',
+              'Disney Hotstar',
+              'iQIYI Premium',
+              'Netflix Premium',
+              'Spotify Premium',
+              'Vidio Premier',
+              'WeTV Premium',
+              'Youtube Premium',
+              'Amazon Prime Video',
+            ])
+          ) {
+            $cekProdukDulu = Product::where('jenis', 4)
+              ->orderBy('id', 'desc')
+              ->first();
+
+            if ($cekProdukDulu) {
+              $id = $cekProdukDulu->id + 1;
+            } else {
+              $id = str_pad($i, 4, '0', STR_PAD_LEFT);
+            }
+
+            $produk->id = $id;
+            $produk->slug = $slug;
+            $produk->code = $code;
+            $produk->title = $title;
+            $produk->kategori = $game;
+            $produk->harga_modal = $hargaModal;
+            $produk->harga_jual = $hargaJual;
+            $produk->harga_reseller = $hargaReseller;
+            $produk->harga_flash = $hargaFlash;
+            $produk->image = $image;
+            $produk->currency = '';
+            $produk->type = 'Umum';
+            $produk->status = 1;
+            $produk->jenis = 4;
+            $produk->product_type = 2;
             $produk->save();
 
             if (!$produk->save()) {
