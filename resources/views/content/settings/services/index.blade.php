@@ -91,8 +91,12 @@
                                                         style="vertical-align: middle; white-space: nowrap;">
                                                         <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 1]) }}"
                                                             class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 1,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -104,8 +108,12 @@
                                                         style="vertical-align: middle; white-space: nowrap;">
                                                         <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 4]) }}"
                                                             class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 4,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -117,8 +125,12 @@
                                                         style="vertical-align: middle; white-space: nowrap;">
                                                         <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 2]) }}"
                                                             class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 2,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -130,8 +142,12 @@
                                                         style="vertical-align: middle; white-space: nowrap;">
                                                         <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 3]) }}"
                                                             class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 3,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                             @elseif ($provider->provider === 'Digiflazz')
@@ -142,9 +158,14 @@
                                                         Game & Voucher</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 1]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 1,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -154,9 +175,14 @@
                                                         Pulsa & Emoney</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 2]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 2,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -166,9 +192,14 @@
                                                         Pascabayar</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 5]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 5,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                             @elseif ($provider->provider === 'MedanPedia')
@@ -179,9 +210,14 @@
                                                         Social Media</td>
                                                     <td class="text-center"
                                                         style="vertical-align: middle; white-space: nowrap;">
-                                                        <a href="#" class="btn btn-primary btn-sm">Ambil</a>
-                                                        <a href="#" class="btn btn-label-secondary btn-sm"
-                                                            onclick="return confirm('Are you sure want remove this data?');">Hapus</a>
+                                                        <a href="{{ route('get-service', ['providerId' => $provider->id, 'jenis' => 3]) }}"
+                                                            class="btn btn-primary btn-sm">Ambil</a>
+                                                        @include('content.settings.services.delete-form', [
+                                                            'action' => route('delete-service', [
+                                                                'providerId' => $provider->id,
+                                                                'jenis' => 3,
+                                                            ]),
+                                                        ])
                                                     </td>
                                                 </tr>
                                             @endif

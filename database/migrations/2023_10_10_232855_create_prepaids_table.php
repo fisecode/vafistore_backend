@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
   /**
    * Run the migrations.
    */
@@ -20,9 +21,7 @@ return new class extends Migration {
       $table->integer('harga_modal');
       $table->integer('harga_jual');
       $table->integer('harga_reseller');
-      $table->integer('harga_flash')->nullable();
       $table->string('image', 255);
-      $table->integer('flash_sale')->default(0);
       $table->integer('status');
       $table->integer('jenis');
       $table->integer('product_type');

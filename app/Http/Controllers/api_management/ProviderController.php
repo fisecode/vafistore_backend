@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\pages;
+namespace App\Http\Controllers\api_management;
 
 use App\Models\ApiManagement as Provider;
 use App\Http\Controllers\Controller;

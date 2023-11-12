@@ -11,5 +11,5 @@ class Markup extends Model
 
   protected $primaryKey = 'id';
 
-  protected $fillable = ['persen_sell', 'persen_res', 'persen_flash', 'com_ref', 'satuan'];
+  protected $fillable = ['persen_sell', 'persen_res', 'com_ref', 'satuan'];
 }

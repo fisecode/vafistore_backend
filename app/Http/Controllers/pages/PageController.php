@@ -15,7 +15,7 @@ class PageController extends Controller
   use ImageStorage;
   public function PageManagement()
   {
-    return view('content.content-pages.index');
+    return view('content.pages.index');
   }
   /**
    * Display a listing of the resource.

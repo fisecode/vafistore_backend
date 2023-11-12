@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\pages;
+namespace App\Http\Controllers\slide_show;
 
 use App\Http\Controllers\Controller;
 use App\Models\Slide;
@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageStorage;
 use Illuminate\Http\Request;
 
-class SlideController extends Controller
+class SlideShowController extends Controller
 {
   use ImageStorage;
   public function SlideManagement()
   {
-    return view('content.slide.index');
+    return view('content.slide-show.index');
   }
   /**
    * Display a listing of the resource.

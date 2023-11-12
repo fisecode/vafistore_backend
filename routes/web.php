@@ -2,15 +2,15 @@
 
 use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\pages\DashboardController;
+use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\pages\MiscError;
 use App\Http\Controllers\pages\PageController;
-use App\Http\Controllers\pages\PostController;
-use App\Http\Controllers\pages\PostCategoryController;
-use App\Http\Controllers\pages\ProviderController;
-use App\Http\Controllers\pages\ServiceController;
-use App\Http\Controllers\pages\SlideController;
-use App\Http\Controllers\pages\SocialController;
+use App\Http\Controllers\posts\PostController;
+use App\Http\Controllers\posts\PostCategoryController;
+use App\Http\Controllers\api_management\ProviderController;
+use App\Http\Controllers\settings\ServiceController;
+use App\Http\Controllers\slide_show\SlideShowController;
+use App\Http\Controllers\socials\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,8 +44,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('page/add', [PageController::class, 'create'])->name('page.add');
     Route::get('page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
     //slide
-    Route::resource('/slide-list', SlideController::class);
-    Route::get('/slide', [SlideController::class, 'SlideManagement'])->name('slide');
+    Route::resource('/slide-list', SlideShowController::class);
+    Route::get('/slide', [SlideShowController::class, 'SlideManagement'])->name('slide');
     //socials
     Route::resource('/social-list', SocialController::class);
     Route::get('/socials', [SocialController::class, 'SocialManagement'])->name('socials');
@@ -58,6 +58,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('/setting/services', ServiceController::class);
     Route::get('/setting/services', [ServiceController::class, 'index'])->name('setting-services');
     Route::get('/setting/services/get/{providerId}/{jenis}', [ServiceController::class, 'get'])->name('get-service');
+    Route::delete('/setting/services/{providerId}/{jenis}', [ServiceController::class, 'destroy'])->name('delete-service');
   });
 });
 

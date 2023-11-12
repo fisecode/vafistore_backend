@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\pages;
+namespace App\Http\Controllers\posts;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ImageStorage;
+
 class PostController extends Controller
 {
   use ImageStorage;
