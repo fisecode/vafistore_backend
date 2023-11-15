@@ -6,10 +6,17 @@ function truncated(content, max) {
   return truncatedContent;
 }
 
-var dt_user_table = $('.datatables-posts'),
+function convertToIdr(price) {
+  const formattedCapital = price.toLocaleString('id-ID', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
+  return formattedCapital;
+}
+
+var dt_game_table = $('.datatables-games'),
   select2 = $('.select2'),
-  userView = baseUrl + 'app/user/view/account',
-  offCanvasForm = $('#offcanvasAddCategory'),
+  offCanvasForm = $('#offcanvasEditProduct'),
   statusObj = {
     0: { title: 'not_active' },
     1: { title: 'active' }
@@ -28,8 +35,8 @@ $.ajaxSetup({
 
 // Datatable (jquery)
 $(function () {
-  if (dt_user_table.length) {
-    var dt_user = dt_user_table.DataTable({
+  if (dt_game_table.length) {
+    var dt_game = dt_game_table.DataTable({
       processing: true,
       serverSide: true,
       ajax: {
@@ -123,28 +130,46 @@ $(function () {
           }
         },
         {
+          // capital price
+          targets: 6,
+          responsivePriority: 3,
+          render: function (data, type, full, meta) {
+            // Konversi nilai full.capital ke format mata uang Indonesia tanpa simbol dan nol di belakang koma
+            const cp = convertToIdr(full.capital);
+
+            // Return string dengan format mata uang Indonesia tanpa simbol dan nol di belakang koma
+            return `<span>${cp}</span>`;
+          }
+        },
+        {
+          // selling price
+          targets: 7,
+          responsivePriority: 3,
+          render: function (data, type, full, meta) {
+            // Konversi nilai full.capital ke format mata uang Indonesia tanpa simbol dan nol di belakang koma
+            const cs = convertToIdr(full.selling);
+
+            // Return string dengan format mata uang Indonesia tanpa simbol dan nol di belakang koma
+            return `<span>${cs}</span>`;
+          }
+        },
+        {
+          // reseller price
+          targets: 8,
+          responsivePriority: 3,
+          render: function (data, type, full, meta) {
+            // Konversi nilai full.capital ke format mata uang Indonesia tanpa simbol dan nol di belakang koma
+            const cr = convertToIdr(full.reseller);
+
+            // Return string dengan format mata uang Indonesia tanpa simbol dan nol di belakang koma
+            return `<span>${cr}</span>`;
+          }
+        },
+        {
           // provider
           targets: 9,
           render: function (data, type, full, meta) {
             var $provider = full['provider'];
-            var statusSwitchObj = {
-              not_active:
-                '<label class="switch switch-primary switch-sm">' +
-                `<input type="checkbox" class="switch-input" id="switch" data-id="${full['id']}">` +
-                '<span class="switch-toggle-slider">' +
-                '<span class="switch-off">' +
-                '</span>' +
-                '</span>' +
-                '</label>',
-              active:
-                '<label class="switch switch-primary switch-sm">' +
-                `<input type="checkbox" class="switch-input" checked="" data-id="${full['id']}">` +
-                '<span class="switch-toggle-slider">' +
-                '<span class="switch-on">' +
-                '</span>' +
-                '</span>' +
-                '</label>'
-            };
             return '<span>' + providerObj[$provider].title + '</span>';
           }
         },
@@ -189,18 +214,10 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'post/' + full['id'] + '/edit';
+            var edit = baseUrl + 'product/game' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
-              '<a href="' +
-              edit +
-              '" class="btn btn-sm btn-icon"><i class="mdi mdi-pencil-outline"></i></a>' +
-              '<button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical mdi-20px"></i></button>' +
-              '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="' +
-              userView +
-              '" class="dropdown-item">View</a>' +
-              `<a href="javascript:;" class="dropdown-item delete-record" data-id="${full['id']}">Delete</a>` +
+              `<button class="btn btn-sm btn-icon edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditProduct"><i class="mdi mdi-pencil-outline mdi-20px"></i></button>` +
               '</div>'
             );
           }
@@ -259,9 +276,90 @@ $(function () {
     });
   }
 
-  // Delete Record
-  $(document).on('click', '.delete-record', function () {
-    var post_id = $(this).data('id'),
+  // form
+  const editProductForm = document.getElementById('editProductForm');
+
+  // product form validation
+  const fv = FormValidation.formValidation(editProductForm, {
+    fields: {
+      item: {
+        validators: {
+          notEmpty: {
+            message: 'Please insert item name'
+          }
+        }
+      },
+      selling: {
+        validators: {
+          notEmpty: {
+            message: 'Please insert selling price'
+          }
+        }
+      },
+      reseller: {
+        validators: {
+          notEmpty: {
+            message: 'Please insert reseller price'
+          }
+        }
+      }
+    },
+    plugins: {
+      trigger: new FormValidation.plugins.Trigger(),
+      bootstrap5: new FormValidation.plugins.Bootstrap5({
+        // Use this for enabling/changing valid/invalid class
+        eleValidClass: '',
+        rowSelector: function (field, ele) {
+          // field is the field name & ele is the field element
+          return '.mb-4';
+        }
+      }),
+      submitButton: new FormValidation.plugins.SubmitButton(),
+      // Submit the form when all fields are valid
+      // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+      autoFocus: new FormValidation.plugins.AutoFocus()
+    }
+  }).on('core.form.valid', function () {
+    // adding or updating category when form successfully validate
+    var formData = new FormData($('#editProductForm')[0]);
+
+    $.ajax({
+      data: formData,
+      url: `${baseUrl}product/game-list`,
+      type: 'POST',
+      contentType: false,
+      processData: false,
+      success: function (response) {
+        dt_game.draw();
+        offCanvasForm.offcanvas('hide');
+
+        // sweetalert
+        Swal.fire({
+          icon: 'success',
+          title: `${response.message}`,
+          text: `${response.message}`,
+          customClass: {
+            confirmButton: 'btn btn-success'
+          }
+        });
+      },
+      error: function (err) {
+        console.log(err.responseJSON.message);
+        offCanvasForm.offcanvas('hide');
+        Swal.fire({
+          title: 'Duplicate Entry!',
+          text: 'Sort Order Already Use.',
+          icon: 'error',
+          customClass: {
+            confirmButton: 'btn btn-success'
+          }
+        });
+      }
+    });
+  });
+
+  $(document).on('click', '.edit-record', function () {
+    var product_id = $(this).data('id'),
       dtrModal = $('.dtr-bs-modal.show');
 
     // hide responsive modal in small screen
@@ -269,50 +367,51 @@ $(function () {
       dtrModal.modal('hide');
     }
 
-    // sweetalert for confirmation of delete
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      customClass: {
-        confirmButton: 'btn btn-primary me-3',
-        cancelButton: 'btn btn-label-secondary'
-      },
-      buttonsStyling: false
-    }).then(function (result) {
-      if (result.value) {
-        // delete the data
-        $.ajax({
-          type: 'DELETE',
-          url: `${baseUrl}post-list/${post_id}`,
-          success: function () {
-            dt_user.draw();
-          },
-          error: function (error) {
-            console.log(error);
-          }
-        });
+    // get data
+    $.get(`${baseUrl}product/game-list\/${product_id}\/edit`, function (data) {
+      let provider = '';
+      if (data.jenis == 4) {
+        provider = 'Vip Reseller';
+      } else if (data.jenis == 5) {
+        provider = 'Digiflazz';
+      }
+      $('#product_id').val(data.id);
+      $('#edit-code').val(data.code);
+      $('#edit-item').val(data.title);
+      $('#edit-category').val(data.kategori);
+      $('#edit-capital').val(data.harga_modal);
+      $('#edit-selling').val(data.harga_jual);
+      $('#edit-reseller').val(data.harga_reseller);
+      $('#edit-provider').val(provider);
+    });
+  });
 
-        // success sweetalert
+  // Update Status
+  $(document).on('change', '.switch-input', function () {
+    var id = $(this).data('id');
+
+    $.ajax({
+      method: 'PUT',
+      url: `${baseUrl}product/game-list/${id}`,
+      data: {
+        newStatus: $(this).is(':checked') ? 1 : 0
+      },
+      success: function (response) {
+        dt_game.draw();
+
+        // sweetalert
         Swal.fire({
           icon: 'success',
-          title: 'Deleted!',
-          text: 'The post has been deleted!',
+          title: `${response.title}`,
+          text: `${response.message}`,
           customClass: {
             confirmButton: 'btn btn-success'
           }
         });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({
-          title: 'Cancelled',
-          text: 'The post is not deleted!',
-          icon: 'error',
-          customClass: {
-            confirmButton: 'btn btn-success'
-          }
-        });
+      },
+      error: function (error) {
+        console.error('Terjadi kesalahan dalam permintaan AJAX:');
+        console.error(error);
       }
     });
   });

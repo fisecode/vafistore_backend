@@ -5,6 +5,7 @@ namespace App\Http\Controllers\product;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GameController extends Controller
 {
@@ -136,7 +137,42 @@ class GameController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    // Validation rules
+    $rules = [
+      'item' => 'required',
+      'selling' => 'numeric|required',
+      'reseller' => 'numeric|required',
+    ];
+
+    // Validate the request data
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+      return response()->json(['title' => 'Error', 'message' => $validator->messages()->first()]);
+    }
+
+    $productId = $request->id;
+    $item = $request->item;
+    $selling = $request->selling;
+    $reseller = $request->reseller;
+
+    // Find the product
+    $product = Product::find($productId);
+
+    if (!$product) {
+      return response()->json(['title' => 'Error', 'message' => 'Product not found.']);
+    }
+
+    // Update the product
+    $product->title = $item;
+    $product->harga_jual = $selling;
+    $product->harga_reseller = $reseller;
+
+    if ($product->update()) {
+      return response()->json(['title' => 'Well Done!', 'message' => 'Product Updated!']);
+    } else {
+      return response()->json(['title' => 'Error', 'message' => 'An error occurred while updating the product.']);
+    }
   }
 
   /**
@@ -150,17 +186,42 @@ class GameController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(Product $product)
+  public function edit($id)
   {
-    //
+    $where = ['id' => $id];
+
+    $product = Product::where($where)->first();
+
+    return response()->json($product);
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Product $product)
+  public function update(Request $request, $id)
   {
-    //
+    $newStatus = $request->input('newStatus');
+
+    $product = Product::find($id);
+    if ($product) {
+      $product->status = $newStatus;
+      $product->save();
+      // slide updated
+      if ($newStatus == 0) {
+        return response()->json([
+          'title' => 'Successfully deactivated!',
+          'message' => "Product {$product->code} deactivated successfully",
+        ]);
+      } else {
+        return response()->json([
+          'title' => 'Successfully activated!',
+          'message' => "Product {$product->code} activated successfully",
+        ]);
+      }
+    } else {
+      // slide not found
+      return response()->json(['title' => 'Failed', 'message' => 'Product Not Found'], 422);
+    }
   }
 
   /**

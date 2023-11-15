@@ -59,7 +59,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('/setting/services', ServiceController::class);
     Route::get('/setting/services', [ServiceController::class, 'index'])->name('setting-services');
     Route::get('/setting/services/get/{providerId}/{jenis}', [ServiceController::class, 'get'])->name('get-service');
-    Route::delete('/setting/services/{providerId}/{jenis}', [ServiceController::class, 'destroy'])->name('delete-service');
+    Route::delete('/setting/services/{providerId}/{jenis}', [ServiceController::class, 'destroy'])->name(
+      'delete-service'
+    );
     //Product Game
     Route::resource('/product/game-list', GameController::class);
     Route::get('/product/game', [GameController::class, 'GameManagement'])->name('product-game');

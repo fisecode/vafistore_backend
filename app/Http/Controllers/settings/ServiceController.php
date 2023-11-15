@@ -73,7 +73,9 @@ class ServiceController extends Controller
   {
     $success = true;
     if ($jenis == 1) {
-      $delete = Product::where('jenis', $providerID)->where('product_type', $jenis)->delete();
+      $delete = Product::where('jenis', $providerID)
+        ->where('product_type', $jenis)
+        ->delete();
       if (!$delete) {
         $success = false;
       }
@@ -88,7 +90,9 @@ class ServiceController extends Controller
         $success = false;
       }
     } elseif ($jenis == 4) {
-      $delete = Product::where('jenis', $providerID)->where('product_type', 2)->delete();
+      $delete = Product::where('jenis', $providerID)
+        ->where('product_type', 2)
+        ->delete();
       if (!$delete) {
         $success = false;
       }
@@ -139,6 +143,7 @@ class ServiceController extends Controller
             'type' => 'services',
             'filter_type' => 'game',
           ],
+          'verify' => false, // Disable SSL verification
         ]);
 
         $hasil = json_decode($response->getBody(), true);
@@ -194,13 +199,13 @@ class ServiceController extends Controller
               $a = strlen($i);
               if ($a == 1) {
                 $id = '4000' . $i;
-              } else if ($a == 2) {
+              } elseif ($a == 2) {
                 $id = '400' . $i;
-              } else if ($a == 3) {
+              } elseif ($a == 3) {
                 $id = '40' . $i;
-              } else if ($a == 4) {
+              } elseif ($a == 4) {
                 $id = '4' . $i;
-              } else if ($a == 5) {
+              } elseif ($a == 5) {
                 $id = $i;
               }
             }
@@ -252,8 +257,7 @@ class ServiceController extends Controller
         ];
         $date = Carbon::now()->toDateString();
 
-        Product::where('jenis', 5)
-          ->delete();
+        Product::where('jenis', 5)->delete();
 
         $markUp = Markup::where('id', 1)->first();
         $persen_sell = $markUp->persen_sell;
@@ -270,17 +274,17 @@ class ServiceController extends Controller
           $a = strlen($i);
           if ($a == 1) {
             $id = '5000' . $i;
-          } else if ($a == 2) {
+          } elseif ($a == 2) {
             $id = '500' . $i;
-          } else if ($a == 3) {
+          } elseif ($a == 3) {
             $id = '50' . $i;
-          } else if ($a == 4) {
+          } elseif ($a == 4) {
             $id = '5' . $i;
-          } else if ($a == 5) {
+          } elseif ($a == 5) {
             $id = $i;
           }
           $produk = new Product();
-          $brand  = ucwords(strtolower($data['brand']));
+          $brand = ucwords(strtolower($data['brand']));
           $code = $data['buyer_sku_code'];
           $name = $data['product_name'];
           $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
@@ -352,6 +356,7 @@ class ServiceController extends Controller
             'sign' => $sign,
             'type' => 'services',
           ],
+          'verify' => false, // Disable SSL verification
         ]);
 
         $hasil = json_decode($response->getBody(), true);
@@ -458,17 +463,17 @@ class ServiceController extends Controller
           $a = strlen($i);
           if ($a == 1) {
             $id = '5000' . $i;
-          } else if ($a == 2) {
+          } elseif ($a == 2) {
             $id = '500' . $i;
-          } else if ($a == 3) {
+          } elseif ($a == 3) {
             $id = '50' . $i;
-          } else if ($a == 4) {
+          } elseif ($a == 4) {
             $id = '5' . $i;
-          } else if ($a == 5) {
+          } elseif ($a == 5) {
             $id = $i;
           }
           $produk = new Prepaid();
-          $brand  = ucwords(strtolower($data['brand']));
+          $brand = ucwords(strtolower($data['brand']));
           $code = $data['buyer_sku_code'];
           $name = $data['product_name'];
           $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
@@ -504,6 +509,8 @@ class ServiceController extends Controller
               $type = 'saldo-emoney';
             } elseif ($kategori == 'Pulsa' && $type == 'umum') {
               $type = 'pulsa-regular';
+            } elseif ($kategori == 'Data') {
+              $type = 'paket-data';
             }
 
             $produk->id = $id;
@@ -543,8 +550,7 @@ class ServiceController extends Controller
 
         $date = Carbon::now()->toDateString();
 
-        SocialProduct::where('jenis', 4)
-          ->delete();
+        SocialProduct::where('jenis', 4)->delete();
 
         $markUp = Markup::where('id', 5)->first();
         $persen_sell = $markUp->persen_sell;
@@ -558,6 +564,7 @@ class ServiceController extends Controller
             'sign' => $sign,
             'type' => 'services',
           ],
+          'verify' => false, // Disable SSL verification
         ]);
 
         $hasil = json_decode($response->getBody(), true);
@@ -567,13 +574,13 @@ class ServiceController extends Controller
           $a = strlen($i);
           if ($a == 1) {
             $id = '4000' . $i;
-          } else if ($a == 2) {
+          } elseif ($a == 2) {
             $id = '400' . $i;
-          } else if ($a == 3) {
+          } elseif ($a == 3) {
             $id = '40' . $i;
-          } else if ($a == 4) {
+          } elseif ($a == 4) {
             $id = '4' . $i;
-          } else if ($a == 5) {
+          } elseif ($a == 5) {
             $id = $i;
           }
           $produk = new SocialProduct();
@@ -581,7 +588,7 @@ class ServiceController extends Controller
           $explode = explode(' ', $data['category']);
           $category = $explode[0];
           $title = str_replace(['’', "'"], '&apos;', $data['name']);
-          $deskripsi = str_replace(array("’", "'"), "&apos;", $data['note']);
+          $deskripsi = str_replace(['’', "'"], '&apos;', $data['note']);
           $minBuy = $data['min'];
           $maxBuy = $data['max'];
           $image = strtolower($category) . '.png';
@@ -602,7 +609,6 @@ class ServiceController extends Controller
               ->whereDate('created_at', $date)
               ->exists()
           ) {
-
             $produk->id = $id;
             $produk->slug = $code;
             $produk->code = $code;
@@ -638,8 +644,7 @@ class ServiceController extends Controller
       } elseif ($providerID == 6) {
         $date = Carbon::now()->toDateString();
 
-        SocialProduct::where('jenis', 6)
-          ->delete();
+        SocialProduct::where('jenis', 6)->delete();
 
         $markUp = Markup::where('id', 5)->first();
         $persen_sell = $markUp->persen_sell;
@@ -662,13 +667,13 @@ class ServiceController extends Controller
           $a = strlen($i);
           if ($a == 1) {
             $id = '6000' . $i;
-          } else if ($a == 2) {
+          } elseif ($a == 2) {
             $id = '600' . $i;
-          } else if ($a == 3) {
+          } elseif ($a == 3) {
             $id = '60' . $i;
-          } else if ($a == 4) {
+          } elseif ($a == 4) {
             $id = '6' . $i;
-          } else if ($a == 5) {
+          } elseif ($a == 5) {
             $id = $i;
           }
           $produk = new SocialProduct();
@@ -676,7 +681,7 @@ class ServiceController extends Controller
           $explode = explode(' ', $data['category']);
           $category = $explode[0];
           $title = $data['name'];
-          $deskripsi = str_replace(array("’", "'"), "&apos;", $data['description']);
+          $deskripsi = str_replace(['’', "'"], '&apos;', $data['description']);
           $minBuy = $data['min'];
           $maxBuy = $data['max'];
           $image = strtolower($category) . '.png';
@@ -743,6 +748,7 @@ class ServiceController extends Controller
             'type' => 'services',
             'filter_type' => 'game',
           ],
+          'verify' => false, // Disable SSL verification
         ]);
 
         $hasil = json_decode($response->getBody(), true);
@@ -797,13 +803,13 @@ class ServiceController extends Controller
               $a = strlen($i);
               if ($a == 1) {
                 $id = '4000' . $i;
-              } else if ($a == 2) {
+              } elseif ($a == 2) {
                 $id = '400' . $i;
-              } else if ($a == 3) {
+              } elseif ($a == 3) {
                 $id = '40' . $i;
-              } else if ($a == 4) {
+              } elseif ($a == 4) {
                 $id = '4' . $i;
-              } else if ($a == 5) {
+              } elseif ($a == 5) {
                 $id = $i;
               }
             }
@@ -874,7 +880,7 @@ class ServiceController extends Controller
 
         foreach ($hasil['data'] as $i => $data) {
           $produk = new Postpaid();
-          $brand  = ucwords(strtolower($data['brand']));
+          $brand = ucwords(strtolower($data['brand']));
           $code = $data['buyer_sku_code'];
           $name = $data['product_name'];
           $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
@@ -912,13 +918,13 @@ class ServiceController extends Controller
               $a = strlen($i);
               if ($a == 1) {
                 $id = '5000' . $i;
-              } else if ($a == 2) {
+              } elseif ($a == 2) {
                 $id = '500' . $i;
-              } else if ($a == 3) {
+              } elseif ($a == 3) {
                 $id = '50' . $i;
-              } else if ($a == 4) {
+              } elseif ($a == 4) {
                 $id = '5' . $i;
-              } else if ($a == 5) {
+              } elseif ($a == 5) {
                 $id = $i;
               }
             }
