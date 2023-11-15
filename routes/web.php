@@ -8,6 +8,7 @@ use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\posts\PostController;
 use App\Http\Controllers\posts\PostCategoryController;
 use App\Http\Controllers\api_management\ProviderController;
+use App\Http\Controllers\product\GameController;
 use App\Http\Controllers\settings\ServiceController;
 use App\Http\Controllers\slide_show\SlideShowController;
 use App\Http\Controllers\socials\SocialController;
@@ -59,6 +60,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/setting/services', [ServiceController::class, 'index'])->name('setting-services');
     Route::get('/setting/services/get/{providerId}/{jenis}', [ServiceController::class, 'get'])->name('get-service');
     Route::delete('/setting/services/{providerId}/{jenis}', [ServiceController::class, 'destroy'])->name('delete-service');
+    //Product Game
+    Route::resource('/product/game-list', GameController::class);
+    Route::get('/product/game', [GameController::class, 'GameManagement'])->name('product-game');
   });
 });
 
