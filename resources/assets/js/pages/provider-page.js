@@ -10,16 +10,6 @@ $.ajaxSetup({
 // Datatable (jquery)
 $(function () {
   var select2 = $('.select2');
-  if (select2.length) {
-    select2.each(function () {
-      const $this = $(this);
-      select2Focus($this);
-      $this.wrap('<div class="position-relative"></div>').select2({
-        dropdownParent: $this.parent(),
-        placeholder: $this.data('placeholder') // for dynamic placeholder
-      });
-    });
-  }
 
   var dt_provider_table = $('.datatables-provider'),
     offCanvasForm = $('#offcanvasAddProvider'),

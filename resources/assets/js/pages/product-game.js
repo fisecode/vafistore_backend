@@ -14,18 +14,6 @@ function convertToIdr(price) {
   return formattedCapital;
 }
 
-var dt_game_table = $('.datatables-games'),
-  select2 = $('.select2'),
-  offCanvasForm = $('#offcanvasEditProduct'),
-  statusObj = {
-    0: { title: 'not_active' },
-    1: { title: 'active' }
-  },
-  providerObj = {
-    4: { title: 'Vip Reseller' },
-    5: { title: 'Digiflazz' }
-  };
-
 // ajax setup
 $.ajaxSetup({
   headers: {
@@ -35,6 +23,22 @@ $.ajaxSetup({
 
 // Datatable (jquery)
 $(function () {
+  var dt_game_table = $('.datatables-games'),
+    select2 = $('.select2'),
+    offCanvasForm = $('#offcanvasEditProduct'),
+    statusObj = {
+      0: { title: 'not_active' },
+      1: { title: 'active' }
+    },
+    providerObj = {
+      4: { title: 'Vip Reseller' },
+      5: { title: 'Digiflazz' }
+    },
+    statusFilterValObj = {
+      0: { title: 'Not Active' },
+      1: { title: 'Active' }
+    };
+
   if (dt_game_table.length) {
     var dt_game = dt_game_table.DataTable({
       processing: true,
@@ -210,6 +214,7 @@ $(function () {
         {
           // Actions
           targets: -1,
+          responsivePriority: 5,
           title: 'Actions',
           searchable: false,
           orderable: false,
@@ -272,9 +277,87 @@ $(function () {
             return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
+      },
+      initComplete: function () {
+        // Adding category filter once table initialized
+        this.api()
+          .columns(5)
+          .every(function () {
+            var column = this;
+            var select = $(
+              '<select id="ProductCategory" class="form-select text-capitalize"><option value="">Category</option></select>'
+            )
+              .appendTo('.product_category')
+              .on('change', function () {
+                var val = $(this).val();
+                console.log(val);
+                column.search(val ? '^' + val + '$' : '', true, false).draw();
+              });
+
+            column
+              .data()
+              .unique()
+              .sort()
+              .each(function (d, j) {
+                select.append('<option value="' + d + '">' + d + '</option>');
+              });
+          });
+        // Adding category filter once table initialized
+        // this.api()
+        //   .columns(9)
+        //   .every(function () {
+        //     var column = this;
+        //     var select = $(
+        //       '<select id="ProductProvider" class="select2 form-select text-capitalize"><option value="">Provider</option></select>'
+        //     )
+        //       .appendTo('.product_provider')
+        //       .on('change', function () {
+        //         var val = $.fn.dataTable.util.escapeRegex($(this).val());
+        //         column.search(val ? '^' + val + '$' : '', true, false).draw();
+        //       });
+
+        //     column
+        //       .data()
+        //       .unique()
+        //       .sort()
+        //       .each(function (d, j) {
+        //         select.append('<option value="' + categoryObj[d].title + '">' + categoryObj[d].title + '</option>');
+        //       });
+        //   });
+        // Adding status filter once table initialized
+        this.api()
+          .columns(10)
+          .every(function () {
+            var column = this;
+            var select = $(
+              '<select id="ProductStatus" class="form-select text-capitalize"><option value=""> Status </option></select>'
+            )
+              .appendTo('.product_status')
+              .on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                column.search(val ? '^' + val + '$' : '', true, false).draw();
+              });
+
+            column
+              .data()
+              .unique()
+              .sort()
+              .each(function (d, j) {
+                select.append(
+                  '<option value="' + statusObj[d].title + '">' + statusFilterValObj[d].title + '</option>'
+                );
+              });
+          });
       }
     });
   }
+
+  // Filter form control to default size
+  // ? setTimeout used for multilingual table initialization
+  setTimeout(() => {
+    $('.dataTables_filter .form-control').removeClass('form-control-sm');
+    $('.dataTables_length .form-select').removeClass('form-select-sm');
+  }, 300);
 
   // form
   const editProductForm = document.getElementById('editProductForm');
