@@ -49,59 +49,38 @@ class GameController extends Controller
 
     if ($request->status == '0' || $request->status == '1') {
       $query = $query->where('status', $request->status);
+      $totalFiltered = $query->count();
     }
 
     if (!empty($request->provider)) {
       $query = $query->Where('jenis', $request->provider);
+      $totalFiltered = $query->count();
     }
 
     if (!empty($request->category)) {
       $query = $query->Where('kategori', $request->category);
+      $totalFiltered = $query->count();
     }
 
-    if (empty($request->input('search.value'))) {
-      $products = Product::offset($start)
-        ->limit($limit)
-        ->orderBy($order, $dir)
-        ->get();
-    } else {
+    if (!empty($request->input('search.value'))) {
       $search = $request->input('search.value');
 
-      $products = Product::where('id', 'LIKE', "%{$search}%")
+      $query->where('id', 'LIKE', "%{$search}%")
         ->orWhere('image', 'LIKE', "%{$search}%")
         ->orWhere('code', 'LIKE', "%{$search}%")
         ->orWhere('title', 'LIKE', "%{$search}%")
         ->orWhere('kategori', 'LIKE', "%{$search}%")
         ->orWhere('harga_modal', 'LIKE', "%{$search}%")
         ->orWhere('harga_jual', 'LIKE', "%{$search}%")
-        ->orWhere('harga_reseller', 'LIKE', "%{$search}%")
-        ->orWhere('jenis', 'LIKE', "%{$search}%")
-        ->orWhere('status', 'LIKE', "%{$search}%")
-        ->offset($start)
-        ->limit($limit)
-        ->orderBy($order, $dir)
-        ->get();
-
-      $totalFiltered = Product::where('id', 'LIKE', "%{$search}%")
-        ->orWhere('image', 'LIKE', "%{$search}%")
-        ->orWhere('code', 'LIKE', "%{$search}%")
-        ->orWhere('title', 'LIKE', "%{$search}%")
-        ->orWhere('kategori', 'LIKE', "%{$search}%")
-        ->orWhere('harga_modal', 'LIKE', "%{$search}%")
-        ->orWhere('harga_jual', 'LIKE', "%{$search}%")
-        ->orWhere('harga_reseller', 'LIKE', "%{$search}%")
-        ->orWhere('jenis', 'LIKE', "%{$search}%")
-        ->orWhere('status', 'LIKE', "%{$search}%")
-        ->count();
+        ->orWhere('harga_reseller', 'LIKE', "%{$search}%");
+      $totalFiltered = $query->count();
     }
 
-    $products = $query
-      ->offset($start)
+    $products = $query->offset($start)
       ->limit($limit)
       ->orderBy($order, $dir)
       ->get();
 
-    $totalFiltered = $query->count();
 
     $data = [];
 

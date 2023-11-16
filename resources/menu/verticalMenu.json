@@ -130,32 +130,32 @@
       "submenu": [
         {
           "url": "product/game",
-          "name": "Product Game",
+          "name": "Game",
           "slug": "product-game"
         },
         {
           "url": "product/prepaid",
-          "name": "Product Prepaid",
+          "name": "Prepaid",
           "slug": "product-prepaid"
         },
         {
           "url": "product/social",
-          "name": "Product Social",
+          "name": "Social",
           "slug": "product-social"
         },
         {
           "url": "product/manual",
-          "name": "Product Manual",
+          "name": "Manual",
           "slug": "product-manual"
         },
         {
           "url": "product/joki-ml",
-          "name": "Product Joki ML",
+          "name": "Joki ML",
           "slug": "product-joki-ml"
         },
         {
           "url": "product/apigames",
-          "name": "Product Apigames",
+          "name": "Apigames",
           "slug": "product-apigames"
         }
       ]

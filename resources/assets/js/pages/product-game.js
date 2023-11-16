@@ -39,13 +39,16 @@ $(function () {
       1: { title: 'Active' }
     };
 
-  // if (select2.length) {
-  //   var $this = select2;
-  //   $this.wrap('<div class="position-relative"></div>').select2({
-  //     placeholder: 'Category',
-  //     dropdownParent: $this.parent()
-  //   });
-  // }
+  if (select2.length) {
+    select2.each(function () {
+      var $this = $(this);
+      select2Focus($this);
+      $this.wrap('<div class="position-relative"></div>').select2({
+        placeholder: 'Select value',
+        dropdownParent: $this.parent()
+      });
+    });
+  }
 
   if (dt_game_table.length) {
     var dt_game = dt_game_table.DataTable({
@@ -291,89 +294,8 @@ $(function () {
           }
         }
       }
-      // initComplete: function () {
-      //   // Adding category filter once table initialized
-      //   // this.api()
-      //   //   .columns(5)
-      //   //   .every(function () {
-      //   //     var column = this;
-      //   //     var select = $(
-      //   //       '<select id="ProductCategory" class="form-select text-capitalize"><option value="">Category</option></select>'
-      //   //     )
-      //   //       .appendTo('.product_category')
-      //   //       .on('change', function () {
-      //   //         var val = $(this).val();
-      //   //         console.log(val);
-      //   //         column.search(val ? '^' + val + '$' : '', true, false).draw();
-      //   //       });
-
-      //   //     column
-      //   //       .data()
-      //   //       .unique()
-      //   //       .sort()
-      //   //       .each(function (d, j) {
-      //   //         select.append('<option value="' + d + '">' + d + '</option>');
-      //   //       });
-      //   //   });
-      //   // Adding category filter once table initialized
-      //   // this.api()
-      //   //   .columns(9)
-      //   //   .every(function () {
-      //   //     var column = this;
-      //   //     var select = $(
-      //   //       '<select id="ProductProvider" class="select2 form-select text-capitalize"><option value="">Provider</option></select>'
-      //   //     )
-      //   //       .appendTo('.product_provider')
-      //   //       .on('change', function () {
-      //   //         var val = $.fn.dataTable.util.escapeRegex($(this).val());
-      //   //         column.search(val ? '^' + val + '$' : '', true, false).draw();
-      //   //       });
-
-      //   //     column
-      //   //       .data()
-      //   //       .unique()
-      //   //       .sort()
-      //   //       .each(function (d, j) {
-      //   //         select.append('<option value="' + categoryObj[d].title + '">' + categoryObj[d].title + '</option>');
-      //   //       });
-      //   //   });
-      //   // Adding status filter once table initialized
-      //   // this.api()
-      //   //   .columns(10)
-      //   //   .every(function () {
-      //   //     var column = this;
-      //   //     var select = $(
-      //   //       '<select id="ProductStatus" class="form-select text-capitalize"><option value=""> Status </option></select>'
-      //   //     )
-      //   //       .appendTo('.product_status')
-      //   //       .on('change', function () {
-      //   //         var val = $.fn.dataTable.util.escapeRegex($(this).val());
-      //   //         column.search(val ? '^' + val + '$' : '', true, false).draw();
-      //   //       });
-
-      //   //     column
-      //   //       .data()
-      //   //       .unique()
-      //   //       .sort()
-      //   //       .each(function (d, j) {
-      //   //         select.append(
-      //   //           '<option value="' + statusObj[d].title + '">' + statusFilterValObj[d].title + '</option>'
-      //   //         );
-      //   //       });
-      //   //   });
-      // }
     });
   }
-
-  // $('#filterStatus').on('change', function () {
-  //   dt_game.draw();
-  // });
-  // $('#filterCategory').on('change', function () {
-  //   dt_game.draw();
-  // });
-  // $('#filterProvider').on('change', function () {
-  //   dt_game.draw();
-  // });
 
   $('.filter').on('change', function () {
     var statusFilter = $('#filterStatus').val();
@@ -383,13 +305,6 @@ $(function () {
     // Lakukan filtering untuk setiap kondisi filter yang dipilih
     dt_game.column(10).search(statusFilter).column(5).search(categoryFilter).column(9).search(providerFilter).draw();
   });
-
-  // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
-  setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
 
   // form
   const editProductForm = document.getElementById('editProductForm');
