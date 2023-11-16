@@ -38,6 +38,7 @@ class GameController extends Controller
     $search = [];
 
     $totalData = Product::count();
+    $query = Product::select('*');
 
     $totalFiltered = $totalData;
 
@@ -45,6 +46,18 @@ class GameController extends Controller
     $start = $request->input('start');
     $order = $columns[$request->input('order.0.column')];
     $dir = $request->input('order.0.dir');
+
+    if ($request->status == '0' || $request->status == '1') {
+      $query = $query->where('status', $request->status);
+    }
+
+    if (!empty($request->provider)) {
+      $query = $query->Where('jenis', $request->provider);
+    }
+
+    if (!empty($request->category)) {
+      $query = $query->Where('kategori', $request->category);
+    }
 
     if (empty($request->input('search.value'))) {
       $products = Product::offset($start)
@@ -81,6 +94,14 @@ class GameController extends Controller
         ->orWhere('status', 'LIKE', "%{$search}%")
         ->count();
     }
+
+    $products = $query
+      ->offset($start)
+      ->limit($limit)
+      ->orderBy($order, $dir)
+      ->get();
+
+    $totalFiltered = $query->count();
 
     $data = [];
 
