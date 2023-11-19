@@ -8,6 +8,7 @@ use App\Models\Markup;
 use App\Models\Postpaid;
 use App\Models\Prepaid;
 use App\Models\Product;
+use App\Models\GameProduct;
 use App\Models\SocialProduct;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -126,9 +127,9 @@ class ServiceController extends Controller
         $sign = md5($merchantCodes . $apiKey);
         $date = Carbon::now()->toDateString();
 
-        Product::where('jenis', 4)
-          ->where('product_type', 1)
-          ->delete();
+        // Product::where('jenis', 4)
+        //   ->where('type', 1)
+        //   ->delete();
 
         $markUp = Markup::where('id', 1)->first();
         $persen_sell = $markUp->persen_sell;
@@ -150,12 +151,13 @@ class ServiceController extends Controller
         $success = true;
 
         foreach ($hasil['data'] as $i => $data) {
-          $produk = new Product();
+          $product = new GameProduct();
           $code = $data['code'];
-          $game = $data['game'];
-          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $game));
-          $image = strtolower(str_replace(' ', '_', $game)) . '.png';
-          $title = str_replace(['’', "'"], '&apos;', $data['name']);
+          $brand = $data['game'];
+          $status = $data['status'] == 'available' ? 1 : 0;
+          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
+          $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
+          $item = str_replace(['’', "'"], '&apos;', $data['name']);
           $hargaModal = $data['price']['basic'];
 
           if ($satuan == 0) {
@@ -166,14 +168,13 @@ class ServiceController extends Controller
             $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
           }
 
-          $tipeData = $data['status'];
+
           if (
-            $tipeData == 'available' &&
-            !$produk
+            !$product
               ->where('code', $code)
               ->whereDate('created_at', $date)
               ->exists() &&
-            !in_array($game, [
+            !in_array($brand, [
               'Canva Pro',
               'Apple Gift Card',
               'PicsArt Pro',
@@ -189,7 +190,7 @@ class ServiceController extends Controller
               'Amazon Prime Video',
             ])
           ) {
-            $cekProdukDulu = Product::where('jenis', 4)
+            $cekProdukDulu = $product->where('provider', 4)
               ->orderBy('id', 'desc')
               ->first();
 
@@ -210,23 +211,33 @@ class ServiceController extends Controller
               }
             }
 
-            $produk->id = $id;
-            $produk->slug = $slug;
-            $produk->code = $code;
-            $produk->title = $title;
-            $produk->kategori = $game;
-            $produk->harga_modal = $hargaModal;
-            $produk->harga_jual = $hargaJual;
-            $produk->harga_reseller = $hargaReseller;
-            $produk->image = $image;
-            $produk->currency = '';
-            $produk->type = 'Umum';
-            $produk->status = 1;
-            $produk->jenis = 4;
-            $produk->product_type = 1;
-            $produk->save();
+            $cp = $product->where('code', $code)->first();
+            if ($cp) {
+              $product->capital_price = $hargaModal;
+              $product->selling_price = $hargaJual;
+              $product->reseller_price = $hargaReseller;
+              $product->status = $status;
+              $save = $product->update();
+            } else {
+              $product->id = $id;
+              $product->slug = $slug;
+              $product->code = $code;
+              $product->item = $item;
+              $product->brand = $brand;
+              $product->capital_price = $hargaModal;
+              $product->selling_price = $hargaJual;
+              $product->reseller_price = $hargaReseller;
+              $product->image = $image;
+              $product->currency = '';
+              $product->category = 'Top Up';
+              $product->status = $status;
+              $product->provider = $providerID;
+              $product->type = $jenis;
+              $save = $product->save();
+            }
 
-            if (!$produk->save()) {
+
+            if (!$save) {
               $success = false;
             }
           }

@@ -68,7 +68,7 @@ $(function () {
         { data: 'id' },
         { data: 'image' },
         { data: 'code' },
-        { data: 'item' },
+        { data: 'title' },
         { data: 'category' },
         { data: 'capital' },
         { data: 'selling' },
@@ -138,11 +138,11 @@ $(function () {
           targets: 4,
           responsivePriority: 1,
           render: function (data, type, full, meta) {
-            return `<span>${full.item}</span>`;
+            return `<span>${full.title}</span>`;
           }
         },
         {
-          // category
+          // brand
           targets: 5,
           responsivePriority: 3,
           render: function (data, type, full, meta) {
@@ -319,6 +319,13 @@ $(function () {
           }
         }
       },
+      category: {
+        validators: {
+          notEmpty: {
+            message: 'Please insert category'
+          }
+        }
+      },
       selling: {
         validators: {
           notEmpty: {
@@ -400,18 +407,19 @@ $(function () {
     // get data
     $.get(`${baseUrl}product/game-list\/${product_id}\/edit`, function (data) {
       let provider = '';
-      if (data.jenis == 4) {
+      if (data.provider == 4) {
         provider = 'Vip Reseller';
       } else if (data.jenis == 5) {
         provider = 'Digiflazz';
       }
       $('#product_id').val(data.id);
       $('#edit-code').val(data.code);
-      $('#edit-item').val(data.title);
-      $('#edit-category').val(data.kategori);
-      $('#edit-capital').val(data.harga_modal);
-      $('#edit-selling').val(data.harga_jual);
-      $('#edit-reseller').val(data.harga_reseller);
+      $('#edit-item').val(data.item);
+      $('#edit-brand').val(data.brand);
+      $('#edit-category').val(data.category);
+      $('#edit-capital').val(data.capital_price);
+      $('#edit-selling').val(data.selling_price);
+      $('#edit-reseller').val(data.reseller_price);
       $('#edit-provider').val(provider);
     });
   });

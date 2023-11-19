@@ -108,7 +108,7 @@
                         <th>Image</th>
                         <th>Code</th>
                         <th>Item</th>
-                        <th>Category</th>
+                        <th>Brand</th>
                         <th>Capital</th>
                         <th>Selling</th>
                         <th>Reseller</th>
@@ -140,8 +140,13 @@
                         <label for="item">Item Name</label>
                     </div>
                     <div class="form-floating form-floating-outline mb-4">
-                        <input type="text" class="form-control" id="edit-category" name="category" aria-label="Category"
+                        <input type="text" class="form-control" id="edit-brand" name="brand" aria-label="Brand"
                             disabled />
+                        <label for="brand">Brand</label>
+                    </div>
+                    <div class="form-floating form-floating-outline mb-4">
+                        <input type="text" class="form-control" id="edit-category" name="category"
+                            aria-label="Category" />
                         <label for="category">Category</label>
                     </div>
                     <div class="form-floating form-floating-outline mb-4">

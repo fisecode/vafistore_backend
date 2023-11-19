@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
+use App\Models\GameProduct as Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,12 +26,12 @@ class GameController extends Controller
       1 => 'id',
       2 => 'image',
       3 => 'code',
-      4 => 'title',
-      5 => 'kategori',
-      6 => 'harga_modal',
-      7 => 'harga_jual',
-      8 => 'harga_reseller',
-      9 => 'jenis',
+      4 => 'item',
+      5 => 'brand',
+      6 => 'capital_price',
+      7 => 'selling_price',
+      8 => 'reseller_price',
+      9 => 'provider',
       10 => 'status',
     ];
 
@@ -53,12 +53,12 @@ class GameController extends Controller
     }
 
     if (!empty($request->provider)) {
-      $query = $query->Where('jenis', $request->provider);
+      $query = $query->Where('provider', $request->provider);
       $totalFiltered = $query->count();
     }
 
     if (!empty($request->category)) {
-      $query = $query->Where('kategori', $request->category);
+      $query = $query->Where('brand', $request->category);
       $totalFiltered = $query->count();
     }
 
@@ -68,11 +68,11 @@ class GameController extends Controller
       $query->where('id', 'LIKE', "%{$search}%")
         ->orWhere('image', 'LIKE', "%{$search}%")
         ->orWhere('code', 'LIKE', "%{$search}%")
-        ->orWhere('title', 'LIKE', "%{$search}%")
-        ->orWhere('kategori', 'LIKE', "%{$search}%")
-        ->orWhere('harga_modal', 'LIKE', "%{$search}%")
-        ->orWhere('harga_jual', 'LIKE', "%{$search}%")
-        ->orWhere('harga_reseller', 'LIKE', "%{$search}%");
+        ->orWhere('item', 'LIKE', "%{$search}%")
+        ->orWhere('brand', 'LIKE', "%{$search}%")
+        ->orWhere('capital_price', 'LIKE', "%{$search}%")
+        ->orWhere('selling_price', 'LIKE', "%{$search}%")
+        ->orWhere('reseller_price', 'LIKE', "%{$search}%");
       $totalFiltered = $query->count();
     }
 
@@ -89,17 +89,17 @@ class GameController extends Controller
       $ids = $start;
 
       foreach ($products as $product) {
-        if ($product->type == 'Umum' || $product->type == 'Membership') {
+        if ($product->category == 'Umum' || $product->category == 'Membership') {
           $nestedData['id'] = $product->id;
           $nestedData['fake_id'] = ++$ids;
           $nestedData['image'] = $product->image;
           $nestedData['code'] = $product->code;
-          $nestedData['item'] = $product->title;
-          $nestedData['category'] = $product->kategori;
-          $nestedData['capital'] = $product->harga_modal;
-          $nestedData['selling'] = $product->harga_jual;
-          $nestedData['reseller'] = $product->harga_reseller;
-          $nestedData['provider'] = $product->jenis;
+          $nestedData['title'] = $product->item;
+          $nestedData['category'] = $product->brand;
+          $nestedData['capital'] = $product->capital_price;
+          $nestedData['selling'] = $product->selling_price;
+          $nestedData['reseller'] = $product->reseller_price;
+          $nestedData['provider'] = $product->provider;
           $nestedData['status'] = $product->status;
 
           $data[] = $nestedData;
@@ -164,9 +164,9 @@ class GameController extends Controller
     }
 
     // Update the product
-    $product->title = $item;
-    $product->harga_jual = $selling;
-    $product->harga_reseller = $reseller;
+    $product->item = $item;
+    $product->selling_price = $selling;
+    $product->reseller_price = $reseller;
 
     if ($product->update()) {
       return response()->json(['title' => 'Well Done!', 'message' => 'Product Updated!']);
