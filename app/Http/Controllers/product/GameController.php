@@ -14,7 +14,8 @@ class GameController extends Controller
    */
   public function GameManagement()
   {
-    return view('content.product.game.index');
+    $brands = Product::distinct()->pluck('brand');
+    return view('content.product.game.index', compact('brands'));
   }
 
   /**
@@ -24,15 +25,14 @@ class GameController extends Controller
   {
     $columns = [
       1 => 'id',
-      2 => 'image',
-      3 => 'code',
-      4 => 'item',
-      5 => 'brand',
-      6 => 'capital_price',
-      7 => 'selling_price',
-      8 => 'reseller_price',
-      9 => 'provider',
-      10 => 'status',
+      2 => 'item',
+      3 => 'brand',
+      4 => 'capital_price',
+      5 => 'selling_price',
+      6 => 'reseller_price',
+      7 => 'category',
+      8 => 'provider',
+      9 => 'status',
     ];
 
     $search = [];
@@ -72,7 +72,8 @@ class GameController extends Controller
         ->orWhere('brand', 'LIKE', "%{$search}%")
         ->orWhere('capital_price', 'LIKE', "%{$search}%")
         ->orWhere('selling_price', 'LIKE', "%{$search}%")
-        ->orWhere('reseller_price', 'LIKE', "%{$search}%");
+        ->orWhere('reseller_price', 'LIKE', "%{$search}%")
+        ->orWhere('category', 'LIKE', "%{$search}%");
       $totalFiltered = $query->count();
     }
 
@@ -89,21 +90,20 @@ class GameController extends Controller
       $ids = $start;
 
       foreach ($products as $product) {
-        if ($product->category == 'Umum' || $product->category == 'Membership') {
-          $nestedData['id'] = $product->id;
-          $nestedData['fake_id'] = ++$ids;
-          $nestedData['image'] = $product->image;
-          $nestedData['code'] = $product->code;
-          $nestedData['title'] = $product->item;
-          $nestedData['category'] = $product->brand;
-          $nestedData['capital'] = $product->capital_price;
-          $nestedData['selling'] = $product->selling_price;
-          $nestedData['reseller'] = $product->reseller_price;
-          $nestedData['provider'] = $product->provider;
-          $nestedData['status'] = $product->status;
+        $nestedData['id'] = $product->id;
+        $nestedData['fake_id'] = ++$ids;
+        $nestedData['image'] = $product->image;
+        $nestedData['code'] = $product->code;
+        $nestedData['item'] = $product->item;
+        $nestedData['brand'] = $product->brand;
+        $nestedData['capital'] = $product->capital_price;
+        $nestedData['selling'] = $product->selling_price;
+        $nestedData['reseller'] = $product->reseller_price;
+        $nestedData['category'] = $product->category;
+        $nestedData['provider'] = $product->provider;
+        $nestedData['status'] = $product->status;
 
-          $data[] = $nestedData;
-        }
+        $data[] = $nestedData;
       }
     }
 
@@ -140,6 +140,7 @@ class GameController extends Controller
     // Validation rules
     $rules = [
       'item' => 'required',
+      'category' => 'required',
       'selling' => 'numeric|required',
       'reseller' => 'numeric|required',
     ];
@@ -153,6 +154,7 @@ class GameController extends Controller
 
     $productId = $request->id;
     $item = $request->item;
+    $category = $request->category;
     $selling = $request->selling;
     $reseller = $request->reseller;
 
@@ -165,6 +167,7 @@ class GameController extends Controller
 
     // Update the product
     $product->item = $item;
+    $product->category = $category;
     $product->selling_price = $selling;
     $product->reseller_price = $reseller;
 
@@ -230,5 +233,51 @@ class GameController extends Controller
   public function destroy(Product $product)
   {
     //
+  }
+
+  public function saveBulkEdit(Request $request)
+  {
+    try {
+      // Ambil data dari permintaan
+      $selectedIds = $request->input('ids');
+      $bulkCategory = $request->input('bulkCategory');
+      $bulkStatus = $request->input('bulkStatus');
+      // Tambahan data lainnya sesuai kebutuhan
+
+      // Ambil nilai yang ada untuk kolom-kolom yang tidak diisi
+      $existingData = Product::whereIn('id', explode(',', $selectedIds))->get();
+
+      // Perbarui kolom-kolom yang tidak diisi dengan nilai yang ada
+      // Lakukan operasi penyimpanan atau pembaruan data
+
+      // Perbarui kolom-kolom yang tidak diisi dengan nilai yang ada
+      foreach ($existingData as $data) {
+        $updateData = [];
+        if (!empty($bulkCategory)) {
+          $updateData['category'] = $bulkCategory;
+        } else {
+          $updateData['category'] = $data->category;
+        }
+        if ($bulkStatus !== null) {
+          $updateData['status'] = $bulkStatus;
+        } else {
+          $updateData['status'] = $data->status;
+        }
+        // Perbarui kolom-kolom lainnya sesuai kebutuhan
+        // ...
+
+        // Hanya lakukan pembaruan jika ada data yang perlu diperbarui
+        if (!empty($updateData)) {
+          Product::where('id', $data->id)->update($updateData);
+        }
+      }
+
+
+      // Response sukses jika penyimpanan berhasil
+      return response()->json(['message' => 'Data berhasil disimpan'], 200);
+    } catch (\Exception $e) {
+      // Response error jika terjadi kesalahan
+      return response()->json(['message' => 'Gagal menyimpan data'], 500);
+    }
   }
 }

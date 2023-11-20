@@ -62,13 +62,12 @@
                 <div class="col-md-4 product_category">
                     <select id="filterCategory" class="select2 form-select filter" name="filterCategory" data-column="5"
                         data-allow-clear="true">
-                        <option value="">Category</option>
-                        <option value="Ace Racer">
-                            Ace Racer
-                        </option>
-                        <option value="Arena Breakout">
-                            Arena Breakout
-                        </option>
+                        <option value="">Brand</option>
+                        @foreach ($brands as $brand)
+                            <option value="{{ $brand }}">
+                                {{ $brand }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-4 product_provider">
@@ -104,14 +103,13 @@
                 <thead class="table-light">
                     <tr>
                         <th></th>
-                        <th>#</th>
-                        <th>Image</th>
-                        <th>Code</th>
-                        <th>Item</th>
+                        <th></th>
+                        <th>Product</th>
                         <th>Brand</th>
                         <th>Capital</th>
                         <th>Selling</th>
                         <th>Reseller</th>
+                        <th>Category</th>
                         <th>Provider</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -172,6 +170,47 @@
                     <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
                     <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
                 </form>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="bulkEditModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel1">Modal title</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="edit-bulk pt-0" id="editBulkForm">
+                            <input type="hidden" name="id" id="ids">
+                            <div class="row">
+                                <div class="col mb-4 mt-2">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="text" id="bulkCategory" class="form-control"
+                                            placeholder="Top Up" name="bulkCategory">
+                                        <label for="bulkCategory">Category</label>
+                                    </div>
+                                </div>
+                                <div class="form-floating form-floating-outline">
+                                    <select id="bulkStatus" class="select2 form-select" name="bulkStatus"
+                                        data-allow-clear="true">
+                                        <option value="">Status</option>
+                                        <option value="1">
+                                            Active
+                                        </option>
+                                        <option value="0">
+                                            Deactive
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary btn-save-changes">Save changes</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

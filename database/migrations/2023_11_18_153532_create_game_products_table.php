@@ -21,8 +21,8 @@ return new class extends Migration
       $table->bigInteger('capital_price');
       $table->bigInteger('selling_price');
       $table->bigInteger('reseller_price');
-      $table->string('image', 255);
-      $table->text('currency');
+      $table->string('image', 255)->nullable();
+      $table->text('currency')->nullable();
       $table->text('type');
       $table->integer('status');
       $table->integer('provider');

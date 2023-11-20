@@ -24,7 +24,10 @@ $.ajaxSetup({
 // Datatable (jquery)
 $(function () {
   var dt_game_table = $('.datatables-games'),
-    select2 = $('.select2'),
+    select1 = $('#filterCategory'),
+    select2 = $('#filterProvider'),
+    select3 = $('#filterStatus'),
+    select4 = $('#bulkStatus'),
     offCanvasForm = $('#offcanvasEditProduct'),
     statusObj = {
       0: { title: 'not_active' },
@@ -33,18 +36,44 @@ $(function () {
     providerObj = {
       4: { title: 'Vip Reseller' },
       5: { title: 'Digiflazz' }
-    },
-    statusFilterValObj = {
-      0: { title: 'Not Active' },
-      1: { title: 'Active' }
     };
 
+  if (select1.length) {
+    select1.each(function () {
+      var $this = $(this);
+      select2Focus($this);
+      $this.wrap('<div class="position-relative"></div>').select2({
+        placeholder: 'Brands',
+        dropdownParent: $this.parent()
+      });
+    });
+  }
   if (select2.length) {
     select2.each(function () {
       var $this = $(this);
       select2Focus($this);
       $this.wrap('<div class="position-relative"></div>').select2({
-        placeholder: 'Select value',
+        placeholder: 'Provider',
+        dropdownParent: $this.parent()
+      });
+    });
+  }
+  if (select3.length) {
+    select3.each(function () {
+      var $this = $(this);
+      select2Focus($this);
+      $this.wrap('<div class="position-relative"></div>').select2({
+        placeholder: 'Status',
+        dropdownParent: $this.parent()
+      });
+    });
+  }
+  if (select4.length) {
+    select4.each(function () {
+      var $this = $(this);
+      select2Focus($this);
+      $this.wrap('<div class="position-relative"></div>').select2({
+        placeholder: 'Status',
         dropdownParent: $this.parent()
       });
     });
@@ -66,13 +95,12 @@ $(function () {
         // columns according to JSON
         { data: '' },
         { data: 'id' },
-        { data: 'image' },
-        { data: 'code' },
-        { data: 'title' },
-        { data: 'category' },
+        { data: 'item' },
+        { data: 'brand' },
         { data: 'capital' },
         { data: 'selling' },
         { data: 'reseller' },
+        { data: 'category' },
         { data: 'provider' },
         { data: 'status' },
         { data: 'action' }
@@ -83,26 +111,34 @@ $(function () {
           className: 'control',
           searchable: false,
           orderable: false,
-          responsivePriority: 2,
+          responsivePriority: 3,
           targets: 0,
           render: function (data, type, full, meta) {
             return '';
           }
         },
         {
-          searchable: false,
-          orderable: false,
+          // For Checkboxes
           targets: 1,
-          render: function (data, type, full, meta) {
-            return `<span>${full.fake_id}</span>`;
-          }
+          orderable: false,
+          responsivePriority: 2,
+          checkboxes: {
+            selectAllRender: '<input type="checkbox" class="form-check-input">'
+          },
+          render: function (data) {
+            return '<input type="checkbox" class="dt-checkboxes form-check-input" data-id="' + data + '">';
+          },
+          searchable: false
         },
         {
-          // image
+          // product
           targets: 2,
+          responsivePriority: 1,
           render: function (data, type, full, meta) {
             const $id = full['id'];
             const $image = full['image'];
+            const $item = full['item'];
+            const $code = full['code'];
             let $output = '';
 
             if ($image) {
@@ -111,10 +147,13 @@ $(function () {
               const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
               const stateNum = Math.floor(Math.random() * 6);
               const $state = states[stateNum];
-              const $category = full['category'];
-              const $initials = ($category.match(/\b\w/g) || []).map(match => match.toUpperCase()).join('');
+              const $brand = full['brand'];
+              const $initials = ($brand.match(/\b\w/g) || []).map(match => match.toUpperCase()).join('');
               $output = `<span class="avatar-initial rounded-2 bg-label-${$state}">${$initials}</span>`;
             }
+
+            const truncatedContent = truncated($code, 30);
+            const truncatedTitle = truncated($item, 30);
             const $row_output = `
       <div class="d-flex justify-content-start align-items-center product-name">
         <div class="avatar-wrapper me-3">
@@ -122,37 +161,28 @@ $(function () {
             ${$output}
           </div>
         </div>
+        <div class="d-flex flex-column">
+          <span class="text-nowrap text-heading fw-medium">
+            ${truncatedTitle}
+          </span>
+          <small class="text-truncate d-none d-sm-block">
+            ${truncatedContent}
+          </small>
+        </div>
       </div>`;
             return $row_output;
           }
         },
         {
-          // code
+          // brand
           targets: 3,
           render: function (data, type, full, meta) {
-            return `<span>${full.code}</span>`;
-          }
-        },
-        {
-          // item
-          targets: 4,
-          responsivePriority: 1,
-          render: function (data, type, full, meta) {
-            return `<span>${full.title}</span>`;
-          }
-        },
-        {
-          // brand
-          targets: 5,
-          responsivePriority: 3,
-          render: function (data, type, full, meta) {
-            return `<span>${full.category}</span>`;
+            return `<span>${full.brand}</span>`;
           }
         },
         {
           // capital price
-          targets: 6,
-          responsivePriority: 3,
+          targets: 4,
           render: function (data, type, full, meta) {
             // Konversi nilai full.capital ke format mata uang Indonesia tanpa simbol dan nol di belakang koma
             const cp = convertToIdr(full.capital);
@@ -163,8 +193,7 @@ $(function () {
         },
         {
           // selling price
-          targets: 7,
-          responsivePriority: 3,
+          targets: 5,
           render: function (data, type, full, meta) {
             // Konversi nilai full.capital ke format mata uang Indonesia tanpa simbol dan nol di belakang koma
             const cs = convertToIdr(full.selling);
@@ -175,8 +204,7 @@ $(function () {
         },
         {
           // reseller price
-          targets: 8,
-          responsivePriority: 3,
+          targets: 6,
           render: function (data, type, full, meta) {
             // Konversi nilai full.capital ke format mata uang Indonesia tanpa simbol dan nol di belakang koma
             const cr = convertToIdr(full.reseller);
@@ -187,7 +215,7 @@ $(function () {
         },
         {
           // provider
-          targets: 9,
+          targets: 8,
           render: function (data, type, full, meta) {
             var $provider = full['provider'];
             return '<span>' + providerObj[$provider].title + '</span>';
@@ -195,7 +223,7 @@ $(function () {
         },
         {
           // Status
-          targets: 10,
+          targets: 9,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             var $status = full['status'];
@@ -244,30 +272,41 @@ $(function () {
           }
         }
       ],
-      order: [[5, 'asc']],
+      order: [[3, 'asc']],
       dom:
-        '<"row mx-2"' +
-        '<"col-md-2"<"me-3"l>>' +
-        '<"col-md-10"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0"fB>>' +
+        '<"card-header d-flex border-top rounded-0 flex-wrap py-md-0"' +
+        '<"me-5 ms-n2"f>' +
+        '<"d-flex justify-content-start justify-content-md-end align-items-baseline"<"dt-action-buttons d-flex align-items-start align-items-md-center justify-content-sm-center mb-3 mb-sm-0 gap-3"lB>>' +
         '>t' +
-        '<"row mx-2"' +
+        '<"row mx-1"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
+      lengthMenu: [25, 50, 75, 100], //for length of menu
       language: {
         sLengthMenu: '_MENU_',
         search: '',
-        searchPlaceholder: 'Search..'
+        searchPlaceholder: 'Search Product',
+        info: 'Displaying _START_ to _END_ of _TOTAL_ entries'
       },
       // Buttons with Dropdown
-      buttons: [],
+      buttons: [
+        {
+          text: '<i class="mdi mdi-pencil-outline me-0 me-sm-1"></i><span class="d-none d-sm-inline-block">Bulk Edit</span>',
+          className: 'bulk-edit btn btn-primary ms-n1'
+          // attr: {
+          //   'data-bs-toggle': 'modal',
+          //   'data-bs-target': '#bulkEditModal'
+          // }
+        }
+      ],
       // For responsive popup
       responsive: {
         details: {
           display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['title'];
+              return 'Details of ' + data['code'];
             }
           }),
           type: 'column',
@@ -295,6 +334,9 @@ $(function () {
         }
       }
     });
+    $('.dataTables_length').addClass('mt-0 mt-md-3');
+    $('.dt-action-buttons').addClass('pt-0');
+    $('.dt-buttons').addClass('d-flex flex-wrap');
   }
 
   $('.filter').on('change', function () {
@@ -304,6 +346,69 @@ $(function () {
 
     // Lakukan filtering untuk setiap kondisi filter yang dipilih
     dt_game.column(10).search(statusFilter).column(5).search(categoryFilter).column(9).search(providerFilter).draw();
+  });
+
+  toastr.options = {
+    timeOut: 5000,
+    positionClass: 'toast-top-center',
+    showDuration: '300',
+    hideDuration: '1000'
+  };
+
+  $('.bulk-edit').on('click', function () {
+    var selectedIds = [];
+    $('.form-check-input:checked').each(function () {
+      var id = $(this).data('id');
+      if (id !== undefined) {
+        selectedIds.push(id);
+      }
+    });
+
+    if (selectedIds.length > 0) {
+      $('#ids').val(selectedIds.join(',')); // Memasukkan ID langsung ke dalam elemen dengan ID 'ids'
+      $('#bulkEditModal').modal('show');
+    } else {
+      toastr.info('Pilih setidaknya satu item untuk diedit.', '');
+    }
+  });
+
+  $('#bulkEditModal').on('hidden.bs.modal', function () {
+    // Membersihkan checkbox setelah sukses dan modal tertutup
+    $('.form-check-input:checked').prop('checked', false);
+    $('.form-check-input:indeterminate').prop('indeterminate', false);
+    $('#bulkEditModal input, #bulkEditModal select').val('');
+    $('#bulkStatus').val(null).trigger('change');
+  });
+
+  $('.btn-save-changes').on('click', function () {
+    // Mendapatkan nilai dari formulir atau modal
+    var bulkCategory = $('#bulkCategory').val();
+    var bulkStatus = $('#bulkStatus').val();
+    var selectedIds = $('#ids').val();
+
+    // Lakukan permintaan AJAX ke server untuk menyimpan data
+    $.ajax({
+      url: `${baseUrl}product/game/save-bulk-edit`,
+      method: 'POST', // Sesuaikan dengan metode yang sesuai
+      data: {
+        ids: selectedIds,
+        bulkCategory: bulkCategory,
+        bulkStatus: bulkStatus
+        // Tambahkan data lainnya sesuai kebutuhan
+      },
+      success: function (response) {
+        // Handle response dari server
+        // Misalnya, tampilkan pesan sukses, refresh halaman, atau lakukan yang lainnya
+        dt_game.draw();
+        toastr.success(response.message);
+        $('#bulkEditModal').modal('hide'); // Menutup modal setelah penyimpanan berhasil
+      },
+      error: function (response) {
+        // Handle error dari server
+        toastr.success(response.message);
+        // Tampilkan pesan error atau lakukan yang lainnya
+      }
+    });
   });
 
   // form

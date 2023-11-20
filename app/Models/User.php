@@ -73,4 +73,8 @@ class User extends Authenticatable
   {
     return $this->hasMany(Slide::class, 'user_id');
   }
+  public function productCategory()
+  {
+    return $this->hasMany(ProductCategory::class, 'user_id');
+  }
 }

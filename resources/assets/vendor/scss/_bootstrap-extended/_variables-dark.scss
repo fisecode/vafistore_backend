@@ -80,7 +80,7 @@ $color-scheme: 'dark' !default; // (C)
 // *******************************************************************************
 
 $body-bg: #282a42 !default;
-$rgba-to-hex-bg: #30334e !default; // (C)
+$rgba-to-hex-bg: #1a1a25 !default; // (C)
 $body-color: rgba-to-hex($gray-600, $rgba-to-hex-bg) !default;
 $rgba-to-hex-bg-inverted: rgb(160, 149, 149) !default; // (C)
 
@@ -145,7 +145,7 @@ $pagination-disabled-border-color: rgba-to-hex(rgba($base, 0.12), $rgba-to-hex-b
 // * Cards
 // *******************************************************************************
 
-$card-bg: #30334e !default;
+$card-bg: #1a1a25 !default;
 $card-border-color: $border-color !default;
 $card-box-shadow: 0 0.125rem 0.625rem 0 rgba($black, 0.18) !default;
 

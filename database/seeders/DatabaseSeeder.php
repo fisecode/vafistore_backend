@@ -180,180 +180,180 @@ class DatabaseSeeder extends Seeder
       // Tambahkan data lainnya sesuai kebutuhan
     ]);
 
-    DB::table('categories')->insert([
+    DB::table('type_products')->insert([
       [
-        'cuid' => 1,
-        'kategori' => 'Game',
+        'id' => 1,
+        'name' => 'Game',
         'image' => 'fas fa-gamepad',
         'sort' => 1,
         'status' => 1,
       ],
       [
-        'cuid' => 2,
-        'kategori' => 'Premium',
+        'id' => 2,
+        'name' => 'Premium',
         'image' => 'fas fa-shopping-bag',
         'sort' => 5,
         'status' => 1,
       ],
       [
-        'cuid' => 3,
-        'kategori' => 'Pulsa',
+        'id' => 3,
+        'name' => 'Pulsa',
         'image' => 'fas fa-mobile-alt',
         'sort' => 2,
         'status' => 1,
       ],
       [
-        'cuid' => 4,
-        'kategori' => 'Emoney',
+        'id' => 4,
+        'name' => 'Emoney',
         'image' => 'fab fa-google-wallet',
         'sort' => 3,
         'status' => 1,
       ],
       [
-        'cuid' => 5,
-        'kategori' => 'Social',
+        'id' => 5,
+        'name' => 'Social',
         'image' => 'fas fa-share-nodes',
         'sort' => 4,
         'status' => 1,
       ],
       [
-        'cuid' => 6,
-        'kategori' => 'Jasa Joki',
+        'id' => 6,
+        'name' => 'Jasa Joki',
         'image' => 'fas fa-heart',
         'sort' => 6,
         'status' => 0,
       ],
       [
-        'cuid' => 7,
-        'kategori' => 'Pascabayar',
+        'id' => 7,
+        'name' => 'Pascabayar',
         'image' => 'fas fa-wallet',
         'sort' => 7,
         'status' => 1,
       ],
     ]);
 
-    DB::table('services')->insert([
-      [
-        'cuid' => 1,
-        'slug' => 'apexlegendsmobile',
-        'layanan' => 'Apex Legends Mobile',
-        'cekID' => '',
-        'image' => 'apex_legends_mobile.png',
-        'parent' => 1,
-        'deskripsi' => '<ol style="margin-left: -25px;">
-              <li>Masukan UserID dan Zone / Server ID</li>
-              <li>Pilih Layanan Yang Diinginkan</li>
-              <li>Pilih Metode Pembayaran</li>
-              <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
-              <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
-              <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
-          </ol>',
-        'bantuan' => '<p>Tes</p>',
-        'subtitle' => '',
-        'subimage' => 'subimage.png',
-        'populer' => 0,
-        'sort' => 0,
-        'created_date' => '2023-09-11',
-        'user' => 'master',
-        'status' => 1,
-      ],
-      [
-        'cuid' => 6,
-        'slug' => 'callofdutymobile',
-        'layanan' => 'Call of Duty Mobile',
-        'cekID' => 'call-of-duty-mobile',
-        'image' => 'call_of_duty_mobile.png',
-        'parent' => 1,
-        'deskripsi' => '<ol style="margin-left: -25px;">
-              <li>Masukan UserID dan Zone / Server ID</li>
-              <li>Pilih Layanan Yang Diinginkan</li>
-              <li>Pilih Metode Pembayaran</li>
-              <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
-              <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
-              <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
-          </ol>',
-        'bantuan' => '',
-        'subtitle' => '',
-        'subimage' => 'subimage.png',
-        'populer' => 0,
-        'sort' => 0,
-        'created_date' => '2023-09-11',
-        'user' => 'master',
-        'status' => 1,
-      ],
-      [
-        'cuid' => 3,
-        'slug' => 'au2mobile',
-        'layanan' => 'AU2 MOBILE',
-        'cekID' => '',
-        'image' => 'au2_mobile.png',
-        'parent' => 1,
-        'deskripsi' => '<ol style="margin-left: -25px;">
-              <li>Masukan UserID dan Zone / Server ID</li>
-              <li>Pilih Layanan Yang Diinginkan</li>
-              <li>Pilih Metode Pembayaran</li>
-              <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
-              <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
-              <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
-          </ol>',
-        'bantuan' => '',
-        'subtitle' => '',
-        'subimage' => 'subimage.png',
-        'populer' => 0,
-        'sort' => 0,
-        'created_date' => '2023-09-11',
-        'user' => 'master',
-        'status' => 1,
-      ],
-      [
-        'cuid' => 4,
-        'slug' => 'betheking',
-        'layanan' => 'Be The King',
-        'cekID' => '',
-        'image' => 'be_the_king.png',
-        'parent' => 1,
-        'deskripsi' => '<ol style="margin-left: -25px;">
-              <li>Masukan UserID and Zone / Server ID</li>
-              <li>Pilih Layanan Yang Diinginkan</li>
-              <li>Pilih Metode Pembayaran</li>
-              <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
-              <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
-              <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
-          </ol>',
-        'bantuan' => '',
-        'subtitle' => '',
-        'subimage' => 'subimage.png',
-        'populer' => 0,
-        'sort' => 0,
-        'created_date' => '2023-09-11',
-        'user' => 'master',
-        'status' => 1,
-      ],
-      [
-        'cuid' => 5,
-        'slug' => 'chimeraland',
-        'layanan' => 'Chimeraland',
-        'cekID' => '',
-        'image' => 'chimeraland.png',
-        'parent' => 1,
-        'deskripsi' => '<ol style="margin-left: -25px;">
-              <li>Masukan UserID and Zone / Server ID</li>
-              <li>Pilih Layanan Yang Diinginkan</li>
-              <li>Pilih Metode Pembayaran</li>
-              <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
-              <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
-              <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
-          </ol>',
-        'bantuan' => '',
-        'subtitle' => '',
-        'subimage' => 'subimage.png',
-        'populer' => 0,
-        'sort' => 0,
-        'created_date' => '2023-09-11',
-        'user' => 'master',
-        'status' => 1,
-      ],
-    ]);
+    // DB::table('services')->insert([
+    //   [
+    //     'cuid' => 1,
+    //     'slug' => 'apexlegendsmobile',
+    //     'layanan' => 'Apex Legends Mobile',
+    //     'cekID' => '',
+    //     'image' => 'apex_legends_mobile.png',
+    //     'parent' => 1,
+    //     'deskripsi' => '<ol style="margin-left: -25px;">
+    //           <li>Masukan UserID dan Zone / Server ID</li>
+    //           <li>Pilih Layanan Yang Diinginkan</li>
+    //           <li>Pilih Metode Pembayaran</li>
+    //           <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
+    //           <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
+    //           <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
+    //       </ol>',
+    //     'bantuan' => '<p>Tes</p>',
+    //     'subtitle' => '',
+    //     'subimage' => 'subimage.png',
+    //     'populer' => 0,
+    //     'sort' => 0,
+    //     'created_date' => '2023-09-11',
+    //     'user' => 'master',
+    //     'status' => 1,
+    //   ],
+    //   [
+    //     'cuid' => 6,
+    //     'slug' => 'callofdutymobile',
+    //     'layanan' => 'Call of Duty Mobile',
+    //     'cekID' => 'call-of-duty-mobile',
+    //     'image' => 'call_of_duty_mobile.png',
+    //     'parent' => 1,
+    //     'deskripsi' => '<ol style="margin-left: -25px;">
+    //           <li>Masukan UserID dan Zone / Server ID</li>
+    //           <li>Pilih Layanan Yang Diinginkan</li>
+    //           <li>Pilih Metode Pembayaran</li>
+    //           <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
+    //           <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
+    //           <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
+    //       </ol>',
+    //     'bantuan' => '',
+    //     'subtitle' => '',
+    //     'subimage' => 'subimage.png',
+    //     'populer' => 0,
+    //     'sort' => 0,
+    //     'created_date' => '2023-09-11',
+    //     'user' => 'master',
+    //     'status' => 1,
+    //   ],
+    //   [
+    //     'cuid' => 3,
+    //     'slug' => 'au2mobile',
+    //     'layanan' => 'AU2 MOBILE',
+    //     'cekID' => '',
+    //     'image' => 'au2_mobile.png',
+    //     'parent' => 1,
+    //     'deskripsi' => '<ol style="margin-left: -25px;">
+    //           <li>Masukan UserID dan Zone / Server ID</li>
+    //           <li>Pilih Layanan Yang Diinginkan</li>
+    //           <li>Pilih Metode Pembayaran</li>
+    //           <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
+    //           <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
+    //           <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
+    //       </ol>',
+    //     'bantuan' => '',
+    //     'subtitle' => '',
+    //     'subimage' => 'subimage.png',
+    //     'populer' => 0,
+    //     'sort' => 0,
+    //     'created_date' => '2023-09-11',
+    //     'user' => 'master',
+    //     'status' => 1,
+    //   ],
+    //   [
+    //     'cuid' => 4,
+    //     'slug' => 'betheking',
+    //     'layanan' => 'Be The King',
+    //     'cekID' => '',
+    //     'image' => 'be_the_king.png',
+    //     'parent' => 1,
+    //     'deskripsi' => '<ol style="margin-left: -25px;">
+    //           <li>Masukan UserID and Zone / Server ID</li>
+    //           <li>Pilih Layanan Yang Diinginkan</li>
+    //           <li>Pilih Metode Pembayaran</li>
+    //           <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
+    //           <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
+    //           <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
+    //       </ol>',
+    //     'bantuan' => '',
+    //     'subtitle' => '',
+    //     'subimage' => 'subimage.png',
+    //     'populer' => 0,
+    //     'sort' => 0,
+    //     'created_date' => '2023-09-11',
+    //     'user' => 'master',
+    //     'status' => 1,
+    //   ],
+    //   [
+    //     'cuid' => 5,
+    //     'slug' => 'chimeraland',
+    //     'layanan' => 'Chimeraland',
+    //     'cekID' => '',
+    //     'image' => 'chimeraland.png',
+    //     'parent' => 1,
+    //     'deskripsi' => '<ol style="margin-left: -25px;">
+    //           <li>Masukan UserID and Zone / Server ID</li>
+    //           <li>Pilih Layanan Yang Diinginkan</li>
+    //           <li>Pilih Metode Pembayaran</li>
+    //           <li>Masukan No. Whatsapp Anda agar mendapapat notifikasi</li>
+    //           <li>Klik Beli Sekarang dan Selesaikan Pembayaran</li>
+    //           <li>Tunggu Proses 1-2 Menit (event max 2jam), Pesanan Anda akan Masuk Secara Otomatis</li>
+    //       </ol>',
+    //     'bantuan' => '',
+    //     'subtitle' => '',
+    //     'subimage' => 'subimage.png',
+    //     'populer' => 0,
+    //     'sort' => 0,
+    //     'created_date' => '2023-09-11',
+    //     'user' => 'master',
+    //     'status' => 1,
+    //   ],
+    // ]);
 
     DB::table('pages')->insert([
       [

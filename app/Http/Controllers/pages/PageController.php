@@ -97,7 +97,7 @@ class PageController extends Controller
    */
   public function create()
   {
-    return view('content.content-pages.form');
+    return view('content.pages.form');
   }
 
   /**

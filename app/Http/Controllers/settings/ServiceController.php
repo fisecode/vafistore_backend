@@ -9,10 +9,13 @@ use App\Models\Postpaid;
 use App\Models\Prepaid;
 use App\Models\Product;
 use App\Models\GameProduct;
+use App\Models\ProductCategory;
 use App\Models\SocialProduct;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -74,31 +77,31 @@ class ServiceController extends Controller
   {
     $success = true;
     if ($jenis == 1) {
-      $delete = Product::where('jenis', $providerID)
-        ->where('product_type', $jenis)
+      $delete = GameProduct::where('provider', $providerID)
+        ->where('type', $jenis)
         ->delete();
       if (!$delete) {
         $success = false;
       }
     } elseif ($jenis == 2) {
-      $delete = Prepaid::where('jenis', $providerID)->delete();
+      $delete = Prepaid::where('provider', $providerID)->delete();
       if (!$delete) {
         $success = false;
       }
     } elseif ($jenis == 3) {
-      $delete = SocialProduct::where('jenis', $providerID)->delete();
+      $delete = SocialProduct::where('provider', $providerID)->delete();
       if (!$delete) {
         $success = false;
       }
     } elseif ($jenis == 4) {
-      $delete = Product::where('jenis', $providerID)
-        ->where('product_type', 2)
+      $delete = Product::where('provider', $providerID)
+        ->where('type', 2)
         ->delete();
       if (!$delete) {
         $success = false;
       }
     } elseif ($jenis == 5) {
-      $delete = Postpaid::where('jenis', $providerID)->delete();
+      $delete = Postpaid::where('provider', $providerID)->delete();
       if (!$delete) {
         $success = false;
       }
@@ -150,13 +153,17 @@ class ServiceController extends Controller
         $hasil = json_decode($response->getBody(), true);
         $success = true;
 
+        set_time_limit(120);
         foreach ($hasil['data'] as $i => $data) {
           $product = new GameProduct();
+          $productCategory = new ProductCategory();
           $code = $data['code'];
           $brand = $data['game'];
+          $category = 'Top Up';
           $status = $data['status'] == 'available' ? 1 : 0;
-          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
+          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '-', $brand));
           $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
+          $subimage = strtolower(str_replace(' ', '_', $brand)) . '_' . strtolower(str_replace(' ', '_', $category)) . '.png';
           $item = str_replace(['’', "'"], '&apos;', $data['name']);
           $hargaModal = $data['price']['basic'];
 
@@ -188,8 +195,24 @@ class ServiceController extends Controller
               'WeTV Premium',
               'Youtube Premium',
               'Amazon Prime Video',
+              'Viu Premium',
+              'Resso Premium',
+              'Telegram Premium',
+              'TikTok Music',
+              'Lita',
             ])
           ) {
+            $cpc = $productCategory->where('name', $brand)->first();
+            if (!$cpc) {
+              $productCategory->slug = $slug;
+              $productCategory->name = $brand;
+              $productCategory->image = $image;
+              $productCategory->type = $jenis;
+              $productCategory->subimage = $subimage;
+              $productCategory->user_id = Auth::user()->id;
+              $productCategory->save();
+            }
+
             $cekProdukDulu = $product->where('provider', 4)
               ->orderBy('id', 'desc')
               ->first();
@@ -220,22 +243,20 @@ class ServiceController extends Controller
               $save = $product->update();
             } else {
               $product->id = $id;
-              $product->slug = $slug;
+              $product->slug = $slug . '-' . strtolower(str_replace(' ', '-', $category));
               $product->code = $code;
               $product->item = $item;
               $product->brand = $brand;
               $product->capital_price = $hargaModal;
               $product->selling_price = $hargaJual;
               $product->reseller_price = $hargaReseller;
-              $product->image = $image;
               $product->currency = '';
-              $product->category = 'Top Up';
+              $product->category = $category;
               $product->status = $status;
               $product->provider = $providerID;
               $product->type = $jenis;
               $save = $product->save();
             }
-
 
             if (!$save) {
               $success = false;

@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     //Product Game
     Route::resource('/product/game-list', GameController::class);
     Route::get('/product/game', [GameController::class, 'GameManagement'])->name('product-game');
+    Route::post('/product/game/save-bulk-edit/', [GameController::class, 'saveBulkEdit'])->name('save-bulk-edit');
   });
 });
 
