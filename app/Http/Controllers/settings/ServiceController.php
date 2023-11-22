@@ -243,7 +243,7 @@ class ServiceController extends Controller
               $save = $product->update();
             } else {
               $product->id = $id;
-              $product->slug = $slug . '-' . strtolower(str_replace(' ', '-', $category));
+              $product->slug = $slug;
               $product->code = $code;
               $product->item = $item;
               $product->brand = $brand;
@@ -289,7 +289,7 @@ class ServiceController extends Controller
         ];
         $date = Carbon::now()->toDateString();
 
-        Product::where('jenis', 5)->delete();
+        // Product::where('jenis', 5)->delete();
 
         $markUp = Markup::where('id', 1)->first();
         $persen_sell = $markUp->persen_sell;
@@ -303,27 +303,16 @@ class ServiceController extends Controller
         $success = true;
 
         foreach ($hasil['data'] as $i => $data) {
-          $a = strlen($i);
-          if ($a == 1) {
-            $id = '5000' . $i;
-          } elseif ($a == 2) {
-            $id = '500' . $i;
-          } elseif ($a == 3) {
-            $id = '50' . $i;
-          } elseif ($a == 4) {
-            $id = '5' . $i;
-          } elseif ($a == 5) {
-            $id = $i;
-          }
-          $produk = new Product();
+          $product = new GameProduct();
+          $productCategory = new ProductCategory();
           $brand = ucwords(strtolower($data['brand']));
           $code = $data['buyer_sku_code'];
-          $name = $data['product_name'];
+          $status = $data['seller_product_status'] == true ? 1 : 0;
           $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
           $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
-          $title = str_replace(['’', "'"], '&apos;', $name);
-          $kategori = $data['category'];
-          $type = $data['type'];
+          $item = str_replace(['’', "'"], '&apos;', $data['product_name']);
+          $cat = $data['category'];
+          $category = $data['type'];
           $hargaModal = $data['price'];
 
           if ($satuan == 0) {
@@ -335,31 +324,78 @@ class ServiceController extends Controller
           }
 
           if (
-            !$produk
+            !$product
               ->where('code', $code)
               ->whereDate('created_at', $date)
               ->exists() &&
-            in_array($kategori, ['Games', 'Voucher'])
+            in_array($cat, ['Games', 'Voucher']) && !in_array($brand, ['Vidio'])
           ) {
-            $type = $kategori == 'Voucher' ? $kategori : $type;
+            $category = $cat == 'Voucher' ? $cat : 'Top Up';
+            $subimage = strtolower(str_replace(' ', '_', $brand)) . '_' . strtolower(str_replace(' ', '_', $category)) . '.png';
 
-            $produk->id = $id;
-            $produk->slug = $slug;
-            $produk->code = $code;
-            $produk->title = $title;
-            $produk->kategori = $brand;
-            $produk->harga_modal = $hargaModal;
-            $produk->harga_jual = $hargaJual;
-            $produk->harga_reseller = $hargaReseller;
-            $produk->image = $image;
-            $produk->currency = '';
-            $produk->type = $type;
-            $produk->status = 1;
-            $produk->jenis = 5;
-            $produk->product_type = 1;
-            $produk->save();
+            $brandLower = strtolower($brand);
+            $itemLower = strtolower($item);
+            $titleWithoutBrand = str_replace($brandLower, '', $itemLower);
+            $titleWithoutBrand = str_replace('-', '', $titleWithoutBrand);
+            $titleWithoutBrand =  ucwords(trim($titleWithoutBrand));
 
-            if (!$produk->save()) {
+            $cpc = $productCategory->where('name', $brand)->first();
+            if (!$cpc) {
+              $productCategory->slug = $slug;
+              $productCategory->name = $brand;
+              $productCategory->image = $image;
+              $productCategory->type = $jenis;
+              $productCategory->subimage = $subimage;
+              $productCategory->user_id = Auth::user()->id;
+              $productCategory->save();
+            }
+
+            $cekProdukDulu = $product->where('provider', 5)
+              ->orderBy('id', 'desc')
+              ->first();
+
+            if ($cekProdukDulu) {
+              $id = $cekProdukDulu->id + 1;
+            } else {
+              $a = strlen($i);
+              if ($a == 1) {
+                $id = '5000' . $i;
+              } elseif ($a == 2) {
+                $id = '500' . $i;
+              } elseif ($a == 3) {
+                $id = '50' . $i;
+              } elseif ($a == 4) {
+                $id = '5' . $i;
+              } elseif ($a == 5) {
+                $id = $i;
+              }
+            }
+
+            $cp = $product->where('code', $code)->first();
+            if ($cp) {
+              $product->capital_price = $hargaModal;
+              $product->selling_price = $hargaJual;
+              $product->reseller_price = $hargaReseller;
+              $product->status = $status;
+              $save = $product->update();
+            } else {
+              $product->id = $id;
+              $product->slug = $slug;
+              $product->code = $code;
+              $product->item = $titleWithoutBrand;
+              $product->brand = $brand;
+              $product->capital_price = $hargaModal;
+              $product->selling_price = $hargaJual;
+              $product->reseller_price = $hargaReseller;
+              $product->currency = '';
+              $product->category = $category;
+              $product->status = $status;
+              $product->provider = $providerID;
+              $product->type = $jenis;
+              $save = $product->save();
+            }
+
+            if (!$save) {
               $success = false;
             }
           }
