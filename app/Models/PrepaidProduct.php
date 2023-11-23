@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Prepaid extends Model
+class PrepaidProduct extends Model
 {
   use HasFactory;
 
@@ -14,15 +14,16 @@ class Prepaid extends Model
   protected $fillable = [
     'slug',
     'code',
-    'title',
-    'kategori',
+    'item',
     'brand',
-    'harga_modal',
-    'harga_jual',
-    'harga_reseller',
+    'category',
+    'capital_price',
+    'selling_price',
+    'reseller_price',
     'image',
+    'currency',
+    'type',
     'status',
-    'jenis',
-    'product_type',
+    'provider',
   ];
 }

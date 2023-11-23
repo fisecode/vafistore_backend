@@ -11,20 +11,21 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('prepaids', function (Blueprint $table) {
+    Schema::create('prepaid_products', function (Blueprint $table) {
       $table->id('id');
       $table->text('slug');
       $table->text('code');
-      $table->text('title');
-      $table->text('kategori');
+      $table->text('item');
       $table->text('brand');
-      $table->integer('harga_modal');
-      $table->integer('harga_jual');
-      $table->integer('harga_reseller');
-      $table->string('image', 255);
+      $table->text('category');
+      $table->bigInteger('capital_price');
+      $table->bigInteger('selling_price');
+      $table->bigInteger('reseller_price');
+      $table->string('image', 255)->nullable();
+      $table->text('currency')->nullable();
+      $table->text('type');
       $table->integer('status');
-      $table->integer('jenis');
-      $table->integer('product_type');
+      $table->integer('provider');
       $table->timestamps();
     });
   }
@@ -34,6 +35,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('prepaids');
+    Schema::dropIfExists('prepaid_products');
   }
 };

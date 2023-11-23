@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ApiManagement;
 use App\Models\Markup;
 use App\Models\Postpaid;
-use App\Models\Prepaid;
+use App\Models\PrepaidProduct as Prepaid;
 use App\Models\Product;
 use App\Models\GameProduct;
 use App\Models\ProductCategory;
@@ -243,7 +243,7 @@ class ServiceController extends Controller
               $save = $product->update();
             } else {
               $product->id = $id;
-              $product->slug = $slug;
+              $product->slug = $slug . "-" . str_replace(' ', '-', strtolower($category));
               $product->code = $code;
               $product->item = $item;
               $product->brand = $brand;
@@ -415,7 +415,7 @@ class ServiceController extends Controller
       if ($providerID == 4) {
         $sign = md5($merchantCodes . $apiKey);
 
-        $delete = Prepaid::where('jenis', 4)->delete();
+        // $delete = Prepaid::where('jenis', 4)->delete();
 
         $client = new Client();
         $response = $client->post('https://vip-reseller.co.id/api/prepaid', [
@@ -430,29 +430,29 @@ class ServiceController extends Controller
         $hasil = json_decode($response->getBody(), true);
         $success = true;
 
+        set_time_limit(120);
         foreach ($hasil['data'] as $i => $data) {
-          $a = strlen($i);
-          $id = $a < 5 ? sprintf('%s%s', str_pad('4', 5 - $a, '0', STR_PAD_RIGHT), $i) : $i;
-          $produk = new Prepaid();
+          $product = new Prepaid();
+          $productCategory = new ProductCategory();
           $code = $data['code'];
           $brand = $data['brand'];
-          $kategori = $data['type'];
+          $category = ucwords(str_replace('-', ' ', $data['type']));
+          $status = $data['status'] == 'available' ? 1 : 0;
+          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
           $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
-          $title = str_replace(['’', "'"], '&apos;', $data['name']);
-          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $title));
+          $subimage = strtolower(str_replace(' ', '_', $brand)) . '_' . strtolower(str_replace(' ', '_', $category)) . '.png';
+          $item = str_replace(['’', "'"], '&apos;', $data['name']);
           $hargaModal = $data['price']['basic'];
 
-          $tipeData = $data['status'];
           if (
-            $tipeData == 'available' &&
-            !$produk
+            !$product
               ->where('code', $code)
               ->whereDate('created_at', $date)
               ->exists() &&
-            !in_array($kategori, ['voucher-game', 'paket-lainnya', 'pulsa-internasional'])
+            !in_array($category, ['Voucher Game', 'Paket Lainnya', 'Pulsa Internasional', 'Not Filtered'])
           ) {
-            $productType = $kategori == 'saldo-emoney' ? 4 : 3;
-            $markUp = Markup::where('id', $productType)->first();
+            $type = $category == 'Saldo Emoney' ? 4 : 3;
+            $markUp = Markup::where('id', $type)->first();
 
             $persen_sell = $markUp->persen_sell;
             $persen_res = $markUp->persen_res;
@@ -466,22 +466,54 @@ class ServiceController extends Controller
               $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
             }
 
-            $produk->id = $id;
-            $produk->slug = $slug;
-            $produk->code = $code;
-            $produk->title = $title;
-            $produk->kategori = $kategori;
-            $produk->brand = $brand;
-            $produk->harga_modal = $hargaModal;
-            $produk->harga_jual = $hargaJual;
-            $produk->harga_reseller = $hargaReseller;
-            $produk->image = $image;
-            $produk->status = 1;
-            $produk->jenis = 4;
-            $produk->product_type = $productType;
-            $produk->save();
+            $cpc = $productCategory->where('name', $brand)->first();
+            if (!$cpc) {
+              $productCategory->slug = $slug;
+              $productCategory->name = $brand;
+              $productCategory->image = $image;
+              $productCategory->type = $type;
+              $productCategory->subimage = $subimage;
+              $productCategory->user_id = Auth::user()->id;
+              $productCategory->save();
+            }
 
-            if (!$produk->save()) {
+            $cekProdukDulu = $product->where('provider', 4)
+              ->orderBy('id', 'desc')
+              ->first();
+
+            if ($cekProdukDulu) {
+              $id = $cekProdukDulu->id + 1;
+            } else {
+              $a = strlen($i);
+              if ($a == 1) {
+                $id = '4000' . $i;
+              } elseif ($a == 2) {
+                $id = '400' . $i;
+              } elseif ($a == 3) {
+                $id = '40' . $i;
+              } elseif ($a == 4) {
+                $id = '4' . $i;
+              } elseif ($a == 5) {
+                $id = $i;
+              }
+            }
+
+            $product->id = $id;
+            $product->slug = $slug . "-" . str_replace(' ', '-', strtolower($category));
+            $product->code = $code;
+            $product->item = $item;
+            $product->brand = $brand;
+            $product->capital_price = $hargaModal;
+            $product->selling_price = $hargaJual;
+            $product->reseller_price = $hargaReseller;
+            $product->currency = '';
+            $product->category = $category;
+            $product->status = $status;
+            $product->provider = $providerID;
+            $product->type = $type;
+            $product->save();
+
+            if (!$product->save()) {
               $success = false;
             }
           }
