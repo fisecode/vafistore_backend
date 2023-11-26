@@ -8,7 +8,8 @@ use App\Models\Markup;
 use App\Models\Postpaid;
 use App\Models\PrepaidProduct as Prepaid;
 use App\Models\Product;
-use App\Models\GameProduct;
+use App\Models\VoucherProduct as Voucher;
+use App\Models\GameProduct as Game;
 use App\Models\ProductCategory;
 use App\Models\SocialProduct;
 use Illuminate\Http\Request;
@@ -77,10 +78,13 @@ class ServiceController extends Controller
   {
     $success = true;
     if ($jenis == 1) {
-      $delete = GameProduct::where('provider', $providerID)
-        ->where('type', $jenis)
+      $dg = Game::where('provider', $providerID)
+        ->where('type', 1)
         ->delete();
-      if (!$delete) {
+      $dv = Voucher::where('provider', $providerID)
+        ->where('type', 3)
+        ->delete();
+      if (!$dg && !$dv) {
         $success = false;
       }
     } elseif ($jenis == 2) {
@@ -155,7 +159,7 @@ class ServiceController extends Controller
 
         set_time_limit(120);
         foreach ($hasil['data'] as $i => $data) {
-          $product = new GameProduct();
+          $product = new Game();
           $productCategory = new ProductCategory();
           $code = $data['code'];
           $brand = $data['game'];
@@ -254,7 +258,7 @@ class ServiceController extends Controller
               $product->category = $category;
               $product->status = $status;
               $product->provider = $providerID;
-              $product->type = $jenis;
+              $product->type = 1;
               $save = $product->save();
             }
 
@@ -303,7 +307,6 @@ class ServiceController extends Controller
         $success = true;
 
         foreach ($hasil['data'] as $i => $data) {
-          $product = new GameProduct();
           $productCategory = new ProductCategory();
           $brand = ucwords(strtolower($data['brand']));
           $code = $data['buyer_sku_code'];
@@ -313,6 +316,7 @@ class ServiceController extends Controller
           $item = str_replace(['’', "'"], '&apos;', $data['product_name']);
           $cat = $data['category'];
           $category = $data['type'];
+          $product = $cat == "Games" ? new Game() : new Voucher();
           $hargaModal = $data['price'];
 
           if ($satuan == 0) {
@@ -328,9 +332,10 @@ class ServiceController extends Controller
               ->where('code', $code)
               ->whereDate('created_at', $date)
               ->exists() &&
-            in_array($cat, ['Games', 'Voucher']) && !in_array($brand, ['Vidio'])
+            in_array($cat, ['Games', 'Voucher'])
           ) {
             $category = $cat == 'Voucher' ? $cat : 'Top Up';
+            $type = $cat == "Games" ? 1 : 3;
             $subimage = strtolower(str_replace(' ', '_', $brand)) . '_' . strtolower(str_replace(' ', '_', $category)) . '.png';
 
             $brandLower = strtolower($brand);
@@ -391,7 +396,7 @@ class ServiceController extends Controller
               $product->category = $category;
               $product->status = $status;
               $product->provider = $providerID;
-              $product->type = $jenis;
+              $product->type = $type;
               $save = $product->save();
             }
 
@@ -545,8 +550,6 @@ class ServiceController extends Controller
 
         $date = Carbon::now()->toDateString();
 
-        Prepaid::where('jenis', 5)->delete();
-
         $markUp = Markup::where('id', 1)->first();
         $persen_sell = $markUp->persen_sell;
         $persen_res = $markUp->persen_res;
@@ -560,39 +563,36 @@ class ServiceController extends Controller
         $success = true;
 
         foreach ($hasil['data'] as $i => $data) {
-          $a = strlen($i);
-          if ($a == 1) {
-            $id = '5000' . $i;
-          } elseif ($a == 2) {
-            $id = '500' . $i;
-          } elseif ($a == 3) {
-            $id = '50' . $i;
-          } elseif ($a == 4) {
-            $id = '5' . $i;
-          } elseif ($a == 5) {
-            $id = $i;
-          }
-          $produk = new Prepaid();
+          $product = new Prepaid();
+          $productCategory = new ProductCategory();
           $brand = ucwords(strtolower($data['brand']));
           $code = $data['buyer_sku_code'];
-          $name = $data['product_name'];
+          $status = $data['seller_product_status'] == true ? 1 : 0;
           $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
           $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
-          $title = str_replace(['’', "'"], '&apos;', $name);
-          $kategori = $data['category'];
-          $type = strtolower(str_replace(' ', '-', $data['type']));
+          $item = str_replace(['’', "'"], '&apos;', $data['product_name']);
+          $cat = $data['category'];
+          $category = $data['type'];
           $hargaModal = $data['price'];
 
           if (
-            !$produk
+            !$product
               ->where('code', $code)
               ->whereDate('created_at', $date)
               ->exists() &&
-            !in_array($kategori, ['Games', 'Voucher'])
+            !in_array($cat, ['Games', 'Voucher'])
           ) {
-            $productType = $kategori == 'E-Money' ? 4 : 3;
-            $markUp = Markup::where('id', $productType)->first();
+            $productType = $cat == 'E-Money' ? 4 : 3;
+            $subimage = strtolower(str_replace(' ', '_', $brand)) . '_' . strtolower(str_replace(' ', '_', $category)) . '.png';
 
+            $brandLower = strtolower($brand);
+            $itemLower = strtolower($item);
+            $titleWithoutBrand = str_replace($brandLower, '', $itemLower);
+            $titleWithoutBrand = str_replace('-', '', $titleWithoutBrand);
+            $titleWithoutBrand =  ucwords(trim($titleWithoutBrand));
+
+
+            $markUp = Markup::where('id', $productType)->first();
             $persen_sell = $markUp->persen_sell;
             $persen_res = $markUp->persen_res;
             $satuan = $markUp->satuan;
@@ -605,30 +605,71 @@ class ServiceController extends Controller
               $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
             }
 
-            if ($kategori == 'E-Money' && $type == 'umum') {
-              $type = 'saldo-emoney';
-            } elseif ($kategori == 'Pulsa' && $type == 'umum') {
-              $type = 'pulsa-regular';
-            } elseif ($kategori == 'Data') {
-              $type = 'paket-data';
+            $cpc = $productCategory->where('name', $brand)->first();
+            if (!$cpc) {
+              $productCategory->slug = $slug;
+              $productCategory->name = $brand;
+              $productCategory->image = $image;
+              $productCategory->type = $jenis;
+              $productCategory->subimage = $subimage;
+              $productCategory->user_id = Auth::user()->id;
+              $productCategory->save();
             }
 
-            $produk->id = $id;
-            $produk->slug = $slug;
-            $produk->code = $code;
-            $produk->title = $title;
-            $produk->kategori = $type;
-            $produk->brand = $brand;
-            $produk->harga_modal = $hargaModal;
-            $produk->harga_jual = $hargaJual;
-            $produk->harga_reseller = $hargaReseller;
-            $produk->image = $image;
-            $produk->status = 1;
-            $produk->jenis = 5;
-            $produk->product_type = $productType;
-            $produk->save();
+            $cekProdukDulu = $product->where('provider', 5)
+              ->orderBy('id', 'desc')
+              ->first();
 
-            if (!$produk->save()) {
+            if ($cekProdukDulu) {
+              $id = $cekProdukDulu->id + 1;
+            } else {
+              $a = strlen($i);
+              if ($a == 1) {
+                $id = '5000' . $i;
+              } elseif ($a == 2) {
+                $id = '500' . $i;
+              } elseif ($a == 3) {
+                $id = '50' . $i;
+              } elseif ($a == 4) {
+                $id = '5' . $i;
+              } elseif ($a == 5) {
+                $id = $i;
+              }
+            }
+
+            if ($cat == 'E-Money' && $category == 'Umum') {
+              $category = 'Saldo E-Money';
+            } elseif ($cat == 'Pulsa' && $category == 'Umum') {
+              $category = 'Pulsa Regular';
+            } elseif ($cat == 'Data') {
+              $category = 'Paket Data';
+            }
+
+            $cp = $product->where('code', $code)->first();
+            if ($cp) {
+              $product->capital_price = $hargaModal;
+              $product->selling_price = $hargaJual;
+              $product->reseller_price = $hargaReseller;
+              $product->status = $status;
+              $save = $product->update();
+            } else {
+              $product->id = $id;
+              $product->slug = $slug . "-" . str_replace(' ', '-', strtolower($category));
+              $product->code = $code;
+              $product->item = $titleWithoutBrand;
+              $product->brand = $brand;
+              $product->capital_price = $hargaModal;
+              $product->selling_price = $hargaJual;
+              $product->reseller_price = $hargaReseller;
+              $product->currency = '';
+              $product->category = $category;
+              $product->status = $status;
+              $product->provider = $providerID;
+              $product->type = $jenis;
+              $save = $product->save();
+            }
+
+            if (!$product->save()) {
               $success = false;
             }
           }

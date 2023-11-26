@@ -34,6 +34,6 @@ class ProductCategory extends Model
 
   public function type()
   {
-    return $this->belongsTo(TypeProduct::class, 'type_id');
+    return $this->belongsTo(ProductType::class, 'type_id');
   }
 }

@@ -180,7 +180,7 @@ class DatabaseSeeder extends Seeder
       // Tambahkan data lainnya sesuai kebutuhan
     ]);
 
-    DB::table('type_products')->insert([
+    DB::table('product_types')->insert([
       [
         'id' => 1,
         'name' => 'Game',
@@ -190,38 +190,38 @@ class DatabaseSeeder extends Seeder
       ],
       [
         'id' => 2,
-        'name' => 'Premium',
-        'image' => 'fas fa-shopping-bag',
-        'sort' => 5,
-        'status' => 1,
-      ],
-      [
-        'id' => 3,
         'name' => 'Pulsa',
         'image' => 'fas fa-mobile-alt',
         'sort' => 2,
         'status' => 1,
       ],
       [
-        'id' => 4,
-        'name' => 'Emoney',
-        'image' => 'fab fa-google-wallet',
+        'id' => 3,
+        'name' => 'Voucher',
+        'image' => 'fas fa-shopping-bag',
         'sort' => 3,
+        'status' => 1,
+      ],
+      [
+        'id' => 4,
+        'name' => 'E-Money',
+        'image' => 'fab fa-google-wallet',
+        'sort' => 4,
         'status' => 1,
       ],
       [
         'id' => 5,
         'name' => 'Social',
         'image' => 'fas fa-share-nodes',
-        'sort' => 4,
+        'sort' => 5,
         'status' => 1,
       ],
       [
         'id' => 6,
-        'name' => 'Jasa Joki',
-        'image' => 'fas fa-heart',
+        'name' => 'Entertaiment',
+        'image' => 'fas fa-shopping-bag',
         'sort' => 6,
-        'status' => 0,
+        'status' => 1,
       ],
       [
         'id' => 7,
@@ -229,6 +229,13 @@ class DatabaseSeeder extends Seeder
         'image' => 'fas fa-wallet',
         'sort' => 7,
         'status' => 1,
+      ],
+      [
+        'id' => 8,
+        'name' => 'Jasa Joki',
+        'image' => 'fas fa-heart',
+        'sort' => 8,
+        'status' => 0,
       ],
     ]);
 
