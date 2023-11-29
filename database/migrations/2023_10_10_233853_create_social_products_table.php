@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
   /**
    * Run the migrations.
    */
@@ -15,18 +14,18 @@ return new class extends Migration
       $table->id('id');
       $table->text('slug');
       $table->text('code');
-      $table->text('title');
-      $table->text('kategori');
-      $table->text('deskripsi');
+      $table->text('item');
+      $table->text('category');
+      $table->text('description');
       $table->integer('min_buy');
       $table->integer('max_buy');
-      $table->integer('harga_modal');
-      $table->integer('harga_jual');
-      $table->integer('harga_reseller');
-      $table->string('image');
+      $table->bigInteger('capital_price');
+      $table->bigInteger('selling_price');
+      $table->bigInteger('reseller_price');
+      $table->string('image', 255)->nullable();
+      $table->integer('type');
       $table->integer('status');
-      $table->integer('jenis');
-      $table->tinyInteger('product_type');
+      $table->integer('provider');
       $table->timestamps();
     });
   }
