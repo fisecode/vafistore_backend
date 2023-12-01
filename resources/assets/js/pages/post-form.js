@@ -122,7 +122,7 @@ $(function () {
   $('#discard').click(function (e) {
     e.preventDefault(); // Mencegah tindakan bawaan tombol
     // Kode untuk mengarahkan ke halaman daftar posting
-    window.location.href = `${baseUrl}posts`;
+    window.location.href = `${baseUrl}dashboard/posts`;
   });
 
   // Select2
@@ -173,15 +173,17 @@ $(function () {
     // adding or updating user when form successfully validate
     $.ajax({
       data: $('#addNewCategoryForm').serialize(),
-      url: `${baseUrl}post-category`,
+      url: `${baseUrl}dashboard/post-category`,
       type: 'POST',
       success: function (response) {
         if (response.success) {
           // Refresh the Select2 dropdown
+          const placeholderOption = $('#category-org').find('option[value=""]').clone();
+          $('#category-org').empty();
+          $('#category-org').append(placeholderOption);
           $.each(response.categories, function (id, text) {
             $('#category-org').append(new Option(text, id, false, false));
           });
-          $('#category-org').trigger('change');
         }
         offCanvasForm.offcanvas('hide');
 

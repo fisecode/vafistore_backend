@@ -51,7 +51,7 @@ $(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'slide-list'
+        url: baseUrl + 'dashboard/slide-list'
       },
       columns: [
         // columns according to JSON
@@ -85,7 +85,7 @@ $(function () {
             let $output = '';
 
             if ($image) {
-              $output = `<img src="../storage/assets/img/slides/${$image}" alt="slide-${$id}" class="w-px-250 h-auto d-block">`;
+              $output = `<img src="${storagePath}img/slides/${$image}" alt="slide-${$id}" class="w-px-250 h-auto d-block">`;
             } else {
               $output = '<span>No Image</span>';
             }
@@ -232,13 +232,13 @@ $(function () {
     $('#offcanvasAddSlideLabel').html('Edit Slide');
 
     // get data
-    $.get(`${baseUrl}slide-list\/${slide_id}\/edit`, function (data) {
+    $.get(`${baseUrl}dashboard/slide-list\/${slide_id}\/edit`, function (data) {
       $('#slide_id').val(data.id);
       $('#add-slide-description').val(data.description);
       $('#add-slide-sort').val(data.sort);
 
       if (data.image) {
-        $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/slides/' + data.image);
+        $('#uploadedImage').attr('src', storagePath + 'img/slides/' + data.image);
         $('#uploadedImage').removeClass('hide-item'); // Hapus kelas 'hide-item'
       }
     });
@@ -248,7 +248,7 @@ $(function () {
   $('.add-new').on('click', function () {
     $('#slide_id').val('');
     $('#offcanvasAddSlideLabel').html('Add Slide');
-    $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/slides/no-image.jpg');
+    $('#uploadedImage').attr('src', storagePath + 'img/slides/no-image.jpg');
     $('#uploadedImage').addClass('hide-item');
   });
 
@@ -303,7 +303,7 @@ $(function () {
 
     $.ajax({
       data: formData,
-      url: `${baseUrl}slide-list`,
+      url: `${baseUrl}dashboard/slide-list`,
       type: 'POST',
       contentType: false,
       processData: false,
@@ -347,7 +347,7 @@ $(function () {
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}slide-list/${id}`,
+      url: `${baseUrl}dashboard/slide-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },
@@ -398,7 +398,7 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}slide-list/${page_id}`,
+          url: `${baseUrl}dashboard/slide-list/${page_id}`,
           success: function () {
             dt_slides.draw();
           },

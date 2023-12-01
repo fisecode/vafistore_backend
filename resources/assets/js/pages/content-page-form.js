@@ -104,6 +104,6 @@ $.ajaxSetup({
 $(function () {
   $('#discard').on('click', function (e) {
     e.preventDefault(); // Mencegah tindakan bawaan tombol
-    window.location.href = `${baseUrl}page`;
+    window.location.href = `${baseUrl}dashboard/page`;
   });
 });

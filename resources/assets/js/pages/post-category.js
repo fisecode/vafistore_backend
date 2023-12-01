@@ -18,7 +18,7 @@ $(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'post-category'
+        url: baseUrl + 'dashboard/post-category'
       },
       columns: [
         // columns according to JSON
@@ -147,7 +147,7 @@ $(function () {
     $('#offcanvasAddCategoryLabel').html('Edit Category');
 
     // get data
-    $.get(`${baseUrl}post-category\/${category_id}\/edit`, function (data) {
+    $.get(`${baseUrl}dashboard/post-category\/${category_id}\/edit`, function (data) {
       $('#category_id').val(data.id);
       $('#add-category-name').val(data.name);
     });
@@ -191,7 +191,7 @@ $(function () {
     // adding or updating category when form successfully validate
     $.ajax({
       data: $('#addNewCategoryForm').serialize(),
-      url: `${baseUrl}post-category`,
+      url: `${baseUrl}dashboard/post-category`,
       type: 'POST',
       success: function (response) {
         dt_category.draw();
@@ -253,7 +253,7 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}post-category/${post_id}`,
+          url: `${baseUrl}dashboard/post-category/${post_id}`,
           success: function () {
             dt_category.draw();
           },

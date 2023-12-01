@@ -20,7 +20,7 @@ $(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'page-list'
+        url: baseUrl + 'dashboard/page-list'
       },
       columns: [
         // columns according to JSON
@@ -99,7 +99,7 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'page/' + full['id'] + '/edit';
+            var edit = baseUrl + 'dashboard/page/' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
               '<a href="' +
@@ -132,7 +132,7 @@ $(function () {
           text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Page</span>',
           className: 'add-new btn btn-primary mx-3',
           action: function () {
-            window.location.href = '/page/add';
+            window.location.href = '/dashboard/page/add';
           }
         }
       ],
@@ -178,7 +178,7 @@ $(function () {
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}page-list/${id}`,
+      url: `${baseUrl}dashboard/page-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },
@@ -229,7 +229,7 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}page-list/${page_id}`,
+          url: `${baseUrl}dashboard/page-list/${page_id}`,
           success: function () {
             dt_pages.draw();
           },

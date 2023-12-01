@@ -23,7 +23,7 @@ $(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'api/provider-list'
+        url: baseUrl + 'dashboard/api/provider-list'
       },
       columns: [
         // columns according to JSON
@@ -216,7 +216,7 @@ $(function () {
     $('#offcanvasAddProviderLabel').html('Edit Provider');
 
     // get data
-    $.get(`${baseUrl}api/provider-list\/${provider_id}\/edit`, function (data) {
+    $.get(`${baseUrl}dashboard/api/provider-list\/${provider_id}\/edit`, function (data) {
       $('#provider_id').val(data.id);
       $('#add-provider-api').val(data.api_key);
       $('#add-provider-api-id').val(data.merchant_code);
@@ -280,7 +280,7 @@ $(function () {
 
     $.ajax({
       data: formData,
-      url: `${baseUrl}/api/provider-list`,
+      url: `${baseUrl}dashboard/api/provider-list`,
       type: 'POST',
       contentType: false,
       processData: false,
@@ -324,7 +324,7 @@ $(function () {
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}api/provider-list/${id}`,
+      url: `${baseUrl}dashboard/api/provider-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },
@@ -384,7 +384,7 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}api/provider-list/${provider_id}`,
+          url: `${baseUrl}dashboard/api/provider-list/${provider_id}`,
           success: function (response) {
             dt_provider.draw();
 

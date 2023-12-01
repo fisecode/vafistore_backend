@@ -24,10 +24,11 @@ $.ajaxSetup({
 // Datatable (jquery)
 $(function () {
   var dt_game_table = $('.datatables-games'),
-    select1 = $('#filterCategory'),
+    select1 = $('#filterBrand'),
     select2 = $('#filterProvider'),
     select3 = $('#filterStatus'),
     select4 = $('#bulkStatus'),
+    select5 = $('#filterCategory'),
     offCanvasForm = $('#offcanvasEditProduct'),
     statusObj = {
       0: { title: 'not_active' },
@@ -78,16 +79,27 @@ $(function () {
       });
     });
   }
+  if (select5.length) {
+    select5.each(function () {
+      var $this = $(this);
+      select2Focus($this);
+      $this.wrap('<div class="position-relative"></div>').select2({
+        placeholder: 'Category',
+        dropdownParent: $this.parent()
+      });
+    });
+  }
 
   if (dt_game_table.length) {
     var dt_game = dt_game_table.DataTable({
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + '/product/game-list',
+        url: baseUrl + 'dashboard/product/game-list',
         data: function (d) {
           d.status = $('#filterStatus').val();
           d.provider = $('#filterProvider').val();
+          d.brand = $('#filterBrand').val();
           d.category = $('#filterCategory').val();
         }
       },
@@ -142,7 +154,7 @@ $(function () {
             let $output = '';
 
             if ($image) {
-              $output = `<img src="../storage/assets/img/product/${$image}" alt="Product-${$id}" class="rounded-2">`;
+              $output = `<img src="${storagePath}img/product/${$image}" alt="Product-${$id}" class="rounded-2">`;
             } else {
               const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
               const stateNum = Math.floor(Math.random() * 6);
@@ -263,7 +275,7 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'product/game' + full['id'] + '/edit';
+            var edit = baseUrl + 'dashboard/product/game' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
               `<button class="btn btn-sm btn-icon edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditProduct"><i class="mdi mdi-pencil-outline mdi-20px"></i></button>` +
@@ -282,7 +294,7 @@ $(function () {
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
-      lengthMenu: [25, 50, 75, 100], //for length of menu
+      lengthMenu: [10, 25, 50, 75, 100], //for length of menu
       language: {
         sLengthMenu: '_MENU_',
         search: '',
@@ -388,7 +400,7 @@ $(function () {
 
     // Lakukan permintaan AJAX ke server untuk menyimpan data
     $.ajax({
-      url: `${baseUrl}product/game/save-bulk-edit`,
+      url: `${baseUrl}dashboard/product/game/save-bulk-edit`,
       method: 'POST', // Sesuaikan dengan metode yang sesuai
       data: {
         ids: selectedIds,
@@ -467,7 +479,7 @@ $(function () {
 
     $.ajax({
       data: formData,
-      url: `${baseUrl}product/game-list`,
+      url: `${baseUrl}dashboard/product/game-list`,
       type: 'POST',
       contentType: false,
       processData: false,
@@ -510,7 +522,7 @@ $(function () {
     }
 
     // get data
-    $.get(`${baseUrl}product/game-list\/${product_id}\/edit`, function (data) {
+    $.get(`${baseUrl}dashboard/product/game-list\/${product_id}\/edit`, function (data) {
       let provider = '';
       if (data.provider == 4) {
         provider = 'Vip Reseller';
@@ -535,7 +547,7 @@ $(function () {
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}product/game-list/${id}`,
+      url: `${baseUrl}dashboard/product/game-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },

@@ -15,7 +15,8 @@ class GameController extends Controller
   public function GameManagement()
   {
     $brands = Product::distinct()->pluck('brand');
-    return view('content.product.game.index', compact('brands'));
+    $categories = Product::distinct()->pluck('category');
+    return view('content.product.game.index', compact('brands', 'categories'));
   }
 
   /**
@@ -56,16 +57,21 @@ class GameController extends Controller
       $query = $query->Where('provider', $request->provider);
       $totalFiltered = $query->count();
     }
+    if (!empty($request->brand)) {
+      $query = $query->Where('brand', $request->brand);
+      $totalFiltered = $query->count();
+    }
 
     if (!empty($request->category)) {
-      $query = $query->Where('brand', $request->category);
+      $query = $query->Where('category', $request->category);
       $totalFiltered = $query->count();
     }
 
     if (!empty($request->input('search.value'))) {
       $search = $request->input('search.value');
 
-      $query->where('id', 'LIKE', "%{$search}%")
+      $query
+        ->where('id', 'LIKE', "%{$search}%")
         ->orWhere('image', 'LIKE', "%{$search}%")
         ->orWhere('code', 'LIKE', "%{$search}%")
         ->orWhere('item', 'LIKE', "%{$search}%")
@@ -77,11 +83,11 @@ class GameController extends Controller
       $totalFiltered = $query->count();
     }
 
-    $products = $query->offset($start)
+    $products = $query
+      ->offset($start)
       ->limit($limit)
       ->orderBy($order, $dir)
       ->get();
-
 
     $data = [];
 
@@ -271,7 +277,6 @@ class GameController extends Controller
           Product::where('id', $data->id)->update($updateData);
         }
       }
-
 
       // Response sukses jika penyimpanan berhasil
       return response()->json(['message' => 'Data berhasil disimpan'], 200);

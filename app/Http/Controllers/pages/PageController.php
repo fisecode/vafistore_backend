@@ -215,7 +215,7 @@ class PageController extends Controller
         ->route('page')
         ->with('error', 'Post not found.');
     }
-    return view('content.content-pages.form', compact('page'));
+    return view('content.pages.form', compact('page'));
   }
 
   /**

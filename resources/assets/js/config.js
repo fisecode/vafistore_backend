@@ -47,6 +47,7 @@ let config = {
 };
 
 let assetsPath = document.documentElement.getAttribute('data-assets-path'),
+  storagePath = document.documentElement.getAttribute('data-storage-path'),
   baseUrl = document.documentElement.getAttribute('data-base-url') + '/',
   templateName = document.documentElement.getAttribute('data-template'),
   rtlSupport = true; // set true for rtl support (rtl + ltr), false for ltr only.

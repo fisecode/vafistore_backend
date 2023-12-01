@@ -11,7 +11,7 @@ $configData = Helper::appClasses();
       <span class="app-brand-logo demo">@include('_partials.macros', ['width' => 25, 'withbg' =>
         'var(--bs-primary)'])</span>
       <span class="app-brand-text demo menu-text fw-bold ms-2" style="width: 75%;"><img
-          src="../storage/assets/img/product/logo-text.png" alt="Brand Image" style="width: 100%;"></span>
+          src="{{ asset('storage/assets/img/product/logo-text.png') }}" alt="Brand Image" style="width: 100%;"></span>
       {{--
       @php
       // Gantilah 'Brand' dengan nama model Anda

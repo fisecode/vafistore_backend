@@ -11,7 +11,7 @@
       ]
     },
     {
-      "url": "https://www.vafistore.com/",
+      "url": "/",
       "icon": "menu-icon tf-icons mdi mdi-bullseye",
       "name": "View Store",
       "slug": "view-store",
@@ -30,24 +30,24 @@
       "slug": "post",
       "submenu": [
         {
-          "url": "post/list",
+          "url": "dashboard/post/list",
           "name": "Post List",
           "slug": "post-list"
         },
         {
-          "url": "post/add",
+          "url": "dashboard/post/add",
           "name": "Add Post",
           "slug": "post-add"
         },
         {
-          "url": "post/category",
+          "url": "dashboard/post/category",
           "name": "Category List",
           "slug": "post-category"
         }
       ]
     },
     {
-      "url": "/page",
+      "url": "/dashboard/page",
       "icon": "menu-icon tf-icons mdi mdi-bookmark-multiple-outline",
       "name": "Content Page",
       "slug": "page",
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "url": "/slide",
+      "url": "/dashboard/slide",
       "icon": "menu-icon tf-icons mdi mdi-image-album",
       "name": "Slide Show",
       "slug": "slide",
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "url": "/socials",
+      "url": "/dashboard/socials",
       "icon": "menu-icon tf-icons mdi mdi-folder-account",
       "name": "Social Media",
       "slug": "socials",
@@ -85,22 +85,22 @@
       ],
       "submenu": [
         {
-          "url": "member/basic",
+          "url": "dashboard/member/basic",
           "name": "Basic",
           "slug": "member-basic"
         },
         {
-          "url": "member/reseller",
+          "url": "dashboard/member/reseller",
           "name": "Reseller",
           "slug": "member-reseller"
         },
         {
-          "url": "member/refferal-list",
+          "url": "dashboard/member/refferal-list",
           "name": "Refferal List",
           "slug": "member-refferal-list"
         },
         {
-          "url": "member/super-administrator",
+          "url": "dashboard/member/super-administrator",
           "name": "super administrator",
           "slug": "member-super-administrator"
         }
@@ -110,7 +110,7 @@
       "menuHeader": "PRODUCT"
     },
     {
-      "url": "/category",
+      "url": "/dashboard/category",
       "icon": "menu-icon tf-icons mdi mdi-format-list-bulleted",
       "name": "Category",
       "slug": "category",
@@ -129,32 +129,32 @@
       ],
       "submenu": [
         {
-          "url": "product/game",
+          "url": "dashboard/product/game",
           "name": "Game",
           "slug": "product-game"
         },
         {
-          "url": "product/prepaid",
+          "url": "dashboard/product/prepaid",
           "name": "Prepaid",
           "slug": "product-prepaid"
         },
         {
-          "url": "product/social",
+          "url": "dashboard/product/social",
           "name": "Social",
           "slug": "product-social"
         },
         {
-          "url": "product/manual",
+          "url": "dashboard/product/manual",
           "name": "Manual",
           "slug": "product-manual"
         },
         {
-          "url": "product/joki-ml",
+          "url": "dashboard/product/joki-ml",
           "name": "Joki ML",
           "slug": "product-joki-ml"
         },
         {
-          "url": "product/apigames",
+          "url": "dashboard/product/apigames",
           "name": "Apigames",
           "slug": "product-apigames"
         }
@@ -173,19 +173,19 @@
       ],
       "submenu": [
         {
-          "url": "order/list",
+          "url": "dashboard/order/list",
           "name": "Order List",
           "slug": "order-list"
         },
         {
-          "url": "order/joki",
+          "url": "dashboard/order/joki",
           "name": "Order Joki",
           "slug": "order-joki"
         }
       ]
     },
     {
-      "url": "/topup",
+      "url": "/dashboard/topup",
       "icon": "menu-icon tf-icons mdi mdi-currency-usd",
       "name": "Top Up Request",
       "slug": "top-up-request",
@@ -195,7 +195,7 @@
       ]
     },
     {
-      "url": "/payment/history",
+      "url": "/dashboard/payment/history",
       "icon": "menu-icon tf-icons mdi mdi-calendar-clock-outline",
       "name": "Payment History",
       "slug": "payment-history",
@@ -205,7 +205,7 @@
       ]
     },
     {
-      "url": "/balance/member",
+      "url": "/dashboard/balance/member",
       "icon": "menu-icon tf-icons mdi mdi-wallet-outline",
       "name": "Balance Member",
       "slug": "balance-member",
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "url": "/export",
+      "url": "/dashboard/export",
       "icon": "menu-icon tf-icons mdi mdi-tray-arrow-down",
       "name": "Export Excel",
       "slug": "export-excel",
@@ -239,22 +239,22 @@
       ],
       "submenu": [
         {
-          "url": "api/provider",
+          "url": "dashboard/api/provider",
           "name": "Provider",
           "slug": "api-provider"
         },
         {
-          "url": "api/payment-gateway",
+          "url": "dashboard/api/payment-gateway",
           "name": "Payment Gateway",
           "slug": "api-payment-gateway"
         },
         {
-          "url": "api/cekmutasi",
+          "url": "dashboard/api/cekmutasi",
           "name": "Cekmutasi",
           "slug": "api-cekmutasi"
         },
         {
-          "url": "api/whatshapp",
+          "url": "dashboard/api/whatshapp",
           "name": "Whatsapp",
           "slug": "api-ahatsapp"
         }
@@ -269,52 +269,52 @@
       ],
       "submenu": [
         {
-          "url": "setting/seo",
+          "url": "dashboard/setting/seo",
           "name": "SEO & Logo",
           "slug": "setting-seo"
         },
         {
-          "url": "setting/template",
+          "url": "dashboard/setting/template",
           "name": "Template",
           "slug": "setting-template"
         },
         {
-          "url": "setting/category",
+          "url": "dashboard/setting/category",
           "name": "Product Tab Homepage",
           "slug": "setting-category"
         },
         {
-          "url": "setting/popup/home",
+          "url": "dashboard/setting/popup/home",
           "name": "Pop Up Homepage",
           "slug": "setting-popup-home"
         },
         {
-          "url": "setting/popup/product",
+          "url": "dashboard/setting/popup/product",
           "name": "Pop Up Product",
           "slug": "setting-popup-product"
         },
         {
-          "url": "setting/discount",
+          "url": "dashboard/setting/discount",
           "name": "Discount",
           "slug": "setting-discount"
         },
         {
-          "url": "setting/services",
+          "url": "dashboard/setting/services",
           "name": "Services",
           "slug": "setting-services"
         },
         {
-          "url": "setting/markup/selling",
+          "url": "dashboard/setting/markup/selling",
           "name": "Markup Selling",
           "slug": "setting-markup-selling"
         },
         {
-          "url": "setting/voucher",
+          "url": "dashboard/setting/voucher",
           "name": "Voucher",
           "slug": "setting-voucher"
         },
         {
-          "url": "setting/reseller-area",
+          "url": "dashboard/setting/reseller-area",
           "name": "Reseller",
           "slug": "setting-reseller"
         }

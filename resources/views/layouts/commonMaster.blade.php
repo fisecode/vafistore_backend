@@ -11,7 +11,8 @@ $contentLayout = (isset($container) ? (($container === 'container-xxl') ? "layou
 <html lang="{{ session()->get('locale') ?? app()->getLocale() }}"
   class="{{ $configData['style'] }}-style {{($contentLayout ?? '')}} {{ ($navbarType ?? '') }} {{ ($menuFixed ?? '') }} {{ $menuCollapsed ?? '' }} {{ $menuFlipped ?? '' }} {{ $menuOffcanvas ?? '' }} {{ $footerFixed ?? '' }} {{ $customizerHidden ?? '' }}"
   dir="{{ $configData['textDirection'] }}" data-theme="{{ $configData['theme'] }}"
-  data-assets-path="{{ asset('/assets') . '/' }}" data-base-url="{{url('/')}}" data-framework="laravel"
+  data-assets-path="{{ asset('/assets') . '/' }}" data-storage-path="{{ asset('storage/assets') . '/' }}"
+  data-base-url="{{url('/')}}" data-framework="laravel"
   data-template="{{ $configData['layout'] . '-menu-' . $configData['theme'] . '-' . $configData['style'] }}">
 
 <head>

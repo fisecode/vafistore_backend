@@ -8,7 +8,6 @@ function truncated(content, max) {
 
 var dt_user_table = $('.datatables-posts'),
   select2 = $('.select2'),
-  userView = baseUrl + 'app/user/view/account',
   offCanvasForm = $('#offcanvasAddCategory');
 
 // ajax setup
@@ -25,7 +24,7 @@ $(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'post-list'
+        url: baseUrl + 'dashboard/post-list'
       },
       columns: [
         // columns according to JSON
@@ -59,7 +58,7 @@ $(function () {
             let $output = '';
 
             if ($image) {
-              $output = `<img src="../storage/assets/img/posts/${$image}" alt="Product-${$id}" class="rounded-2">`;
+              $output = `<img src="${storagePath}img/posts/${$image}" alt="Product-${$id}" class="rounded-2">`;
             } else {
               const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
               const stateNum = Math.floor(Math.random() * 6);
@@ -137,7 +136,7 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'post/' + full['id'] + '/edit';
+            var edit = baseUrl + 'dashboard/post/' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
               '<a href="' +
@@ -145,9 +144,7 @@ $(function () {
               '" class="btn btn-sm btn-icon"><i class="mdi mdi-pencil-outline"></i></a>' +
               '<button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical mdi-20px"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="' +
-              userView +
-              '" class="dropdown-item">View</a>' +
+              '<a href="#" class="dropdown-item">View</a>' +
               `<a href="javascript:;" class="dropdown-item delete-record" data-id="${full['id']}">Delete</a>` +
               '</div>'
             );
@@ -175,7 +172,7 @@ $(function () {
           text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Post</span>',
           className: 'add-new btn btn-primary mx-3',
           action: function () {
-            window.location.href = '/post/add';
+            window.location.href = '/dashboard/post/add';
           }
         }
       ],
@@ -242,7 +239,7 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}post-list/${post_id}`,
+          url: `${baseUrl}dashboard/post-list/${post_id}`,
           success: function () {
             dt_user.draw();
           },

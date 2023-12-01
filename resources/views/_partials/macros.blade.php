@@ -35,5 +35,5 @@ $withbg = $withbg ?? '#666cff';
       </linearGradient>
     </defs>
   </svg> --}}
-  <img src="../storage/assets/img/product/logo.png" alt="Brand Image" style="width: 40px">
+  <img src="{{ asset('storage/assets/img/product/logo.png') }}" alt="Brand Image" style="width: 40px">
 </span>

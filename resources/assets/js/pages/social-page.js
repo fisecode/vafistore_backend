@@ -21,7 +21,7 @@ $(function () {
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'social-list'
+        url: baseUrl + 'dashboard/social-list'
       },
       columns: [
         // columns according to JSON
@@ -199,14 +199,14 @@ $(function () {
     $('#offcanvasAddSocialsLabel').html('Edit Socials');
 
     // get data
-    $.get(`${baseUrl}social-list\/${socials_id}\/edit`, function (data) {
+    $.get(`${baseUrl}dashboard/social-list\/${socials_id}\/edit`, function (data) {
       $('#socials_id').val(data.id);
       $('#add-socials-name').val(data.name);
       $('#add-socials-url').val(data.url);
       $('#add-socials-icon').val(data.icon);
 
       if (data.image) {
-        $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/socials/' + data.image);
+        $('#uploadedImage').attr('src', storagePath + 'img/socials/' + data.image);
         $('#uploadedImage').removeClass('hide-item'); // Hapus kelas 'hide-item'
       }
     });
@@ -216,7 +216,7 @@ $(function () {
   $('.add-new').on('click', function () {
     $('#socials_id').val('');
     $('#offcanvasAddSocialsLabel').html('Add Socials');
-    $('#uploadedImage').attr('src', assetsPath + '../storage/assets/img/socials/no-image.jpg');
+    $('#uploadedImage').attr('src', storagePath + 'img/socials/no-image.jpg');
     $('#uploadedImage').addClass('hide-item');
   });
 
@@ -268,7 +268,7 @@ $(function () {
 
     $.ajax({
       data: formData,
-      url: `${baseUrl}social-list`,
+      url: `${baseUrl}dashboard/social-list`,
       type: 'POST',
       contentType: false,
       processData: false,
@@ -312,7 +312,7 @@ $(function () {
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}social-list/${id}`,
+      url: `${baseUrl}dashboard/social-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },
@@ -363,7 +363,7 @@ $(function () {
         // delete the data
         $.ajax({
           type: 'DELETE',
-          url: `${baseUrl}social-list/${social_id}`,
+          url: `${baseUrl}dashboard/social-list/${social_id}`,
           success: function () {
             dt_socials.draw();
           },

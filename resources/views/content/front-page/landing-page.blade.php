@@ -2,7 +2,7 @@
 $configData = Helper::appClasses();
 @endphp
 
-@extends('layouts/layoutMaster')
+@extends('layouts/layoutFront')
 
 @section('title', 'Landing - Front Pages')
 
@@ -39,10 +39,16 @@ $configData = Helper::appClasses();
       <div class="position-relative hero-animation-img">
         <a href="{{url('/app/ecommerce/dashboard')}}" target="_blank">
           <div class="hero-dashboard-img text-center">
-            <img src="{{asset('assets/img/front-pages/landing-page/hero-dashboard-'.$configData['style'].'.png')}}" alt="hero dashboard" class="animation-img" data-speed="2" data-app-light-img="front-pages/landing-page/hero-dashboard-light.png" data-app-dark-img="front-pages/landing-page/hero-dashboard-dark.png" />
+            <img src="{{asset('assets/img/front-pages/landing-page/hero-dashboard-'.$configData['style'].'.png')}}"
+              alt="hero dashboard" class="animation-img" data-speed="2"
+              data-app-light-img="front-pages/landing-page/hero-dashboard-light.png"
+              data-app-dark-img="front-pages/landing-page/hero-dashboard-dark.png" />
           </div>
           <div class="position-absolute hero-elements-img">
-            <img src="{{asset('assets/img/front-pages/landing-page/hero-elements-'.$configData['style'].'.png')}}" alt="hero elements" class="animation-img" data-speed="4" data-app-light-img="front-pages/landing-page/hero-elements-light.png" data-app-dark-img="front-pages/landing-page/hero-elements-dark.png" />
+            <img src="{{asset('assets/img/front-pages/landing-page/hero-elements-'.$configData['style'].'.png')}}"
+              alt="hero elements" class="animation-img" data-speed="4"
+              data-app-light-img="front-pages/landing-page/hero-elements-light.png"
+              data-app-dark-img="front-pages/landing-page/hero-elements-dark.png" />
           </div>
         </a>
       </div>
@@ -54,7 +60,8 @@ $configData = Helper::appClasses();
   <section id="landingFeatures" class="section-py landing-features">
     <div class="container">
       <h6 class="text-center fw-semibold d-flex justify-content-center align-items-center mb-4">
-        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon" class="me-2" />
+        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon"
+          class="me-2" />
         <span class="text-uppercase">Useful features</span>
       </h6>
       <h3 class="text-center mb-2"><span class="fw-bold">Everything you need</span> to start your next project</h3>
@@ -121,7 +128,8 @@ $configData = Helper::appClasses();
   <section id="landingReviews" class="section-py bg-body landing-reviews pb-0">
     <div class="container">
       <h6 class="text-center fw-semibold d-flex justify-content-center align-items-center mb-4">
-        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon" class="me-2" />
+        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon"
+          class="me-2" />
         <span class="text-uppercase">real customers reviews</span>
       </h6>
       <h3 class="text-center mb-2"><span class="fw-bold">Success stories</span> from clients</h3>
@@ -134,10 +142,12 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-4.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-4.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
-                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building dashboard
+                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building
+                  dashboard
                   sites on almost any project.”
                 </p>
                 <div class="text-warning mb-3">
@@ -158,7 +168,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-1.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-1.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>Materio is awesome, and I particularly enjoy knowing that if I get stuck on something.</p>
                 <div class="text-warning mb-3">
@@ -179,7 +190,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-3.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-3.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
                   This template is superior in so many ways. The code, the design, the regular updates, the
@@ -203,7 +215,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-2.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-2.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
                   All the requirements for developers have been taken into consideration, so I’m able to build any
@@ -227,10 +240,12 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-5.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-5.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
-                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building dashboard
+                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building
+                  dashboard
                   sites on almost any project.”
                 </p>
                 <div class="text-warning mb-3">
@@ -251,10 +266,12 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center h-100">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-4.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-4.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
-                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building dashboard
+                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building
+                  dashboard
                   sites on almost any project.”
                 </p>
                 <div class="text-warning mb-3">
@@ -275,7 +292,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center h-100">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-1.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-1.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>Materio is awesome, and I particularly enjoy knowing that if I get stuck on something.</p>
                 <div class="text-warning mb-3">
@@ -296,7 +314,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center h-100">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-3.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-3.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
                   This template is superior in so many ways. The code, the design, the regular updates, the
@@ -320,7 +339,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center h-100">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-2.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-2.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
                   All the requirements for developers have been taken into consideration, so I’m able to build any
@@ -344,10 +364,12 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center h-100">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-5.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-5.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
-                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building dashboard
+                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building
+                  dashboard
                   sites on almost any project.”
                 </p>
                 <div class="text-warning mb-3">
@@ -368,10 +390,12 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-4.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-4.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
-                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building dashboard
+                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building
+                  dashboard
                   sites on almost any project.”
                 </p>
                 <div class="text-warning mb-3">
@@ -392,7 +416,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-1.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-1.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>Materio is awesome, and I particularly enjoy knowing that if I get stuck on something.</p>
                 <div class="text-warning mb-3">
@@ -413,7 +438,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-3.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-3.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
                   This template is superior in so many ways. The code, the design, the regular updates, the
@@ -437,7 +463,8 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-2.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-2.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
                   All the requirements for developers have been taken into consideration, so I’m able to build any
@@ -461,10 +488,12 @@ $configData = Helper::appClasses();
             <div class="card h-100">
               <div class="card-body text-body d-flex flex-column justify-content-between text-center">
                 <div class="mb-3">
-                  <img src="{{asset('assets/img/front-pages/branding/logo-5.png')}}" alt="client logo" class="client-logo img-fluid" />
+                  <img src="{{asset('assets/img/front-pages/branding/logo-5.png')}}" alt="client logo"
+                    class="client-logo img-fluid" />
                 </div>
                 <p>
-                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building dashboard
+                  “I've never used a theme as versatile and flexible as Materialize. It's my go to for building
+                  dashboard
                   sites on almost any project.”
                 </p>
                 <div class="text-warning mb-3">
@@ -491,19 +520,29 @@ $configData = Helper::appClasses();
         <div class="swiper" id="swiper-clients-logos">
           <div class="swiper-wrapper">
             <div class="swiper-slide">
-              <img src="{{asset('assets/img/front-pages/branding/logo-1-'.$configData['style'].'.png')}}" alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-1-light.png" data-app-dark-img="front-pages/branding/logo-1-dark.png" />
+              <img src="{{asset('assets/img/front-pages/branding/logo-1-'.$configData['style'].'.png')}}"
+                alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-1-light.png"
+                data-app-dark-img="front-pages/branding/logo-1-dark.png" />
             </div>
             <div class="swiper-slide">
-              <img src="{{asset('assets/img/front-pages/branding/logo-2-'.$configData['style'].'.png')}}" alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-2-light.png" data-app-dark-img="front-pages/branding/logo-2-dark.png" />
+              <img src="{{asset('assets/img/front-pages/branding/logo-2-'.$configData['style'].'.png')}}"
+                alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-2-light.png"
+                data-app-dark-img="front-pages/branding/logo-2-dark.png" />
             </div>
             <div class="swiper-slide">
-              <img src="{{asset('assets/img/front-pages/branding/logo-3-'.$configData['style'].'.png')}}" alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-3-light.png" data-app-dark-img="front-pages/branding/logo-3-dark.png" />
+              <img src="{{asset('assets/img/front-pages/branding/logo-3-'.$configData['style'].'.png')}}"
+                alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-3-light.png"
+                data-app-dark-img="front-pages/branding/logo-3-dark.png" />
             </div>
             <div class="swiper-slide">
-              <img src="{{asset('assets/img/front-pages/branding/logo-4-'.$configData['style'].'.png')}}" alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-4-light.png" data-app-dark-img="front-pages/branding/logo-4-dark.png" />
+              <img src="{{asset('assets/img/front-pages/branding/logo-4-'.$configData['style'].'.png')}}"
+                alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-4-light.png"
+                data-app-dark-img="front-pages/branding/logo-4-dark.png" />
             </div>
             <div class="swiper-slide">
-              <img src="{{asset('assets/img/front-pages/branding/logo-5-'.$configData['style'].'.png')}}" alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-5-light.png" data-app-dark-img="front-pages/branding/logo-5-dark.png" />
+              <img src="{{asset('assets/img/front-pages/branding/logo-5-'.$configData['style'].'.png')}}"
+                alt="client logo" class="client-logo" data-app-light-img="front-pages/branding/logo-5-light.png"
+                data-app-dark-img="front-pages/branding/logo-5-dark.png" />
             </div>
           </div>
         </div>
@@ -516,7 +555,8 @@ $configData = Helper::appClasses();
   <section id="landingTeam" class="section-py landing-team">
     <div class="container bg-icon-right">
       <h6 class="text-center fw-semibold d-flex justify-content-center align-items-center mb-4">
-        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon" class="me-2" />
+        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon"
+          class="me-2" />
         <span class="text-uppercase">our great team</span>
       </h6>
       <h3 class="text-center mb-2"><span class="fw-bold">Supported</span> by Real People</h3>
@@ -525,7 +565,8 @@ $configData = Helper::appClasses();
         <div class="col-lg-3 col-sm-6">
           <div class="card card-hover-border-primary mt-3 mt-lg-0 shadow-none">
             <div class="bg-label-primary position-relative team-image-box">
-              <img src="{{asset('assets/img/front-pages/landing-page/team-member-1.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-1.png')}}"
+                class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
             </div>
             <div class="card-body text-center">
               <h5 class="card-title fw-semibold mb-1">Sophie Gilbert</h5>
@@ -547,7 +588,8 @@ $configData = Helper::appClasses();
         <div class="col-lg-3 col-sm-6">
           <div class="card card-hover-border-danger mt-3 mt-lg-0 shadow-none">
             <div class="bg-label-danger position-relative team-image-box">
-              <img src="{{asset('assets/img/front-pages/landing-page/team-member-2.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-2.png')}}"
+                class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
             </div>
             <div class="card-body text-center">
               <h5 class="card-title fw-semibold mb-1">Nannie Ford</h5>
@@ -569,7 +611,8 @@ $configData = Helper::appClasses();
         <div class="col-lg-3 col-sm-6">
           <div class="card card-hover-border-success mt-3 mt-lg-0 shadow-none">
             <div class="bg-label-success position-relative team-image-box">
-              <img src="{{asset('assets/img/front-pages/landing-page/team-member-3.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-3.png')}}"
+                class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
             </div>
             <div class="card-body text-center">
               <h5 class="card-title fw-semibold mb-1">Chris Watkins</h5>
@@ -591,7 +634,8 @@ $configData = Helper::appClasses();
         <div class="col-lg-3 col-sm-6">
           <div class="card card-hover-border-info mt-3 mt-lg-0 shadow-none">
             <div class="bg-label-info position-relative team-image-box">
-              <img src="{{asset('assets/img/front-pages/landing-page/team-member-4.png')}}" class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
+              <img src="{{asset('assets/img/front-pages/landing-page/team-member-4.png')}}"
+                class="position-absolute card-img-position bottom-0 start-50 scaleX-n1-rtl" alt="human image" />
             </div>
             <div class="card-body text-center">
               <h5 class="card-title fw-semibold mb-1">Paul Miles</h5>
@@ -619,7 +663,8 @@ $configData = Helper::appClasses();
   <section id="landingPricing" class="section-py bg-body landing-pricing">
     <div class="container bg-icon-left">
       <h6 class="text-center fw-semibold d-flex justify-content-center align-items-center mb-4">
-        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon" class="me-2" />
+        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon"
+          class="me-2" />
         <span class="text-uppercase">pricing plans</span>
       </h6>
       <h3 class="text-center mb-2"><span class="fw-bold">Tailored pricing plans</span> designed for you</h3>
@@ -647,37 +692,43 @@ $configData = Helper::appClasses();
               <ul class="list-unstyled">
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Timeline
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Basic search
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Live chat widget
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Email marketing
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Custom Forms
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Traffic analytics
                   </h5>
                 </li>
@@ -716,37 +767,43 @@ $configData = Helper::appClasses();
               <ul class="list-unstyled">
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Everything in basic
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Timeline with database
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Advanced search
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Marketing automation
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Advanced chatbot
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Campaign management
                   </h5>
                 </li>
@@ -785,37 +842,43 @@ $configData = Helper::appClasses();
               <ul class="list-unstyled">
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Everything in premium
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Timeline with database
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Fuzzy search
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     A/B testing sanbox
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Custom permissions
                   </h5>
                 </li>
                 <li>
                   <h5>
-                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon" class="me-2 pe-1 scaleX-n1-rtl" />
+                    <img src="{{asset('assets/img/front-pages/icons/list-arrow-icon.png')}}" alt="list arrow icon"
+                      class="me-2 pe-1 scaleX-n1-rtl" />
                     Social media automation
                   </h5>
                 </li>
@@ -845,22 +908,26 @@ $configData = Helper::appClasses();
     <div class="container">
       <div class="row gx-0 gy-5 gx-sm-5">
         <div class="col-md-3 col-sm-6 text-center">
-          <span class="badge badge-center rounded-pill bg-label-hover-primary fun-facts-icon mb-4"><i class="tf-icons mdi mdi-land-plots mdi-36px"></i></span>
+          <span class="badge badge-center rounded-pill bg-label-hover-primary fun-facts-icon mb-4"><i
+              class="tf-icons mdi mdi-land-plots mdi-36px"></i></span>
           <h2 class="fw-bold mb-1">137+</h2>
           <p class="fw-medium mb-0">Completed Sites</p>
         </div>
         <div class="col-md-3 col-sm-6 text-center">
-          <span class="badge badge-center rounded-pill bg-label-hover-success fun-facts-icon mb-4"><i class="tf-icons mdi mdi-clock-outline mdi-36px"></i></span>
+          <span class="badge badge-center rounded-pill bg-label-hover-success fun-facts-icon mb-4"><i
+              class="tf-icons mdi mdi-clock-outline mdi-36px"></i></span>
           <h2 class="fw-bold mb-1">1,100+</h2>
           <p class="fw-medium mb-0">Working Hours</p>
         </div>
         <div class="col-md-3 col-sm-6 text-center">
-          <span class="badge badge-center rounded-pill bg-label-hover-warning fun-facts-icon mb-4"><i class="tf-icons mdi mdi-emoticon-happy-outline mdi-36px"></i></span>
+          <span class="badge badge-center rounded-pill bg-label-hover-warning fun-facts-icon mb-4"><i
+              class="tf-icons mdi mdi-emoticon-happy-outline mdi-36px"></i></span>
           <h2 class="fw-bold mb-1">137+</h2>
           <p class="fw-medium mb-0">Happy Customers</p>
         </div>
         <div class="col-md-3 col-sm-6 text-center">
-          <span class="badge badge-center rounded-pill bg-label-hover-info fun-facts-icon mb-4"><i class="tf-icons mdi mdi-medal-outline mdi-36px"></i></span>
+          <span class="badge badge-center rounded-pill bg-label-hover-info fun-facts-icon mb-4"><i
+              class="tf-icons mdi mdi-medal-outline mdi-36px"></i></span>
           <h2 class="fw-bold mb-1">23+</h2>
           <p class="fw-medium mb-0">Awards Winning</p>
         </div>
@@ -873,7 +940,8 @@ $configData = Helper::appClasses();
   <section id="landingFAQ" class="section-py bg-body landing-faq">
     <div class="container bg-icon-right">
       <h6 class="text-center fw-semibold d-flex justify-content-center align-items-center mb-4">
-        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon" class="me-2" />
+        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon"
+          class="me-2" />
         <span class="text-uppercase">faq</span>
       </h6>
       <h3 class="text-center mb-2">Frequently asked<span class="fw-bold"> questions</span></h3>
@@ -883,19 +951,22 @@ $configData = Helper::appClasses();
       <div class="row gy-5">
         <div class="col-lg-5">
           <div class="text-center">
-            <img src="{{asset('assets/img/front-pages/landing-page/sitting-girl-with-laptop.png')}}" alt="sitting girl with laptop" class="faq-image" />
+            <img src="{{asset('assets/img/front-pages/landing-page/sitting-girl-with-laptop.png')}}"
+              alt="sitting girl with laptop" class="faq-image" />
           </div>
         </div>
         <div class="col-lg-7">
           <div class="accordion" id="accordionFront">
             <div class="accordion-item">
               <h2 class="accordion-header" id="head-One">
-                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
                   Do you charge for each upgrade?
                 </button>
               </h2>
 
-              <div id="accordionOne" class="accordion-collapse collapse" data-bs-parent="#accordionFront" aria-labelledby="accordionOne" >
+              <div id="accordionOne" class="accordion-collapse collapse" data-bs-parent="#accordionFront"
+                aria-labelledby="accordionOne">
                 <div class="accordion-body">
                   Lemon drops chocolate cake gummies carrot cake chupa chups muffin topping. Sesame snaps icing
                   marzipan gummi bears macaroon dragée danish caramels powder. Bear claw dragée pastry topping
@@ -905,11 +976,13 @@ $configData = Helper::appClasses();
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header" id="head-Two">
-                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
                   Do I need to purchase a license for each website?
                 </button>
               </h2>
-              <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="accordionTwo" data-bs-parent="#accordionFront">
+              <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="accordionTwo"
+                data-bs-parent="#accordionFront">
                 <div class="accordion-body">
                   Dessert ice cream donut oat cake jelly-o pie sugar plum cheesecake. Bear claw dragée oat cake
                   dragée ice cream halvah tootsie roll. Danish cake oat cake pie macaroon tart donut gummies. Jelly
@@ -919,11 +992,13 @@ $configData = Helper::appClasses();
             </div>
             <div class="accordion-item active">
               <h2 class="accordion-header" id="head-Three">
-                <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionThree" aria-expanded="true" aria-controls="accordionThree">
+                <button type="button" class="accordion-button" data-bs-toggle="collapse"
+                  data-bs-target="#accordionThree" aria-expanded="true" aria-controls="accordionThree">
                   What is regular license?
                 </button>
               </h2>
-              <div id="accordionThree" class="accordion-collapse collapse show" aria-labelledby="accordionThree" data-bs-parent="#accordionFront">
+              <div id="accordionThree" class="accordion-collapse collapse show" aria-labelledby="accordionThree"
+                data-bs-parent="#accordionFront">
                 <div class="accordion-body">
                   Regular license can be used for end products that do not charge users for access or service(access
                   is free and there will be no monthly subscription fee). Single regular license can be used for
@@ -936,11 +1011,13 @@ $configData = Helper::appClasses();
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header" id="head-Four">
-                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionFour" aria-expanded="false" aria-controls="accordionFour">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#accordionFour" aria-expanded="false" aria-controls="accordionFour">
                   What is extended license?
                 </button>
               </h2>
-              <div id="accordionFour" class="accordion-collapse collapse" aria-labelledby="accordionFour" data-bs-parent="#accordionFront">
+              <div id="accordionFour" class="accordion-collapse collapse" aria-labelledby="accordionFour"
+                data-bs-parent="#accordionFront">
                 <div class="accordion-body">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis et aliquid quaerat possimus maxime!
                   Mollitia reprehenderit neque repellat deleniti delectus architecto dolorum maxime, blanditiis
@@ -950,11 +1027,13 @@ $configData = Helper::appClasses();
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header" id="head-Five">
-                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionFive" aria-expanded="false" aria-controls="accordionFive">
+                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#accordionFive" aria-expanded="false" aria-controls="accordionFive">
                   Which license is applicable for SASS application?
                 </button>
               </h2>
-              <div id="accordionFive" class="accordion-collapse collapse" aria-labelledby="accordionFive" data-bs-parent="#accordionFront">
+              <div id="accordionFive" class="accordion-collapse collapse" aria-labelledby="accordionFive"
+                data-bs-parent="#accordionFront">
                 <div class="accordion-body">
                   Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sequi molestias exercitationem ab cum
                   nemo facere voluptates veritatis quia, eveniet veniam at et repudiandae mollitia ipsam quasi
@@ -976,10 +1055,12 @@ $configData = Helper::appClasses();
         <div class="col-lg-6 text-center text-lg-start">
           <h6 class="h2 text-primary fw-bold mb-1">Ready to Get Started?</h6>
           <p class="fw-medium mb-4">Start your project with a 14-day free trial</p>
-          <a href="{{url('/front-pages/payment')}}" class="btn btn-primary">Get Started<i class="mdi mdi-arrow-right mdi-24px ms-3 scaleX-n1-rtl"></i></a>
+          <a href="{{url('/front-pages/payment')}}" class="btn btn-primary">Get Started<i
+              class="mdi mdi-arrow-right mdi-24px ms-3 scaleX-n1-rtl"></i></a>
         </div>
         <div class="col-lg-6 pt-lg-5">
-          <img src="{{asset('assets/img/front-pages/landing-page/cta-dashboard.png')}}" alt="cta dashboard" class="img-fluid" />
+          <img src="{{asset('assets/img/front-pages/landing-page/cta-dashboard.png')}}" alt="cta dashboard"
+            class="img-fluid" />
         </div>
       </div>
     </div>
@@ -990,7 +1071,8 @@ $configData = Helper::appClasses();
   <section id="landingContact" class="section-py bg-body landing-contact">
     <div class="container bg-icon-left">
       <h6 class="text-center fw-semibold d-flex justify-content-center align-items-center mb-4">
-        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon" class="me-2" />
+        <img src="{{asset('assets/img/front-pages/icons/section-tilte-icon.png')}}" alt="section title icon"
+          class="me-2" />
         <span class="text-uppercase">contact us</span>
       </h6>
       <h3 class="text-center mb-2"><span class="fw-bold">Lets work</span> together</h3>
@@ -1025,14 +1107,16 @@ $configData = Helper::appClasses();
 
                   <div class="col-md-6">
                     <div class="form-floating form-floating-outline">
-                      <input type="email" class="form-control" id="basic-default-email" placeholder="johndoe99@gmail.com" />
+                      <input type="email" class="form-control" id="basic-default-email"
+                        placeholder="johndoe99@gmail.com" />
                       <label for="basic-default-email">Email address</label>
                     </div>
                   </div>
 
                   <div class="col-12">
                     <div class="form-floating form-floating-outline">
-                      <textarea class="form-control h-px-200" placeholder="Message" aria-label="Message" id="basic-default-message"></textarea>
+                      <textarea class="form-control h-px-200" placeholder="Message" aria-label="Message"
+                        id="basic-default-message"></textarea>
                       <label for="basic-default-message">Message</label>
                     </div>
                   </div>
