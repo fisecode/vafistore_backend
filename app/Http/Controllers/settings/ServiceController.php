@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ApiManagement;
 use App\Models\EntertainmentProduct as Entertainment;
 use App\Models\Markup;
-use App\Models\Postpaid;
+use App\Models\PostpaidProduct as Postpaid;
 use App\Models\PrepaidProduct as Prepaid;
-use App\Models\Product;
 use App\Models\VoucherProduct as Voucher;
 use App\Models\GameProduct as Game;
 use App\Models\ProductCategory;
@@ -1177,7 +1176,7 @@ class ServiceController extends Controller
 
         $date = Carbon::now()->toDateString();
 
-        Postpaid::where('jenis', 5)->delete();
+        Postpaid::where('provider', 5)->delete();
 
         $markUp = Markup::where('id', 7)->first();
         $persen_sell = $markUp->persen_sell;
@@ -1185,92 +1184,130 @@ class ServiceController extends Controller
         $satuan = $markUp->satuan;
 
         $client = new Client();
-        $response = $client->post('https://api.digiflazz.com/v1/price-list', $params);
+        try {
+          $response = $client->post('https://api.digiflazz.com/v1/price-list', $params);
+          // Lanjutkan dengan pemrosesan respons jika tidak ada kesalahan
+          $hasil = json_decode($response->getBody(), true);
+          // Lakukan sesuatu dengan data yang diterima
+        } catch (ClientException $e) {
+          $response = $e->getResponse();
+          $statusCode = $response->getStatusCode();
 
-        $hasil = json_decode($response->getBody(), true);
-
-        $success = true;
-
-        foreach ($hasil['data'] as $i => $data) {
-          $produk = new Postpaid();
-          $brand = ucwords(strtolower($data['brand']));
-          $code = $data['buyer_sku_code'];
-          $name = $data['product_name'];
-          $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
-          $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
-          $title = str_replace(['’', "'"], '&apos;', $name);
-          $kategori = $data['category'];
-          $hargaModal = $data['admin'];
-          $markUp = Markup::where('id', 7)->first();
-          $persen_sell = $markUp->persen_sell;
-          $persen_res = $markUp->persen_res;
-          $satuan = $markUp->satuan;
-
-          if ($satuan == 0) {
-            $hargaJual = ceil(($hargaModal + round(($hargaModal * $persen_sell) / 100)) / 100) * 100;
-            $hargaReseller = ceil(($hargaModal + round(($hargaModal * $persen_res) / 100)) / 100) * 100;
+          if ($statusCode == 400) {
+            $hasil = json_decode($response->getBody(), true);
+            return redirect()
+              ->route('setting-services')
+              ->with('error', $hasil['data']['message']);
           } else {
-            $hargaJual = ceil(($hargaModal + $persen_sell) / 100) * 100;
-            $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
+            return redirect()
+              ->route('setting-services')
+              ->with('error', 'HTTP Error: ' . $statusCode);
           }
-
-          if (
-            !$produk
-              ->where('code', $code)
-              ->whereDate('created_at', $date)
-              ->exists() &&
-            !in_array($brand, ['PDAM', 'PBB'])
-          ) {
-            $cekProdukDulu = Postpaid::where('jenis', 4)
-              ->orderBy('id', 'desc')
-              ->first();
-
-            if ($cekProdukDulu) {
-              $id = $cekProdukDulu->id + 1;
-            } else {
-              $a = strlen($i);
-              if ($a == 1) {
-                $id = '5000' . $i;
-              } elseif ($a == 2) {
-                $id = '500' . $i;
-              } elseif ($a == 3) {
-                $id = '50' . $i;
-              } elseif ($a == 4) {
-                $id = '5' . $i;
-              } elseif ($a == 5) {
-                $id = $i;
-              }
-            }
-
-            $produk->id = $id;
-            $produk->slug = $slug;
-            $produk->code = $code;
-            $produk->title = $title;
-            $produk->kategori = $brand;
-            $produk->harga_modal = $hargaModal;
-            $produk->harga_jual = $hargaJual;
-            $produk->harga_reseller = $hargaReseller;
-            $produk->image = $image;
-            $produk->currency = '';
-            $produk->status = 1;
-            $produk->jenis = 5;
-            $produk->product_type = 6;
-            $produk->save();
-
-            if (!$produk->save()) {
-              $success = false;
-            }
-          }
+        } catch (\Exception $e) {
+          return redirect()
+            ->route('setting-services')
+            ->with('error', 'Request Error: ' . $e->getMessage());
         }
 
-        if ($success) {
+        if (isset($hasil['data']['rc'])) {
           return redirect()
             ->route('setting-services')
-            ->with('success', 'Semua produk berhasil ditambahkan');
+            ->with('error', $hasil['data']['message']);
         } else {
-          return redirect()
-            ->route('setting-services')
-            ->with('error', 'Gagal menambahkan beberapa produk');
+          $success = true;
+
+          foreach ($hasil['data'] as $i => $data) {
+            $product = new Postpaid();
+            $productCategory = new ProductCategory();
+            $brand = ucwords(strtolower($data['brand']));
+            $code = $data['buyer_sku_code'];
+            $status = $data['seller_product_status'] == true ? 1 : 0;
+            $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
+            $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
+            $item = str_replace(['’', "'"], '&apos;', $data['product_name']);
+            $cat = $data['category'];
+            $hargaModal = $data['admin'];
+            $markUp = Markup::where('id', 7)->first();
+            $persen_sell = $markUp->persen_sell;
+            $persen_res = $markUp->persen_res;
+            $satuan = $markUp->satuan;
+
+            if ($satuan == 0) {
+              $hargaJual = ceil(($hargaModal + round(($hargaModal * $persen_sell) / 100)) / 100) * 100;
+              $hargaReseller = ceil(($hargaModal + round(($hargaModal * $persen_res) / 100)) / 100) * 100;
+            } else {
+              $hargaJual = ceil(($hargaModal + $persen_sell) / 100) * 100;
+              $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
+            }
+
+            if (
+              !$product
+                ->where('code', $code)
+                ->whereDate('created_at', $date)
+                ->exists() &&
+              !in_array($brand, ['PDAM', 'PBB'])
+            ) {
+              $cpc = $productCategory->where('name', $brand)->first();
+              if (!$cpc) {
+                $productCategory->slug = $slug;
+                $productCategory->name = $brand;
+                $productCategory->image = $image;
+                $productCategory->type = 8;
+                $productCategory->user_id = Auth::user()->id;
+                $productCategory->save();
+              }
+
+              $cekProdukDulu = Postpaid::where('provider', 5)
+                ->orderBy('id', 'desc')
+                ->first();
+
+              if ($cekProdukDulu) {
+                $id = $cekProdukDulu->id + 1;
+              } else {
+                $a = strlen($i);
+                if ($a == 1) {
+                  $id = '5000' . $i;
+                } elseif ($a == 2) {
+                  $id = '500' . $i;
+                } elseif ($a == 3) {
+                  $id = '50' . $i;
+                } elseif ($a == 4) {
+                  $id = '5' . $i;
+                } elseif ($a == 5) {
+                  $id = $i;
+                }
+              }
+
+              $product->id = $id;
+              $product->slug = $slug;
+              $product->code = $code;
+              $product->item = $item;
+              $product->brand = $brand;
+              $product->capital_price = $hargaModal;
+              $product->selling_price = $hargaJual;
+              $product->reseller_price = $hargaReseller;
+              $product->image = $image;
+              $product->currency = '';
+              $product->status = $status;
+              $product->provider = $providerID;
+              $product->type = 8;
+              $product->save();
+
+              if (!$product->save()) {
+                $success = false;
+              }
+            }
+          }
+
+          if ($success) {
+            return redirect()
+              ->route('setting-services')
+              ->with('success', 'Semua produk berhasil ditambahkan');
+          } else {
+            return redirect()
+              ->route('setting-services')
+              ->with('error', 'Gagal menambahkan beberapa produk');
+          }
         }
       }
     }
