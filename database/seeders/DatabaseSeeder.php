@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
     // Mendapatkan atau membuat izin 'super admin'
     $superAdminPermission = Permission::firstOrCreate(['name' => 'super admin']);
-    $adminPermission = Permission::firstOrCreate(['name' => 'basic']);
+    $adminPermission = Permission::firstOrCreate(['name' => 'admin']);
 
     // Menambahkan izin 'super admin' ke peran 'super admin'
     $superAdminRole->givePermissionTo($superAdminPermission);

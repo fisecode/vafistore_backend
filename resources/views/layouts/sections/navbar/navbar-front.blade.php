@@ -63,9 +63,20 @@
 
             <!-- navbar button: Start -->
             <li>
-                <a href="{{ route('login') }}" class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4"><span
-                        class="tf-icons mdi mdi-account me-md-1"></span><span
-                        class="d-none d-md-block">Login/Register</span></a>
+                @auth
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="btn btn-secondary px-2 px-sm-4 px-lg-2 px-xl-4"><span
+                            class="tf-icons mdi mdi-account me-md-1"></span><span
+                            class="d-none d-md-block">Logout</span></a>
+                    <form method="POST" id="logout-form" action="{{ route('logout') }}">
+                        @csrf
+                    </form>
+                @endauth
+                @guest
+                    <a href="{{ route('login.member') }}" class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4"><span
+                            class="tf-icons mdi mdi-account me-md-1"></span><span class="d-none d-md-block">Login</span></a>
+                @endguest
             </li>
             <!-- navbar button: End -->
         </ul>

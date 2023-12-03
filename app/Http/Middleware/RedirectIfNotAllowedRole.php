@@ -21,8 +21,7 @@ class RedirectIfNotAllowedRole
       Auth::guard('web')->logout();
       Session::invalidate();
       return redirect()
-        ->route('login')
-        ->with('error', 'You do not have permission to access this page.');
+        ->route('login.member');
     }
 
     return $next($request);
