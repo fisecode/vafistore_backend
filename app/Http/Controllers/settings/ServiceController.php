@@ -519,6 +519,12 @@ class ServiceController extends Controller
                 $hargaReseller = ceil(($hargaModal + $persen_res) / 100) * 100;
               }
 
+              $brandLower = strtolower($brand);
+              $itemLower = strtolower($item);
+              $titleWithoutBrand = str_replace($brandLower, '', $itemLower);
+              $titleWithoutBrand = str_replace('-', '', $titleWithoutBrand);
+              $titleWithoutBrand = ucwords(trim($titleWithoutBrand));
+
               $cpc = $productCategory->where('name', $brand)->first();
               if (!$cpc) {
                 $productCategory->slug = $slug;
@@ -555,7 +561,7 @@ class ServiceController extends Controller
               $product->id = $id;
               $product->slug = $slug . '-' . str_replace(' ', '-', strtolower($category));
               $product->code = $code;
-              $product->item = $item;
+              $product->item = $titleWithoutBrand;
               $product->brand = $brand;
               $product->capital_price = $hargaModal;
               $product->selling_price = $hargaJual;

@@ -31,7 +31,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/pages/product-game.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/product-prepaid.js') }}"></script>
     <script>
         const showMessage = (type, message) => {
             if (message) {

@@ -9,6 +9,7 @@ use App\Http\Controllers\posts\PostController;
 use App\Http\Controllers\posts\PostCategoryController;
 use App\Http\Controllers\api_management\ProviderController;
 use App\Http\Controllers\product\GameController;
+use App\Http\Controllers\product\PrepaidController;
 use App\Http\Controllers\settings\ServiceController;
 use App\Http\Controllers\slide_show\SlideShowController;
 use App\Http\Controllers\socials\SocialController;
@@ -87,11 +88,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
       Route::resource('/product/game-list', GameController::class);
       Route::get('/product/game', [GameController::class, 'GameManagement'])->name('product-game');
       Route::post('/product/game/save-bulk-edit/', [GameController::class, 'saveBulkEdit'])->name('save-bulk-edit');
+      //Product Prepaid
+      Route::resource('/product/prepaid-list', PrepaidController::class);
+      Route::get('/product/prepaid', [PrepaidController::class, 'PrepaidManagement'])->name('product-prepaid');
+      Route::post('/product/prepaid/save-bulk-edit/', [PrepaidController::class, 'saveBulkEdit'])->name('save-bulk-edit');
     });
   });
 });
-
-Route::get('/test', [MiscError::class, 'index'])->name('test');
 
 Route::get('/', function () {
   return view('content.front-page.landing-page');

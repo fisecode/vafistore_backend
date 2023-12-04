@@ -23,7 +23,7 @@ $.ajaxSetup({
 
 // Datatable (jquery)
 $(function () {
-  var dt_game_table = $('.datatables-product'),
+  var dt_prepaid_table = $('.datatables-product'),
     select1 = $('#filterBrand'),
     select2 = $('#filterProvider'),
     select3 = $('#filterStatus'),
@@ -90,12 +90,12 @@ $(function () {
     });
   }
 
-  if (dt_game_table.length) {
-    var dt_game = dt_game_table.DataTable({
+  if (dt_prepaid_table.length) {
+    var dt_prepaid = dt_prepaid_table.DataTable({
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'dashboard/product/game-list',
+        url: baseUrl + 'dashboard/product/prepaid-list',
         data: function (d) {
           d.status = $('#filterStatus').val();
           d.provider = $('#filterProvider').val();
@@ -275,7 +275,7 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'dashboard/product/game' + full['id'] + '/edit';
+            var edit = baseUrl + 'dashboard/product/prepaid' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
               `<button class="btn btn-sm btn-icon edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditProduct"><i class="mdi mdi-pencil-outline mdi-20px"></i></button>` +
@@ -357,7 +357,7 @@ $(function () {
     var providerFilter = $('#filterProvider').val();
 
     // Lakukan filtering untuk setiap kondisi filter yang dipilih
-    dt_game.column(10).search(statusFilter).column(5).search(categoryFilter).column(9).search(providerFilter).draw();
+    dt_prepaid.column(10).search(statusFilter).column(5).search(categoryFilter).column(9).search(providerFilter).draw();
   });
 
   toastr.options = {
@@ -400,7 +400,7 @@ $(function () {
 
     // Lakukan permintaan AJAX ke server untuk menyimpan data
     $.ajax({
-      url: `${baseUrl}dashboard/product/game/save-bulk-edit`,
+      url: `${baseUrl}dashboard/product/prepaid/save-bulk-edit`,
       method: 'POST', // Sesuaikan dengan metode yang sesuai
       data: {
         ids: selectedIds,
@@ -411,7 +411,7 @@ $(function () {
       success: function (response) {
         // Handle response dari server
         // Misalnya, tampilkan pesan sukses, refresh halaman, atau lakukan yang lainnya
-        dt_game.draw();
+        dt_prepaid.draw();
         toastr.success(response.message);
         $('#bulkEditModal').modal('hide'); // Menutup modal setelah penyimpanan berhasil
       },
@@ -479,12 +479,12 @@ $(function () {
 
     $.ajax({
       data: formData,
-      url: `${baseUrl}dashboard/product/game-list`,
+      url: `${baseUrl}dashboard/product/prepaid-list`,
       type: 'POST',
       contentType: false,
       processData: false,
       success: function (response) {
-        dt_game.draw();
+        dt_prepaid.draw();
         offCanvasForm.offcanvas('hide');
 
         // sweetalert
@@ -522,7 +522,7 @@ $(function () {
     }
 
     // get data
-    $.get(`${baseUrl}dashboard/product/game-list\/${product_id}\/edit`, function (data) {
+    $.get(`${baseUrl}dashboard/product/prepaid-list\/${product_id}\/edit`, function (data) {
       let provider = '';
       if (data.provider == 4) {
         provider = 'Vip Reseller';
@@ -547,12 +547,12 @@ $(function () {
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}dashboard/product/game-list/${id}`,
+      url: `${baseUrl}dashboard/product/prepaid-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },
       success: function (response) {
-        dt_game.draw();
+        dt_prepaid.draw();
 
         // sweetalert
         Swal.fire({
