@@ -16,6 +16,7 @@ class PostpaidProduct extends Model
     'code',
     'item',
     'brand',
+    'category',
     'capital_price',
     'selling_price',
     'reseller_price',

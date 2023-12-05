@@ -4,7 +4,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Game Product')
+@section('title', 'Postpaid Product')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
@@ -31,7 +31,7 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/pages/product-game.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/product-postpaid.js') }}"></script>
     <script>
         const showMessage = (type, message) => {
             if (message) {
@@ -51,7 +51,7 @@
 
 @section('content')
     <h4 class="py-3 mb-4">
-        <span class="text-muted fw-light">Product /</span><span> Game</span>
+        <span class="text-muted fw-light">Product /</span><span> Postpaid</span>
     </h4>
 
     <!-- Post List Table -->

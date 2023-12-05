@@ -139,24 +139,24 @@
           "slug": "product-prepaid"
         },
         {
-          "url": "dashboard/product/social",
-          "name": "Social",
-          "slug": "product-social"
+          "url": "dashboard/product/postpaid",
+          "name": "Postpaid",
+          "slug": "product-postpaid"
         },
         {
-          "url": "dashboard/product/manual",
-          "name": "Manual",
-          "slug": "product-manual"
+          "url": "dashboard/product/voucher",
+          "name": "Voucher",
+          "slug": "product-voucher"
         },
         {
-          "url": "dashboard/product/joki-ml",
-          "name": "Joki ML",
-          "slug": "product-joki-ml"
+          "url": "dashboard/product/entertainment",
+          "name": "Entertainment",
+          "slug": "product-entertainment"
         },
         {
-          "url": "dashboard/product/apigames",
-          "name": "Apigames",
-          "slug": "product-apigames"
+          "url": "dashboard/product/social-media",
+          "name": "Social Media",
+          "slug": "product-social-media"
         }
       ]
     },

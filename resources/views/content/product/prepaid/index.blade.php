@@ -4,7 +4,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Post List')
+@section('title', 'Prepaid Product')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
@@ -51,7 +51,7 @@
 
 @section('content')
     <h4 class="py-3 mb-4">
-        <span class="text-muted fw-light">Post /</span><span> List</span>
+        <span class="text-muted fw-light">Product /</span><span> Prepaid</span>
     </h4>
 
     <!-- Post List Table -->

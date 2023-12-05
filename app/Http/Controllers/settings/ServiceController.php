@@ -752,7 +752,7 @@ class ServiceController extends Controller
                 $save = $product->save();
               }
 
-              if (!$product->save()) {
+              if (!$save) {
                 $success = false;
               }
             }
@@ -1225,14 +1225,14 @@ class ServiceController extends Controller
           foreach ($hasil['data'] as $i => $data) {
             $product = new Postpaid();
             $productCategory = new ProductCategory();
-            $brand = ucwords(strtolower($data['brand']));
+            $brand = strtoupper($data['product_name']);
             $code = $data['buyer_sku_code'];
             $status = $data['seller_product_status'] == true ? 1 : 0;
             $slug = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $brand));
             $image = strtolower(str_replace(' ', '_', $brand)) . '.png';
-            $item = str_replace(['’', "'"], '&apos;', $data['product_name']);
-            $cat = $data['category'];
-            $hargaModal = $data['admin'];
+            $item = str_replace(['’', "'"], '&apos;', $data['brand']);
+            $category = $data['category'];
+            $hargaModal = $data['admin'] !== 0 ? $data['admin'] : 1000;
             $markUp = Markup::where('id', 7)->first();
             $persen_sell = $markUp->persen_sell;
             $persen_res = $markUp->persen_res;
@@ -1263,7 +1263,8 @@ class ServiceController extends Controller
                 $productCategory->save();
               }
 
-              $cekProdukDulu = Postpaid::where('provider', 5)
+              $cekProdukDulu = $product
+                ->where('provider', 5)
                 ->orderBy('id', 'desc')
                 ->first();
 
@@ -1284,22 +1285,30 @@ class ServiceController extends Controller
                 }
               }
 
-              $product->id = $id;
-              $product->slug = $slug;
-              $product->code = $code;
-              $product->item = $item;
-              $product->brand = $brand;
-              $product->capital_price = $hargaModal;
-              $product->selling_price = $hargaJual;
-              $product->reseller_price = $hargaReseller;
-              $product->image = $image;
-              $product->currency = '';
-              $product->status = $status;
-              $product->provider = $providerID;
-              $product->type = 8;
-              $product->save();
-
-              if (!$product->save()) {
+              $cp = $product->where('code', $code)->first();
+              if ($cp) {
+                $product->capital_price = $hargaModal;
+                $product->selling_price = $hargaJual;
+                $product->reseller_price = $hargaReseller;
+                $product->status = $status;
+                $save = $product->update();
+              } else {
+                $product->id = $id;
+                $product->slug = $slug;
+                $product->code = $code;
+                $product->item = $item;
+                $product->brand = $brand;
+                $product->category = $category;
+                $product->capital_price = $hargaModal;
+                $product->selling_price = $hargaJual;
+                $product->reseller_price = $hargaReseller;
+                $product->currency = '';
+                $product->status = $status;
+                $product->provider = $providerID;
+                $product->type = 8;
+                $save = $product->save();
+              }
+              if (!$save) {
                 $success = false;
               }
             }
