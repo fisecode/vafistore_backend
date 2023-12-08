@@ -3,22 +3,17 @@
 namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
-use App\Models\GameProduct as Product;
-use App\Traits\ImageStorage;
+use App\Models\VoucherProduct as Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class GameController extends Controller
+class VoucherController extends Controller
 {
-  use ImageStorage;
-  /**
-   * Display a listing of the resource.
-   */
-  public function GameManagement()
+  public function VoucherManagement()
   {
     $brands = Product::distinct()->pluck('brand');
     $categories = Product::distinct()->pluck('category');
-    return view('content.product.game.index', compact('brands', 'categories'));
+    return view('content.product.voucher.index', compact('brands', 'categories'));
   }
 
   /**
@@ -151,7 +146,6 @@ class GameController extends Controller
       'category' => 'required',
       'selling' => 'numeric|required',
       'reseller' => 'numeric|required',
-      'image' => 'image|mimes:jpeg,png,jpg,gif|max:1024',
     ];
 
     // Validate the request data
@@ -163,16 +157,9 @@ class GameController extends Controller
 
     $productId = $request->id;
     $item = $request->item;
-    $brand = $request->bv;
     $category = $request->category;
     $selling = $request->selling;
     $reseller = $request->reseller;
-    $filename = $brand . ' ' . $category;
-
-    if ($request->hasFile('image')) {
-      $image = $request->file('image');
-      $imagePath = $this->uploadImage($image, $filename, 'product/item', false, true);
-    }
 
     // Find the product
     $product = Product::find($productId);
@@ -186,9 +173,6 @@ class GameController extends Controller
     $product->category = $category;
     $product->selling_price = $selling;
     $product->reseller_price = $reseller;
-    if (isset($imagePath)) {
-      $product->image = $imagePath;
-    }
 
     if ($product->update()) {
       return response()->json(['title' => 'Well Done!', 'message' => 'Product Updated!']);
@@ -200,7 +184,7 @@ class GameController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(Product $product)
+  public function show(PrepaidProduct $prepaidProduct)
   {
     //
   }
@@ -249,7 +233,7 @@ class GameController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Product $product)
+  public function destroy(PrepaidProduct $prepaidProduct)
   {
     //
   }

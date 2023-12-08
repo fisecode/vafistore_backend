@@ -4,7 +4,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Game Product')
+@section('title', 'Voucher Product')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/dropzone/dropzone.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -29,11 +28,10 @@
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/dropzone/dropzone.js') }}"></script>
 @endsection
 
 @section('page-script')
-    <script src="{{ asset('assets/js/pages/product-game.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/product-voucher.js') }}"></script>
     <script>
         const showMessage = (type, message) => {
             if (message) {
@@ -53,7 +51,7 @@
 
 @section('content')
     <h4 class="py-3 mb-4">
-        <span class="text-muted fw-light">Product /</span><span> Game</span>
+        <span class="text-muted fw-light">Product /</span><span> Voucher</span>
     </h4>
 
     <!-- Post List Table -->

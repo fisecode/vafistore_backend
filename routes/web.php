@@ -7,9 +7,12 @@ use App\Http\Controllers\pages\PageController;
 use App\Http\Controllers\posts\PostController;
 use App\Http\Controllers\posts\PostCategoryController;
 use App\Http\Controllers\api_management\ProviderController;
+use App\Http\Controllers\product\EntertainmentController;
 use App\Http\Controllers\product\GameController;
 use App\Http\Controllers\product\PostpaidController;
 use App\Http\Controllers\product\PrepaidController;
+use App\Http\Controllers\product\SocialMediaController;
+use App\Http\Controllers\product\VoucherController;
 use App\Http\Controllers\settings\ServiceController;
 use App\Http\Controllers\slide_show\SlideShowController;
 use App\Http\Controllers\socials\SocialController;
@@ -96,6 +99,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
       Route::resource('/product/postpaid-list', PostpaidController::class);
       Route::get('/product/postpaid', [PostpaidController::class, 'PostpaidManagement'])->name('product-postpaid');
       Route::post('/product/postpaid/save-bulk-edit/', [PostpaidController::class, 'saveBulkEdit'])->name('save-bulk-edit');
+      //Voucher Product
+      Route::resource('/product/voucher-list', VoucherController::class);
+      Route::get('/product/voucher', [VoucherController::class, 'VoucherManagement'])->name('product-voucher');
+      Route::post('/product/voucher/save-bulk-edit/', [VoucherController::class, 'saveBulkEdit'])->name('save-bulk-edit');
+      //Entertainment Product
+      Route::resource('/product/entertainment-list', EntertainmentController::class);
+      Route::get('/product/entertainment', [EntertainmentController::class, 'EntertainmentManagement'])->name('product-entertainment');
+      Route::post('/product/entertainment/save-bulk-edit/', [EntertainmentController::class, 'saveBulkEdit'])->name('save-bulk-edit');
+      //Social Media Product
+      Route::resource('/product/social-media-list', SocialMediaController::class);
+      Route::get('/product/social-media', [SocialMediaController::class, 'SocialMediaManagement'])->name('product-social-media');
+      Route::post('/product/social-media/save-bulk-edit/', [SocialMediaController::class, 'saveBulkEdit'])->name('save-bulk-edit');
     });
   });
 });

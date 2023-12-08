@@ -20,13 +20,16 @@ trait ImageStorage
    * @param mixed|null $old_photo
    * @return void
    */
-  public function uploadImage($photo, $name, $path, $update = false, $old_photo = null)
+  public function uploadImage($photo, $name, $path, $unique = false, $update = false, $old_photo = null)
   {
+    $name = Str::slug($name);
     if ($update) {
       Storage::delete("/assets/img/{$path}/" . $old_photo);
     }
+    if ($unique) {
+      $name = Str::slug($name) . '-' . time();
+    }
 
-    $name = Str::slug($name) . '-' . time();
     $extension = $photo->getClientOriginalExtension();
     $newName = $name . '.' . $extension;
     Storage::putFileAs("/assets/img/{$path}", $photo, $newName);

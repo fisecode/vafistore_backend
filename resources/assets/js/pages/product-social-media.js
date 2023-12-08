@@ -23,7 +23,7 @@ $.ajaxSetup({
 
 // Datatable (jquery)
 $(function () {
-  var dt_game_table = $('.datatables-product'),
+  var dt_socialmedia_table = $('.datatables-product'),
     select1 = $('#filterBrand'),
     select2 = $('#filterProvider'),
     select3 = $('#filterStatus'),
@@ -38,37 +38,6 @@ $(function () {
       4: { title: 'Vip Reseller' },
       5: { title: 'Digiflazz' }
     };
-
-  const previewTemplate = `<div class="dz-preview dz-file-preview">
-<div class="dz-details">
-  <div class="dz-thumbnail">
-    <img data-dz-thumbnail>
-    <span class="dz-nopreview">No preview</span>
-    <div class="dz-success-mark"></div>
-    <div class="dz-error-mark"></div>
-    <div class="dz-error-message"><span data-dz-errormessage></span></div>
-    <div class="progress">
-      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
-    </div>
-  </div>
-  <div class="dz-filename" data-dz-name></div>
-  <div class="dz-size" data-dz-size></div>
-</div>
-</div>`;
-
-  // Basic Dropzone
-  // --------------------------------------------------------------------
-  const dropzoneBasic = document.querySelector('#dropzone-basic');
-  if (dropzoneBasic) {
-    var myDropzone = new Dropzone(dropzoneBasic, {
-      url: baseUrl + 'dashboard/product/game',
-      previewTemplate: previewTemplate,
-      parallelUploads: 1,
-      maxFilesize: 1,
-      addRemoveLinks: true,
-      maxFiles: 1
-    });
-  }
 
   if (select1.length) {
     select1.each(function () {
@@ -121,12 +90,12 @@ $(function () {
     });
   }
 
-  if (dt_game_table.length) {
-    var dt_game = dt_game_table.DataTable({
+  if (dt_socialmedia_table.length) {
+    var dt_socialmedia = dt_socialmedia_table.DataTable({
       processing: true,
       serverSide: true,
       ajax: {
-        url: baseUrl + 'dashboard/product/game-list',
+        url: baseUrl + 'dashboard/product/social-media-list',
         data: function (d) {
           d.status = $('#filterStatus').val();
           d.provider = $('#filterProvider').val();
@@ -139,11 +108,10 @@ $(function () {
         { data: '' },
         { data: 'id' },
         { data: 'item' },
-        { data: 'brand' },
+        { data: 'category' },
         { data: 'capital' },
         { data: 'selling' },
         { data: 'reseller' },
-        { data: 'category' },
         { data: 'provider' },
         { data: 'status' },
         { data: 'action' }
@@ -181,11 +149,11 @@ $(function () {
             const $id = full['id'];
             const $image = full['image'];
             const $item = full['item'];
-            const $code = full['code'];
+            const $code = full['description'];
             let $output = '';
 
             if ($image) {
-              $output = `<img src="${storagePath}img/product/item/${$image}" alt="Product-${$id}" class="rounded-2">`;
+              $output = `<img src="${storagePath}img/product/${$image}" alt="Product-${$id}" class="rounded-2">`;
             } else {
               const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
               const stateNum = Math.floor(Math.random() * 6);
@@ -220,7 +188,7 @@ $(function () {
           // brand
           targets: 3,
           render: function (data, type, full, meta) {
-            return `<span>${full.brand}</span>`;
+            return `<span>${full.category}</span>`;
           }
         },
         {
@@ -258,7 +226,7 @@ $(function () {
         },
         {
           // provider
-          targets: 8,
+          targets: 7,
           render: function (data, type, full, meta) {
             var $provider = full['provider'];
             return '<span>' + providerObj[$provider].title + '</span>';
@@ -266,7 +234,7 @@ $(function () {
         },
         {
           // Status
-          targets: 9,
+          targets: 8,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             var $status = full['status'];
@@ -306,7 +274,7 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'dashboard/product/game' + full['id'] + '/edit';
+            var edit = baseUrl + 'dashboard/product/social-media' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
               `<button class="btn btn-sm btn-icon edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditProduct"><i class="mdi mdi-pencil-outline mdi-20px"></i></button>` +
@@ -388,7 +356,14 @@ $(function () {
     var providerFilter = $('#filterProvider').val();
 
     // Lakukan filtering untuk setiap kondisi filter yang dipilih
-    dt_game.column(10).search(statusFilter).column(5).search(categoryFilter).column(9).search(providerFilter).draw();
+    dt_socialmedia
+      .column(10)
+      .search(statusFilter)
+      .column(5)
+      .search(categoryFilter)
+      .column(9)
+      .search(providerFilter)
+      .draw();
   });
 
   toastr.options = {
@@ -431,7 +406,7 @@ $(function () {
 
     // Lakukan permintaan AJAX ke server untuk menyimpan data
     $.ajax({
-      url: `${baseUrl}dashboard/product/game/save-bulk-edit`,
+      url: `${baseUrl}dashboard/product/social-media/save-bulk-edit`,
       method: 'POST', // Sesuaikan dengan metode yang sesuai
       data: {
         ids: selectedIds,
@@ -442,7 +417,7 @@ $(function () {
       success: function (response) {
         // Handle response dari server
         // Misalnya, tampilkan pesan sukses, refresh halaman, atau lakukan yang lainnya
-        dt_game.draw();
+        dt_socialmedia.draw();
         toastr.success(response.message);
         $('#bulkEditModal').modal('hide'); // Menutup modal setelah penyimpanan berhasil
       },
@@ -507,19 +482,15 @@ $(function () {
   }).on('core.form.valid', function () {
     // adding or updating category when form successfully validate
     var formData = new FormData($('#editProductForm')[0]);
-    myDropzone.files.forEach(function (file) {
-      formData.append('image', file);
-    });
 
     $.ajax({
       data: formData,
-      url: `${baseUrl}dashboard/product/game-list`,
+      url: `${baseUrl}dashboard/product/social-media-list`,
       type: 'POST',
       contentType: false,
       processData: false,
       success: function (response) {
-        dt_game.draw();
-        myDropzone.removeAllFiles();
+        dt_socialmedia.draw();
         offCanvasForm.offcanvas('hide');
 
         // sweetalert
@@ -557,25 +528,17 @@ $(function () {
     }
 
     // get data
-    $.get(`${baseUrl}dashboard/product/game-list\/${product_id}\/edit`, function (data) {
+    $.get(`${baseUrl}dashboard/product/social-media-list\/${product_id}\/edit`, function (data) {
       let provider = '';
       if (data.provider == 4) {
         provider = 'Vip Reseller';
       } else if (data.jenis == 5) {
         provider = 'Digiflazz';
       }
-
-      if (data.image) {
-        var mockFile = { name: data.image, accepted: true };
-        myDropzone.displayExistingFile(mockFile, storagePath + 'img/product/item/' + data.image);
-      } else {
-        $('.dz-message').show();
-      }
       $('#product_id').val(data.id);
       $('#edit-code').val(data.code);
       $('#edit-item').val(data.item);
       $('#edit-brand').val(data.brand);
-      $('#bv').val(data.brand);
       $('#edit-category').val(data.category);
       $('#edit-capital').val(data.capital_price);
       $('#edit-selling').val(data.selling_price);
@@ -584,30 +547,18 @@ $(function () {
     });
   });
 
-  function getFileSize(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', url, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        var size = xhr.getResponseHeader('Content-Length');
-        callback(size);
-      }
-    };
-    xhr.send();
-  }
-
   // Update Status
   $(document).on('change', '.switch-input', function () {
     var id = $(this).data('id');
 
     $.ajax({
       method: 'PUT',
-      url: `${baseUrl}dashboard/product/game-list/${id}`,
+      url: `${baseUrl}dashboard/product/social-media-list/${id}`,
       data: {
         newStatus: $(this).is(':checked') ? 1 : 0
       },
       success: function (response) {
-        dt_game.draw();
+        dt_socialmedia.draw();
 
         // sweetalert
         Swal.fire({
@@ -629,11 +580,5 @@ $(function () {
   // clearing form data when offcanvas hidden
   offCanvasForm.on('hidden.bs.offcanvas', function () {
     fv.resetForm(true);
-    var preview = document.querySelector('.dz-preview');
-    if (preview) {
-      $('.dz-preview').remove();
-    }
-
-    $('.dz-message').hide();
   });
 });

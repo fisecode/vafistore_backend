@@ -80,6 +80,17 @@
     <div class="offcanvas-body mx-0 flex-grow-0">
         <form class="edit-product pt-0" id="editProductForm">
             <input type="hidden" name="id" id="product_id">
+            <input type="hidden" name="bv" id="bv">
+            <div class="form-floating form-floating-outline mb-4">
+                <div id="dropzone-basic" class="dropzone">
+                    <div class="dz-message needsclick">
+                        Drop files here or click to upload
+                    </div>
+                    <div class="fallback">
+                        <input name="image" type="file" />
+                    </div>
+                </div>
+            </div>
             <div class="form-floating form-floating-outline mb-4">
                 <input type="text" class="form-control" id="edit-code" name="code" aria-label="Code Product"
                     disabled />
@@ -99,8 +110,8 @@
                 <label for="category">Category</label>
             </div>
             <div class="form-floating form-floating-outline mb-4">
-                <input type="text" class="form-control" id="edit-capital" name="capital" aria-label="Capital Price"
-                    disabled />
+                <input type="text" class="form-control" id="edit-capital" name="capital"
+                    aria-label="Capital Price" disabled />
                 <label for="capital">Capital Price</label>
             </div>
             <div class="form-floating form-floating-outline mb-4">
