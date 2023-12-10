@@ -326,7 +326,7 @@ $(function () {
         offCanvasForm.offcanvas('hide');
         Swal.fire({
           title: 'Duplicate Entry!',
-          text: 'Sort Order Already Use.',
+          text: `${err.responseJSON.message}`,
           icon: 'error',
           customClass: {
             confirmButton: 'btn btn-success'
@@ -427,5 +427,12 @@ $(function () {
         });
       }
     });
+  });
+
+  // clearing form data when offcanvas hidden
+  offCanvasForm.on('hidden.bs.offcanvas', function () {
+    $('#uploadedImage').attr('src', '');
+    $('#uploadedImage').addClass('hide-item');
+    fv.resetForm(true);
   });
 });

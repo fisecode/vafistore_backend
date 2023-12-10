@@ -151,7 +151,7 @@ class GameController extends Controller
       'category' => 'required',
       'selling' => 'numeric|required',
       'reseller' => 'numeric|required',
-      'image' => 'image|mimes:jpeg,png,jpg,gif|max:1024',
+      'image' => 'image|mimes:jpeg,png,jpg|max:800',
     ];
 
     // Validate the request data

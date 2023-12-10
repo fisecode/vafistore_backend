@@ -4,11 +4,13 @@ namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
 use App\Models\PostpaidProduct as Product;
+use App\Traits\ImageStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PostpaidController extends Controller
 {
+  use ImageStorage;
   public function PostpaidManagement()
   {
     $brands = Product::distinct()->pluck('brand');
@@ -146,6 +148,7 @@ class PostpaidController extends Controller
       'category' => 'required',
       'selling' => 'numeric|required',
       'reseller' => 'numeric|required',
+      'image' => 'image|mimes:jpeg,png,jpg|max:800',
     ];
 
     // Validate the request data
@@ -157,9 +160,16 @@ class PostpaidController extends Controller
 
     $productId = $request->id;
     $item = $request->item;
+    $brand = $request->bv;
     $category = $request->category;
     $selling = $request->selling;
     $reseller = $request->reseller;
+    $filename = $brand . ' ' . $category;
+
+    if ($request->hasFile('image')) {
+      $image = $request->file('image');
+      $imagePath = $this->uploadImage($image, $filename, 'product/item', false, true);
+    }
 
     // Find the product
     $product = Product::find($productId);
@@ -173,6 +183,9 @@ class PostpaidController extends Controller
     $product->category = $category;
     $product->selling_price = $selling;
     $product->reseller_price = $reseller;
+    if (isset($imagePath)) {
+      $product->image = $imagePath;
+    }
 
     if ($product->update()) {
       return response()->json(['title' => 'Well Done!', 'message' => 'Product Updated!']);

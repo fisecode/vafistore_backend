@@ -4,11 +4,13 @@ namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
 use App\Models\SocialProduct as Product;
+use App\Traits\ImageStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class SocialMediaController  extends Controller
 {
+  use ImageStorage;
   public function SocialMediaManagement()
   {
     $categories = Product::distinct()->pluck('category');
@@ -139,6 +141,7 @@ class SocialMediaController  extends Controller
       'category' => 'required',
       'selling' => 'numeric|required',
       'reseller' => 'numeric|required',
+      'image' => 'image|mimes:jpeg,png,jpg|max:800',
     ];
 
     // Validate the request data
@@ -150,9 +153,16 @@ class SocialMediaController  extends Controller
 
     $productId = $request->id;
     $item = $request->item;
+    $brand = $request->bv;
     $category = $request->category;
     $selling = $request->selling;
     $reseller = $request->reseller;
+    $filename = $brand . ' ' . $category;
+
+    if ($request->hasFile('image')) {
+      $image = $request->file('image');
+      $imagePath = $this->uploadImage($image, $filename, 'product/item', false, true);
+    }
 
     // Find the product
     $product = Product::find($productId);
@@ -166,6 +176,9 @@ class SocialMediaController  extends Controller
     $product->category = $category;
     $product->selling_price = $selling;
     $product->reseller_price = $reseller;
+    if (isset($imagePath)) {
+      $product->image = $imagePath;
+    }
 
     if ($product->update()) {
       return response()->json(['title' => 'Well Done!', 'message' => 'Product Updated!']);

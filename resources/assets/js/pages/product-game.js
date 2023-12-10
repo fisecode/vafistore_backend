@@ -1,5 +1,40 @@
 'use strict';
 
+document.addEventListener('DOMContentLoaded', function (e) {
+  (function () {
+    // Update/reset user image of account page
+    let accountUserImage = document.getElementById('uploadedImage');
+    const fileInput = document.querySelector('.account-file-input');
+    const resetFileInput = document.querySelector('.account-image-reset');
+
+    if (accountUserImage) {
+      fileInput.onchange = () => {
+        if (fileInput.files[0]) {
+          accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+          $('#uploadedImage').removeClass('hide-item'); // Show the image
+          resetFileInput.style.display = 'block'; // Show the Reset button
+          resetFileInput.classList.add('btn');
+        }
+      };
+
+      resetFileInput.onclick = () => {
+        let pathImage = document.getElementById('pathImage').value;
+        let resetImage = '';
+        fileInput.value = '';
+        if (pathImage) {
+          resetImage = storagePath + 'img/product/item/' + pathImage;
+          $('#uploadedImage').removeClass('hide-item');
+        } else {
+          $('#uploadedImage').addClass('hide-item');
+        }
+        accountUserImage.src = resetImage;
+        resetFileInput.style.display = 'none'; // Hide the Reset button
+        resetFileInput.classList.remove('btn');
+      };
+    }
+  })();
+});
+
 function truncated(content, max) {
   const maxContentLength = max;
   const truncatedContent = content.length > maxContentLength ? content.slice(0, maxContentLength) + '...' : content;
@@ -38,37 +73,6 @@ $(function () {
       4: { title: 'Vip Reseller' },
       5: { title: 'Digiflazz' }
     };
-
-  const previewTemplate = `<div class="dz-preview dz-file-preview">
-<div class="dz-details">
-  <div class="dz-thumbnail">
-    <img data-dz-thumbnail>
-    <span class="dz-nopreview">No preview</span>
-    <div class="dz-success-mark"></div>
-    <div class="dz-error-mark"></div>
-    <div class="dz-error-message"><span data-dz-errormessage></span></div>
-    <div class="progress">
-      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
-    </div>
-  </div>
-  <div class="dz-filename" data-dz-name></div>
-  <div class="dz-size" data-dz-size></div>
-</div>
-</div>`;
-
-  // Basic Dropzone
-  // --------------------------------------------------------------------
-  const dropzoneBasic = document.querySelector('#dropzone-basic');
-  if (dropzoneBasic) {
-    var myDropzone = new Dropzone(dropzoneBasic, {
-      url: baseUrl + 'dashboard/product/game',
-      previewTemplate: previewTemplate,
-      parallelUploads: 1,
-      maxFilesize: 1,
-      addRemoveLinks: true,
-      maxFiles: 1
-    });
-  }
 
   if (select1.length) {
     select1.each(function () {
@@ -460,6 +464,16 @@ $(function () {
   // product form validation
   const fv = FormValidation.formValidation(editProductForm, {
     fields: {
+      image: {
+        validators: {
+          file: {
+            extension: 'jpg,jpeg,png',
+            type: 'image/jpeg,image/png',
+            maxSize: 800000,
+            message: 'The selected file is not valid'
+          }
+        }
+      },
       item: {
         validators: {
           notEmpty: {
@@ -507,9 +521,6 @@ $(function () {
   }).on('core.form.valid', function () {
     // adding or updating category when form successfully validate
     var formData = new FormData($('#editProductForm')[0]);
-    myDropzone.files.forEach(function (file) {
-      formData.append('image', file);
-    });
 
     $.ajax({
       data: formData,
@@ -519,7 +530,6 @@ $(function () {
       processData: false,
       success: function (response) {
         dt_game.draw();
-        myDropzone.removeAllFiles();
         offCanvasForm.offcanvas('hide');
 
         // sweetalert
@@ -537,7 +547,7 @@ $(function () {
         offCanvasForm.offcanvas('hide');
         Swal.fire({
           title: 'Duplicate Entry!',
-          text: 'Sort Order Already Use.',
+          text: `${err.responseJSON.message}`,
           icon: 'error',
           customClass: {
             confirmButton: 'btn btn-success'
@@ -561,21 +571,23 @@ $(function () {
       let provider = '';
       if (data.provider == 4) {
         provider = 'Vip Reseller';
-      } else if (data.jenis == 5) {
+      } else if (data.provider == 5) {
         provider = 'Digiflazz';
       }
 
       if (data.image) {
-        var mockFile = { name: data.image, accepted: true };
-        myDropzone.displayExistingFile(mockFile, storagePath + 'img/product/item/' + data.image);
+        $('#uploadedImage').attr('src', storagePath + 'img/product/item/' + data.image);
+        $('#uploadedImage').removeClass('hide-item'); // Hapus kelas 'hide-item'
       } else {
-        $('.dz-message').show();
+        $('#uploadedImage').attr('src', '');
+        $('#uploadedImage').addClass('hide-item');
       }
+
       $('#product_id').val(data.id);
+      $('#pathImage').val(data.image);
       $('#edit-code').val(data.code);
       $('#edit-item').val(data.item);
       $('#edit-brand').val(data.brand);
-      $('#bv').val(data.brand);
       $('#edit-category').val(data.category);
       $('#edit-capital').val(data.capital_price);
       $('#edit-selling').val(data.selling_price);
@@ -583,18 +595,6 @@ $(function () {
       $('#edit-provider').val(provider);
     });
   });
-
-  function getFileSize(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', url, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        var size = xhr.getResponseHeader('Content-Length');
-        callback(size);
-      }
-    };
-    xhr.send();
-  }
 
   // Update Status
   $(document).on('change', '.switch-input', function () {
@@ -628,12 +628,8 @@ $(function () {
 
   // clearing form data when offcanvas hidden
   offCanvasForm.on('hidden.bs.offcanvas', function () {
+    $('#uploadedImage').attr('src', '');
+    $('#uploadedImage').addClass('hide-item');
     fv.resetForm(true);
-    var preview = document.querySelector('.dz-preview');
-    if (preview) {
-      $('.dz-preview').remove();
-    }
-
-    $('.dz-message').hide();
   });
 });

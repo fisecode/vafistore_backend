@@ -1,5 +1,40 @@
 'use strict';
 
+document.addEventListener('DOMContentLoaded', function (e) {
+  (function () {
+    // Update/reset user image of account page
+    let accountUserImage = document.getElementById('uploadedImage');
+    const fileInput = document.querySelector('.account-file-input');
+    const resetFileInput = document.querySelector('.account-image-reset');
+
+    if (accountUserImage) {
+      fileInput.onchange = () => {
+        if (fileInput.files[0]) {
+          accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+          $('#uploadedImage').removeClass('hide-item'); // Show the image
+          resetFileInput.style.display = 'block'; // Show the Reset button
+          resetFileInput.classList.add('btn');
+        }
+      };
+
+      resetFileInput.onclick = () => {
+        let pathImage = document.getElementById('pathImage').value;
+        let resetImage = '';
+        fileInput.value = '';
+        if (pathImage) {
+          resetImage = storagePath + 'img/product/item/' + pathImage;
+          $('#uploadedImage').removeClass('hide-item');
+        } else {
+          $('#uploadedImage').addClass('hide-item');
+        }
+        accountUserImage.src = resetImage;
+        resetFileInput.style.display = 'none'; // Hide the Reset button
+        resetFileInput.classList.remove('btn');
+      };
+    }
+  })();
+});
+
 function truncated(content, max) {
   const maxContentLength = max;
   const truncatedContent = content.length > maxContentLength ? content.slice(0, maxContentLength) + '...' : content;
@@ -154,7 +189,7 @@ $(function () {
             let $output = '';
 
             if ($image) {
-              $output = `<img src="${storagePath}img/product/${$image}" alt="Product-${$id}" class="rounded-2">`;
+              $output = `<img src="${storagePath}img/product/item/${$image}" alt="Product-${$id}" class="rounded-2">`;
             } else {
               const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
               const stateNum = Math.floor(Math.random() * 6);
@@ -436,6 +471,16 @@ $(function () {
   // product form validation
   const fv = FormValidation.formValidation(editProductForm, {
     fields: {
+      image: {
+        validators: {
+          file: {
+            extension: 'jpg,jpeg,png',
+            type: 'image/jpeg,image/png',
+            maxSize: 800000,
+            message: 'The selected file is not valid'
+          }
+        }
+      },
       item: {
         validators: {
           notEmpty: {
@@ -509,7 +554,7 @@ $(function () {
         offCanvasForm.offcanvas('hide');
         Swal.fire({
           title: 'Duplicate Entry!',
-          text: 'Sort Order Already Use.',
+          text: `${err.responseJSON.message}`,
           icon: 'error',
           customClass: {
             confirmButton: 'btn btn-success'
@@ -533,10 +578,19 @@ $(function () {
       let provider = '';
       if (data.provider == 4) {
         provider = 'Vip Reseller';
-      } else if (data.jenis == 5) {
+      } else if (data.provider == 5) {
         provider = 'Digiflazz';
       }
+      if (data.image) {
+        $('#uploadedImage').attr('src', storagePath + 'img/product/item/' + data.image);
+        $('#uploadedImage').removeClass('hide-item'); // Hapus kelas 'hide-item'
+      } else {
+        $('#uploadedImage').attr('src', '');
+        $('#uploadedImage').addClass('hide-item');
+      }
+
       $('#product_id').val(data.id);
+      $('#pathImage').val(data.image);
       $('#edit-code').val(data.code);
       $('#edit-item').val(data.item);
       $('#edit-brand').val(data.brand);
@@ -580,6 +634,8 @@ $(function () {
 
   // clearing form data when offcanvas hidden
   offCanvasForm.on('hidden.bs.offcanvas', function () {
+    $('#uploadedImage').attr('src', '');
+    $('#uploadedImage').addClass('hide-item');
     fv.resetForm(true);
   });
 });

@@ -17,6 +17,15 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css') }}" />
+    <style>
+        .hide-item {
+            display: none;
+        }
+
+        .hide-button {
+            display: none;
+        }
+    </style>
 @endsection
 
 @section('vendor-script')

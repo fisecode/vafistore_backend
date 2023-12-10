@@ -80,17 +80,33 @@
     <div class="offcanvas-body mx-0 flex-grow-0">
         <form class="edit-product pt-0" id="editProductForm">
             <input type="hidden" name="id" id="product_id">
-            <input type="hidden" name="bv" id="bv">
-            <div class="form-floating form-floating-outline mb-4">
-                <div id="dropzone-basic" class="dropzone">
-                    <div class="dz-message needsclick">
-                        Drop files here or click to upload
+            <input type="hidden" name="pathImage" id="pathImage">
+            <!-- Image Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Image Item</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <img src="" alt="post-img" class="w-100 h-auto hide-item rounded" id="uploadedImage" />
                     </div>
-                    <div class="fallback">
-                        <input name="image" type="file" />
+                    <div class="button-wrapper text-center">
+                        <label for="upload" class="btn btn-primary" tabindex="0">
+                            <span class="d-none d-sm-block">Browse</span>
+                            <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
+                            <input type="file" id="upload" class="account-file-input" name="image" hidden
+                                accept="image/png, image/jpeg" />
+                        </label>
+                        <button type="button" class="btn-outline-danger account-image-reset hide-item">
+                            <i class="mdi mdi-reload d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Reset</span>
+                        </button>
+
+                        <div class="small mt-3">Allowed JPG or PNG. Max size of 800K</div>
                     </div>
                 </div>
             </div>
+            <!-- /Image Card -->
             <div class="form-floating form-floating-outline mb-4">
                 <input type="text" class="form-control" id="edit-code" name="code" aria-label="Code Product"
                     disabled />
@@ -102,11 +118,13 @@
                 <label for="item">Item Name</label>
             </div>
             <div class="form-floating form-floating-outline mb-4">
-                <input type="text" class="form-control" id="edit-brand" name="brand" aria-label="Brand" disabled />
+                <input type="text" class="form-control" id="edit-brand" name="brand" aria-label="Brand"
+                    disabled />
                 <label for="brand">Brand</label>
             </div>
             <div class="form-floating form-floating-outline mb-4">
-                <input type="text" class="form-control" id="edit-category" name="category" aria-label="Category" />
+                <input type="text" class="form-control" id="edit-category" name="category"
+                    aria-label="Category" />
                 <label for="category">Category</label>
             </div>
             <div class="form-floating form-floating-outline mb-4">
