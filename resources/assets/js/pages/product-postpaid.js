@@ -436,20 +436,15 @@ $(function () {
 
   $('.btn-save-changes').on('click', function () {
     // Mendapatkan nilai dari formulir atau modal
-    var bulkCategory = $('#bulkCategory').val();
-    var bulkStatus = $('#bulkStatus').val();
-    var selectedIds = $('#ids').val();
+    var formBulkData = new FormData($('#editBulkForm')[0]);
 
     // Lakukan permintaan AJAX ke server untuk menyimpan data
     $.ajax({
       url: `${baseUrl}dashboard/product/postpaid/save-bulk-edit`,
       method: 'POST', // Sesuaikan dengan metode yang sesuai
-      data: {
-        ids: selectedIds,
-        bulkCategory: bulkCategory,
-        bulkStatus: bulkStatus
-        // Tambahkan data lainnya sesuai kebutuhan
-      },
+      contentType: false, // Untuk menghindari konversi FormData ke string
+      processData: false,
+      data: formBulkData,
       success: function (response) {
         // Handle response dari server
         // Misalnya, tampilkan pesan sukses, refresh halaman, atau lakukan yang lainnya

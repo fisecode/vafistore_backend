@@ -8,7 +8,7 @@ use App\Traits\ImageStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class EntertainmentController  extends Controller
+class EntertainmentController extends Controller
 {
   use ImageStorage;
   public function EntertainmentManagement()
@@ -278,6 +278,13 @@ class EntertainmentController  extends Controller
           $updateData['status'] = $bulkStatus;
         } else {
           $updateData['status'] = $data->status;
+        }
+        if ($request->hasFile('bulkImage')) {
+          $image = $request->file('bulkImage');
+          $filename = $data->brand . ' ' . $data->category;
+          $updateData['image'] = $this->uploadImage($image, $filename, 'product/item', false, true);
+        } else {
+          $updateData['image'] = $data->image;
         }
         // Perbarui kolom-kolom lainnya sesuai kebutuhan
         // ...
