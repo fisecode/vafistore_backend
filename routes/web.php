@@ -11,6 +11,7 @@ use App\Http\Controllers\product\EntertainmentController;
 use App\Http\Controllers\product\GameController;
 use App\Http\Controllers\product\PostpaidController;
 use App\Http\Controllers\product\PrepaidController;
+use App\Http\Controllers\product\ProductCategoryController;
 use App\Http\Controllers\product\SocialMediaController;
 use App\Http\Controllers\product\VoucherController;
 use App\Http\Controllers\settings\ServiceController;
@@ -111,6 +112,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
       Route::resource('/product/social-media-list', SocialMediaController::class);
       Route::get('/product/social-media', [SocialMediaController::class, 'SocialMediaManagement'])->name('product-social-media');
       Route::post('/product/social-media/save-bulk-edit/', [SocialMediaController::class, 'saveBulkEdit'])->name('save-bulk-edit');
+      //Category Product
+      Route::resource('/product/category-list', ProductCategoryController::class);
+      Route::get('product/category', [ProductCategoryController::class, 'ProductCategoryManagement'])->name('category-product');
+      Route::get('product/category/add', [ProductCategoryController::class, 'create'])->name('page.add');
+      Route::get('product/category/{id}/edit', [ProductCategoryController::class, 'edit'])->name('page.edit');
     });
   });
 });

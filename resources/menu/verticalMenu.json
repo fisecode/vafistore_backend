@@ -110,10 +110,10 @@
       "menuHeader": "PRODUCT"
     },
     {
-      "url": "/dashboard/category",
+      "url": "/dashboard/product/category",
       "icon": "menu-icon tf-icons mdi mdi-format-list-bulleted",
       "name": "Category",
-      "slug": "category",
+      "slug": "category-product",
       "roles": [
         "super admin",
         "admin"
