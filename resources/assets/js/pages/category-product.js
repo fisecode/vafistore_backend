@@ -135,7 +135,7 @@ $(function () {
           orderable: false,
           width: 10,
           render: function (data, type, full, meta) {
-            var edit = baseUrl + 'dashboard/page/' + full['id'] + '/edit';
+            var edit = baseUrl + 'dashboard/product/category/' + full['id'] + '/edit';
             return (
               '<div class="d-inline-block text-nowrap">' +
               '<a href="' +
@@ -163,15 +163,7 @@ $(function () {
         searchPlaceholder: 'Search..'
       },
       // Buttons with Dropdown
-      buttons: [
-        {
-          text: '<i class="mdi mdi-plus me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add New Page</span>',
-          className: 'add-new btn btn-primary mx-3',
-          action: function () {
-            window.location.href = '/dashboard/page/add';
-          }
-        }
-      ],
+      buttons: [],
       // For responsive popup
       responsive: {
         details: {

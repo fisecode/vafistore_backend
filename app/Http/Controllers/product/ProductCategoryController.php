@@ -108,7 +108,7 @@ class ProductCategoryController extends Controller
    */
   public function create()
   {
-    return view('content.pages.form');
+    return view('content.product.category.form');
   }
 
   /**
@@ -223,10 +223,10 @@ class ProductCategoryController extends Controller
     if (!$productCategory) {
       // Handle jika posting tidak ditemukan
       return redirect()
-        ->route('page')
-        ->with('error', 'Post not found.');
+        ->route('category-product')
+        ->with('error', 'Product not found.');
     }
-    return view('content.pages.form', compact('page'));
+    return view('content.product.category.form', compact('productCategory'));
   }
 
   /**
@@ -242,13 +242,16 @@ class ProductCategoryController extends Controller
       $productCategory->save();
       // page updated
       if ($newStatus == 0) {
-        return response()->json(['title' => 'Successfully deactivated!', 'message' => 'Page deactivated successfully']);
+        return response()->json([
+          'title' => 'Successfully deactivated!',
+          'message' => 'Product deactivated successfully',
+        ]);
       } else {
-        return response()->json(['title' => 'Successfully activated!', 'message' => 'Page activated successfully']);
+        return response()->json(['title' => 'Successfully activated!', 'message' => 'Product activated successfully']);
       }
     } else {
       // page not found
-      return response()->json(['title' => 'Failed', 'message' => 'Page Not Found'], 422);
+      return response()->json(['title' => 'Failed', 'message' => 'Product Not Found'], 422);
     }
   }
 
