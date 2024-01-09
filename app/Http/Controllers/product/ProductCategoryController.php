@@ -4,6 +4,7 @@ namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
+use App\Models\ProductType;
 use App\Traits\ImageStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -219,6 +220,7 @@ class ProductCategoryController extends Controller
   public function edit($id)
   {
     $productCategory = ProductCategory::find($id);
+    $productTypes = ProductType::all();
 
     if (!$productCategory) {
       // Handle jika posting tidak ditemukan
@@ -226,7 +228,7 @@ class ProductCategoryController extends Controller
         ->route('category-product')
         ->with('error', 'Product not found.');
     }
-    return view('content.product.category.form', compact('productCategory'));
+    return view('content.product.category.form', compact('productCategory', 'productTypes'));
   }
 
   /**
