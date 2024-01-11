@@ -38,10 +38,10 @@ $.ajaxSetup({
   });
 
   // Mendengarkan perubahan di Quill Editor
-  quill.on('text-change', function () {
+  quillHt.on('text-change', function () {
     // Dapatkan nilai dari Quill Editor dan perbarui input 'content'
-    const content = document.querySelector('input[name=content]');
-    content.value = quill.root.innerHTML;
+    const contentHt = document.querySelector('input[name=content]');
+    contentHt.value = quillHt.root.innerHTML;
   });
 
   document.addEventListener('DOMContentLoaded', function (e) {
@@ -110,7 +110,7 @@ $.ajaxSetup({
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
         // Submit the form when all fields are valid
-        defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
         autoFocus: new FormValidation.plugins.AutoFocus()
       }
     });
@@ -122,4 +122,62 @@ $(function () {
     e.preventDefault(); // Mencegah tindakan bawaan tombol
     window.location.href = `${baseUrl}dashboard/product/category`;
   });
+
+  // Select2
+  const select2 = $('.select2');
+  if (select2.length) {
+    select2.each(function () {
+      const $this = $(this);
+      select2Focus($this);
+      $this.wrap('<div class="position-relative"></div>').select2({
+        dropdownParent: $this.parent(),
+        placeholder: $this.data('placeholder') // for dynamic placeholder
+      });
+    });
+  }
+
+  var formRepeater = $('.form-repeater');
+
+  if (formRepeater.length) {
+    var row = 2;
+    var col = 1;
+
+    formRepeater.repeater({
+      show: function () {
+        var fromControl = $(this).find('.form-control, .form-select');
+        var formLabel = $(this).find('.form-label');
+
+        fromControl.each(function (i) {
+          var id = 'form-repeater-' + row + '-' + col;
+          $(fromControl[i]).attr('id', id);
+          $(formLabel[i]).attr('for', id);
+          col++;
+        });
+
+        row++;
+
+        $(this).slideDown();
+      },
+      hide: function (e) {
+        confirm('Are you sure you want to delete this element?') && $(this).slideUp(e);
+      }
+    });
+
+    // Pindahkan penanganan peristiwa click ke dalam repeater
+    formRepeater.on('click', '.btn-repeater', function () {
+      var fromControl = $(this).closest('.form-repeater').find('.form-control, .form-select');
+      var formLabel = $(this).closest('.form-repeater').find('.form-label');
+
+      fromControl.each(function (i) {
+        var id = 'form-repeater-' + row + '-' + col;
+        $(fromControl[i]).attr('id', id);
+        $(formLabel[i]).attr('for', id);
+        col++;
+      });
+
+      row++;
+
+      $(this).closest('.form-repeater').find('[data-repeater-list="group-a"]').repeater('add');
+    });
+  }
 });

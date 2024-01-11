@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/katex.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/editor.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+
     <style>
         .hide-item {
             display: none;
@@ -32,6 +34,8 @@
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
 @endsection
 
 @section('page-script')
@@ -64,7 +68,7 @@
 
     <div class="add-page">
         <form id="add-page" role="form" action="{{ route('page-list.store') }}" method="post"
-            enctype="multipart/form-data">
+            enctype="multipart/form-data" class="form-repeater">
             @csrf
             <!-- Add Page -->
             @if ($isEdit)
@@ -171,7 +175,7 @@
                     <!-- Image Card -->
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Add Image Product</h5>
+                            <h5 class="card-title mb-0">Image Product</h5>
                         </div>
                         <div class="card-body">
                             <div class="text-center mb-3">
@@ -203,7 +207,7 @@
                     <!-- Sub Image Card -->
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Add Sub-image Product</h5>
+                            <h5 class="card-title mb-0">Sub-image Product</h5>
                         </div>
                         <div class="card-body">
                             <div class="text-center mb-3">
@@ -254,11 +258,55 @@
                                     <label for="category">Type</label>
                                 </div>
                             </div>
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1 row">
+                                    <div class="col-9">
+                                        <span class="mb-0">Option Server?</span>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <label class="switch">
+                                            <input type="checkbox" class="switch-input">
+                                            <span class="switch-toggle-slider">
+                                                <span class="switch-on"></span>
+                                                <span class="switch-off"></span>
+                                            </span>
+                                            <span class="switch-label"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-repeater-list="group-a">
+                                <div data-repeater-item>
+                                    <div class="row">
+                                        <div class="mb-3 col-9 mb-0">
+                                            <div class="form-floating form-floating-outline">
+                                                <input type="text" id="form-repeater-1-1" class="form-control"
+                                                    placeholder="Athena" />
+                                                <label for="form-repeater-1-1">Server Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 col-1 d-flex align-items-center mb-0">
+                                            <button class="btn btn-outline-danger" data-repeater-delete>
+                                                <i class="mdi mdi-close me-1"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="mb-0">
+                                <button class="btn btn-primary btn-repeater" type="button" data-repeater-create>
+                                    <i class="mdi mdi-plus me-1"></i>
+                                    <span class="align-middle">Add</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <!-- /Organize Card -->
+
                 </div>
             </div>
+
         </form>
     </div>
 
