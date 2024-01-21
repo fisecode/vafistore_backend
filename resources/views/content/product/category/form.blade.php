@@ -67,7 +67,7 @@
     </h4>
 
     <div class="add-page">
-        <form id="add-page" role="form" action="{{ route('page-list.store') }}" method="post"
+        <form id="add-page" role="form" action="{{ route('category-list.store') }}" method="post"
             enctype="multipart/form-data" class="form-repeater">
             @csrf
             <!-- Add Page -->
@@ -92,10 +92,10 @@
                         <div class="card-body">
 
                             <div class="form-floating form-floating-outline mb-4">
-                                <input type="text" class="form-control" id="page-title" placeholder="Add Title"
-                                    name="title" aria-label="Page title"
+                                <input type="text" class="form-control" id="product-name" placeholder="Add Name"
+                                    name="productName" aria-label="Product name"
                                     value="{{ $isEdit ? $productCategory->name : '' }}">
-                                <label for="page-title">Product Name</label>
+                                <label for="product-name">Product Name</label>
                             </div>
 
                             <!-- Full Editor -->
@@ -122,9 +122,9 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="content" id="quill-content"
+                                    <input type="hidden" name="description" id="quill-content"
                                         value="{{ $isEdit ? $productCategory->description : '' }}">
-                                    <div class="content-editor border-0 pb-1 ql-container ql-snow" id="article-content">
+                                    <div class="description-editor border-0 pb-1 ql-container ql-snow" id="article-content">
                                         @if ($isEdit)
                                             {!! $productCategory->description !!}
                                         @endif
@@ -157,7 +157,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="content" id="quill-content"
+                                    <input type="hidden" name="helpText" id="quill-content"
                                         value="{{ $isEdit ? $productCategory->help_text : '' }}">
                                     <div class="help-text-editor border-0 pb-1 ql-container ql-snow" id="article-content">
                                         @if ($isEdit)
@@ -181,7 +181,7 @@
                             <div class="text-center mb-3">
                                 @if ($isEdit)
                                     <img src="{{ asset('storage/assets/img/product/category/' . $productCategory->image) }}"
-                                        alt="page-img" class="w-25 h-auto rounded" id="uploadedImage" />
+                                        alt="product-img" class="w-25 h-auto rounded" id="uploadedImage" />
                                 @else
                                     <img src="" alt="product-img" class="w-100 h-auto hide-item rounded"
                                         id="uploadedImage" />
@@ -191,10 +191,10 @@
                                 <label for="upload" class="btn btn-primary" tabindex="0">
                                     <span class="d-none d-sm-block">Browse</span>
                                     <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
-                                    <input type="file" id="upload" class="account-file-input" name="image"
+                                    <input type="file" id="upload" class="product-file-input" name="image"
                                         hidden accept="image/png, image/jpeg" />
                                 </label>
-                                <button type="button" class="btn-outline-danger account-image-reset hide-item">
+                                <button type="button" class="btn-outline-danger product-image-reset hide-item">
                                     <i class="mdi mdi-reload d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block">Reset</span>
                                 </button>
@@ -212,21 +212,21 @@
                         <div class="card-body">
                             <div class="text-center mb-3">
                                 @if ($isEdit)
-                                    <img src="{{ asset('storage/assets/img/product/category/subimage/' . $productCategory->subimage) }}"
-                                        alt="page-img" class="w-25 h-auto rounded" id="uploadedImage" />
+                                    <img src="{{ asset('storage/assets/img/product/category/sub/' . $productCategory->subimage) }}"
+                                        alt="sub-img" class="w-25 h-auto rounded" id="uploadedSubImage" />
                                 @else
-                                    <img src="" alt="product-img" class="w-100 h-auto hide-item rounded"
-                                        id="uploadedImage" />
+                                    <img src="" alt="sub-img" class="w-100 h-auto hide-item rounded"
+                                        id="uploadedSubImage" />
                                 @endif
                             </div>
                             <div class="button-wrapper text-center">
-                                <label for="upload" class="btn btn-primary" tabindex="0">
+                                <label for="uploadSub" class="btn btn-primary" tabindex="0">
                                     <span class="d-none d-sm-block">Browse</span>
                                     <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
-                                    <input type="file" id="upload" class="account-file-input" name="image"
-                                        hidden accept="image/png, image/jpeg" />
+                                    <input type="file" id="uploadSub" class="sub-file-input" name="subImage" hidden
+                                        accept="image/png, image/jpeg" />
                                 </label>
-                                <button type="button" class="btn-outline-danger account-image-reset hide-item">
+                                <button type="button" class="btn-outline-danger sub-image-reset hide-item">
                                     <i class="mdi mdi-reload d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block">Reset</span>
                                 </button>
@@ -246,7 +246,7 @@
                             <div class="mb-4 col category-select2-dropdown d-flex justify-content-between">
                                 <div class="form-floating form-floating-outline w-100 me-3">
                                     <select id="category-org" class="select2 form-select"
-                                        data-placeholder="Select Category" name="category">
+                                        data-placeholder="Select Category" name="type">
                                         <option value="">Select Type</option>
                                         @foreach ($productTypes as $type)
                                             <option value="{{ $type->id }}"
@@ -265,36 +265,85 @@
                                     </div>
                                     <div class="col-3 text-end">
                                         <label class="switch">
-                                            <input type="checkbox" class="switch-input">
+                                            <input type="checkbox" class="switch-input" name="option_server"
+                                                id="optionServerToggle"
+                                                {{ $productCategory->option_server === 1 ? 'checked' : '' }}>
                                             <span class="switch-toggle-slider">
-                                                <span class="switch-on"></span>
-                                                <span class="switch-off"></span>
+                                                @if ($productCategory->option_server === 1)
+                                                    <span class="switch-on"></span>
+                                                @else
+                                                    <span class="switch-off"></span>
+                                                @endif
                                             </span>
                                             <span class="switch-label"></span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div data-repeater-list="group-a">
-                                <div data-repeater-item>
-                                    <div class="row">
-                                        <div class="mb-3 col-9 mb-0">
-                                            <div class="form-floating form-floating-outline">
-                                                <input type="text" id="form-repeater-1-1" class="form-control"
-                                                    placeholder="Athena" />
-                                                <label for="form-repeater-1-1">Server Name</label>
+                            <div data-repeater-list="group-a" id="repeaterList">
+                                @if ($isEdit)
+                                    @forelse ($optionServers as $index => $optionServer)
+                                        <div data-repeater-item>
+                                            <div class="row">
+                                                <div class="col-9 mb-0">
+                                                    <div class="form-floating form-floating-outline">
+                                                        <input type="text" id="form-repeater-{{ $index }}"
+                                                            class="form-control" placeholder="Athena"
+                                                            value="{{ $optionServer->name }}"
+                                                            name="option_servers[{{ $index }}][name]">
+                                                        <label for="form-repeater-{{ $index }}">Server Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1 d-flex align-items-center mb-0">
+                                                    <button class="btn btn-outline-danger" data-repeater-delete
+                                                        data-repeater-id="{{ $optionServer->id }}">
+                                                        <i class="mdi mdi-close me-1"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    @empty
+                                        <div data-repeater-item>
+                                            <div class="row">
+                                                <div class="col-9 mb-0">
+                                                    <div class="form-floating form-floating-outline">
+                                                        <input type="text" id="form-repeater-new" class="form-control"
+                                                            placeholder="Athena" name="option_servers[][name]">
+                                                        <label for="form-repeater-new">Server Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1 d-flex align-items-center mb-0">
+                                                    <button class="btn btn-outline-danger" data-repeater-delete>
+                                                        <i class="mdi mdi-close me-1"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    @endforelse
+                                @else
+                                    <div data-repeater-item>
+                                        <div class="row">
+                                            <div class="col-9 mb-0">
+                                                <div class="form-floating form-floating-outline">
+                                                    <input type="text" id="form-repeater-new" class="form-control"
+                                                        placeholder="Athena" name="option_servers[][name]">
+                                                    <label for="form-repeater-new">Server Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-1 d-flex align-items-center mb-0">
+                                                <button class="btn btn-outline-danger" data-repeater-delete>
+                                                    <i class="mdi mdi-close me-1"></i>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="mb-3 col-1 d-flex align-items-center mb-0">
-                                            <button class="btn btn-outline-danger" data-repeater-delete>
-                                                <i class="mdi mdi-close me-1"></i>
-                                            </button>
-                                        </div>
+                                        <hr>
                                     </div>
-                                    <hr>
-                                </div>
+                                @endif
                             </div>
-                            <div class="mb-0">
+
+                            <div class="mb-0" id="addButton">
                                 <button class="btn btn-primary btn-repeater" type="button" data-repeater-create>
                                     <i class="mdi mdi-plus me-1"></i>
                                     <span class="align-middle">Add</span>

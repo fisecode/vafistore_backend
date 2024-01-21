@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\product;
 
 use App\Http\Controllers\Controller;
+use App\Models\OptionServer;
 use App\Models\ProductCategory;
 use App\Models\ProductType;
 use App\Traits\ImageStorage;
@@ -119,9 +120,11 @@ class ProductCategoryController extends Controller
   {
     // Validation rules
     $rules = [
-      'title' => 'required',
-      'content' => 'required',
+      'productName' => 'required',
+      'description' => 'required',
+      'type' => 'required',
       'image' => 'image|mimes:jpeg,png,jpg|max:800',
+      'subImage' => 'image|mimes:jpeg,png,jpg|max:800',
     ];
 
     // Validate the request data
@@ -136,43 +139,82 @@ class ProductCategoryController extends Controller
     }
 
     $productCategoryId = $request->id;
-    $title = $request->title;
+    $productName = $request->productName;
+    $description = $request->description;
+    $type = $request->type;
+    $helpText = $request->helpText;
+    $optionServer = $request->input('option_server') ? 1 : 0;
     $productCategory = ProductCategory::find($productCategoryId);
-    $productCategoriestatus = 1;
-    $slug = ProductCategory::slug($title);
+    $slug = Str::slug($productName);
 
     if ($productCategory) {
       // Handle image upload
       $imagePath = $productCategory->image;
       if ($request->hasFile('image')) {
         $image = $request->file('image');
-        $imagePath = $this->uploadImage($image, $request->title, 'pages', true, $imagePath);
+        $imagePath = $this->uploadImage($image, $request->productName, 'product/category', false, true, $imagePath);
+      }
+      $subImagePath = $productCategory->subimage;
+      if ($request->hasFile('subImage')) {
+        $subImage = $request->file('subImage');
+        $subImagePath = $this->uploadImage($subImage, $request->productName . "-sub", 'product/category/sub', false, true, $subImagePath);
       }
 
-      // Handle image renaming
-      $newTitle = $title;
-      $oldTitle = $productCategory->title;
-      if ($oldTitle !== $newTitle) {
-        $newImageName = $this->renameImage($imagePath, $request->title, 'pages');
-        $imagePath = $newImageName;
+      if ($optionServer === 1) {
+        // Simpan data dari repeater "Option Server" ke dalam database
+        if ($request->has('group-a') && is_array($request->input('group-a'))) {
+          foreach ($request->input('group-a') as $optionServerData) {
+            $existingOptionServer = OptionServer::where('name', $optionServerData['name'])
+              ->where('category_id', $productCategoryId)
+              ->first();
+
+            // Cek apakah option server dengan nama tersebut sudah ada
+            if (!$existingOptionServer) {
+              $newOptionServer = new OptionServer([
+                'name' => $optionServerData['name'],
+                'category_id' => $productCategoryId,
+              ]);
+              $saveOptionServer = $productCategory->optionServers()->save($newOptionServer);
+
+              if (!$saveOptionServer) {
+                $message = 'An error occurred while saving the option server.';
+                return redirect()
+                  ->route('category-product')
+                  ->with('error', $message);
+              }
+            }
+          }
+        } else {
+          // Handle the case when 'option_servers' is null or not an array
+          $message = 'Invalid or missing data for option servers.';
+          return redirect()
+            ->route('category-product')
+            ->with('error', $message);
+        }
+      } else {
+        OptionServer::where('category_id', $request->id)->delete();
       }
-      $productCategoriestatus = $productCategory->status;
-      $productCategory->page_name = $request->title;
+
+      $productCategory->name = $request->productName;
       $productCategory->slug = $slug;
-      $productCategory->content = $request->content;
       $productCategory->image = $imagePath;
-      $productCategory->status = $productCategoriestatus;
-      $productCategory->save();
+      $productCategory->subimage = $subImagePath;
+      $productCategory->type = $type;
+      $productCategory->description = $description;
+      $productCategory->help_text = $helpText;
+      $productCategory->option_server = $optionServer;
+      $productCategory->status = $productCategory->status;
+      $saveProduct = $productCategory->save();
 
-      if ($productCategory) {
-        $message = 'Well Done! Content Page Saved!';
+      if ($saveProduct) {
+        $message = 'Well Done! Content Product Saved!';
         return redirect()
-          ->route('page')
+          ->route('category-product')
           ->with('success', $message);
       } else {
         return redirect()
-          ->route('page')
-          ->with('error', 'An error occurred while saving the page.');
+          ->route('category-product')
+          ->with('error', 'An error occurred while saving the product.');
       }
     } else {
       // Handle file upload
@@ -221,6 +263,7 @@ class ProductCategoryController extends Controller
   {
     $productCategory = ProductCategory::find($id);
     $productTypes = ProductType::all();
+    $optionServers = OptionServer::where('category_id', $id)->get();
 
     if (!$productCategory) {
       // Handle jika posting tidak ditemukan
@@ -228,7 +271,7 @@ class ProductCategoryController extends Controller
         ->route('category-product')
         ->with('error', 'Product not found.');
     }
-    return view('content.product.category.form', compact('productCategory', 'productTypes'));
+    return view('content.product.category.form', compact('productCategory', 'productTypes', 'optionServers'));
   }
 
   /**

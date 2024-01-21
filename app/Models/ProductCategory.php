@@ -36,4 +36,8 @@ class ProductCategory extends Model
   {
     return $this->belongsTo(ProductType::class, 'type_id');
   }
+  public function optionServers()
+  {
+    return $this->hasMany(OptionServer::class, 'category_id');
+  }
 }

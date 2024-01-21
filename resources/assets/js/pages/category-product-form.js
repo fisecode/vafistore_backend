@@ -12,7 +12,7 @@ $.ajaxSetup({
 });
 
 (function () {
-  const ap = document.querySelector('.content-editor');
+  const ap = document.querySelector('.description-editor');
   const quill = new Quill(ap, {
     modules: {
       toolbar: '.content-toolbar'
@@ -24,7 +24,7 @@ $.ajaxSetup({
   // Mendengarkan perubahan di Quill Editor
   quill.on('text-change', function () {
     // Dapatkan nilai dari Quill Editor dan perbarui input 'content'
-    const content = document.querySelector('input[name=content]');
+    const content = document.querySelector('input[name=description]');
     content.value = quill.root.innerHTML;
   });
 
@@ -40,23 +40,26 @@ $.ajaxSetup({
   // Mendengarkan perubahan di Quill Editor
   quillHt.on('text-change', function () {
     // Dapatkan nilai dari Quill Editor dan perbarui input 'content'
-    const contentHt = document.querySelector('input[name=content]');
+    const contentHt = document.querySelector('input[name=helpText]');
     contentHt.value = quillHt.root.innerHTML;
   });
 
   document.addEventListener('DOMContentLoaded', function (e) {
-    // Update/reset user image of account page
-    let accountUserImage = document.getElementById('uploadedImage');
-    const fileInput = document.querySelector('.account-file-input');
-    const resetFileInput = document.querySelector('.account-image-reset');
+    // Update/reset image of product page
+    let productImage = document.getElementById('uploadedImage');
+    let productSubImage = document.getElementById('uploadedSubImage');
+    const fileInput = document.querySelector('.product-file-input');
+    const fileInputSub = document.querySelector('.sub-file-input');
+    const resetFileInput = document.querySelector('.product-image-reset');
+    const resetFileInputSub = document.querySelector('.sub-image-reset');
 
-    if (accountUserImage) {
-      const resetImage = accountUserImage.src;
+    if (productImage) {
+      const resetImage = productImage.src;
 
       fileInput.onchange = () => {
         if (fileInput.files[0]) {
-          accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-          accountUserImage.style.display = 'block'; // Show the image
+          productImage.src = window.URL.createObjectURL(fileInput.files[0]);
+          productImage.style.display = 'block'; // Show the image
           resetFileInput.style.display = 'block'; // Show the Reset button
           resetFileInput.classList.add('btn');
         }
@@ -64,30 +67,61 @@ $.ajaxSetup({
 
       resetFileInput.onclick = () => {
         fileInput.value = '';
-        accountUserImage.src = resetImage;
-        accountUserImage.style.display = 'none'; // Hide the image
+        productImage.src = resetImage;
+        productImage.style.display = 'none'; // Hide the image
         resetFileInput.style.display = 'none'; // Hide the Reset button
         resetFileInput.classList.remove('btn');
       };
     }
 
+    if (productSubImage) {
+      const resetSubImage = productSubImage.src;
+
+      fileInputSub.onchange = () => {
+        if (fileInputSub.files[0]) {
+          productSubImage.src = window.URL.createObjectURL(fileInputSub.files[0]);
+          productSubImage.style.display = 'block'; // Show the image
+          resetFileInputSub.style.display = 'block'; // Show the Reset button
+          resetFileInputSub.classList.add('btn');
+        }
+      };
+
+      resetFileInputSub.onclick = () => {
+        fileInputSub.value = '';
+        productSubImage.src = resetSubImage;
+        productSubImage.style.display = 'none'; // Hide the image
+        resetFileInputSub.style.display = 'none'; // Hide the Reset button
+        resetFileInputSub.classList.remove('btn');
+      };
+    }
+
     FormValidation.formValidation(document.getElementById('add-page'), {
       fields: {
-        title: {
+        productName: {
           validators: {
             notEmpty: {
-              message: 'Title is required'
+              message: 'Product name is required'
             }
           }
         },
-        content: {
+        description: {
           validators: {
             notEmpty: {
-              message: 'Content is required'
+              message: 'description is required'
             }
           }
         },
         image: {
+          validators: {
+            file: {
+              extension: 'jpg,jpeg,png',
+              type: 'image/jpeg,image/png',
+              maxSize: 800000,
+              message: 'The selected file is not valid'
+            }
+          }
+        },
+        subImage: {
           validators: {
             file: {
               extension: 'jpg,jpeg,png',
@@ -110,7 +144,7 @@ $.ajaxSetup({
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
         // Submit the form when all fields are valid
-        // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+        defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
         autoFocus: new FormValidation.plugins.AutoFocus()
       }
     });
@@ -122,6 +156,26 @@ $(function () {
     e.preventDefault(); // Mencegah tindakan bawaan tombol
     window.location.href = `${baseUrl}dashboard/product/category`;
   });
+
+  $('#optionServerToggle').on('change', function () {
+    // Periksa apakah checkbox di-centang atau tidak
+    if ($(this).is(':checked')) {
+      // Jika di-centang, tampilkan elemen repeater-list
+      $('#repeaterList, #addButton').show();
+    } else {
+      // Jika tidak di-centang, sembunyikan elemen repeater-list
+      $('#repeaterList, #addButton').hide();
+    }
+  });
+
+  // Periksa apakah checkbox option_server di-centang atau tidak
+  if ($('#optionServerToggle').is(':checked')) {
+    // Jika di-centang, tampilkan elemen repeater-list
+    $('#repeaterList, #addButton').show();
+  } else {
+    // Jika tidak di-centang, sembunyikan elemen repeater-list
+    $('#repeaterList, #addButton').hide();
+  }
 
   // Select2
   const select2 = $('.select2');
@@ -137,21 +191,19 @@ $(function () {
   }
 
   var formRepeater = $('.form-repeater');
+  var row = 1;
 
   if (formRepeater.length) {
-    var row = 2;
-    var col = 1;
-
     formRepeater.repeater({
       show: function () {
-        var fromControl = $(this).find('.form-control, .form-select');
-        var formLabel = $(this).find('.form-label');
+        var repeaterContainer = $(this);
+        var fromControl = repeaterContainer.find('.form-control, .form-select');
+        var formLabel = repeaterContainer.find('.form-label');
 
         fromControl.each(function (i) {
-          var id = 'form-repeater-' + row + '-' + col;
+          var id = 'form-repeater-' + row + '-' + (i + 1);
           $(fromControl[i]).attr('id', id);
           $(formLabel[i]).attr('for', id);
-          col++;
         });
 
         row++;
@@ -165,19 +217,32 @@ $(function () {
 
     // Pindahkan penanganan peristiwa click ke dalam repeater
     formRepeater.on('click', '.btn-repeater', function () {
-      var fromControl = $(this).closest('.form-repeater').find('.form-control, .form-select');
-      var formLabel = $(this).closest('.form-repeater').find('.form-label');
+      var repeaterContainer = $(this).closest('.form-repeater');
+      var repeaterList = repeaterContainer.find('[data-repeater-list="group-a"]');
+      var lastRepeater = repeaterList.find('[data-repeater-item]:last');
+      var fromControl = lastRepeater.find('.form-control, .form-select');
+      var formLabel = lastRepeater.find('.form-label');
 
+      // Set value menjadi kosong hanya untuk elemen pada repeater baru
+      fromControl.val('');
+
+      // Hanya ubah nilai id dan for untuk elemen yang merupakan duplikat dari elemen pertama
       fromControl.each(function (i) {
-        var id = 'form-repeater-' + row + '-' + col;
-        $(fromControl[i]).attr('id', id);
-        $(formLabel[i]).attr('for', id);
-        col++;
+        if (i > 0) {
+          var id = 'form-repeater-' + row + '-' + (i + 1);
+          $(fromControl[i]).attr('id', id);
+          $(formLabel[i]).attr('for', id);
+        }
       });
+
+      // Set a unique data-repeater-id for the new repeater item
+      var deleteButton = repeaterContainer.find('[data-repeater-delete]');
+      var deleteButtonId = Math.random().toString(36).substring(7);
+      deleteButton.attr('data-repeater-id', deleteButtonId);
 
       row++;
 
-      $(this).closest('.form-repeater').find('[data-repeater-list="group-a"]').repeater('add');
+      repeaterContainer.find('[data-repeater-list="group-a"]').repeater('add');
     });
   }
 });
